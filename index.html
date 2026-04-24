@@ -320,6 +320,42 @@
     .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .fade-in.visible { opacity: 1; transform: none; }
 
+    /* DATA TABLES */
+    .data-tables-section { margin-bottom: 2.5rem; }
+    .data-table-title {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .data-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden;
+    }
+    .data-table thead tr { background: #1e2d3d; }
+    .data-table thead th {
+      padding: 0.75rem 1rem; text-align: left;
+      color: var(--accent); font-weight: 600;
+      border-bottom: 1px solid var(--border2);
+      letter-spacing: 0.06em;
+    }
+    .data-table tbody tr:nth-child(odd)  { background: var(--bg2); }
+    .data-table tbody tr:nth-child(even) { background: var(--bg3); }
+    .data-table tbody tr.highlight-row   { background: #2a1f0e; }
+    .data-table tbody td {
+      padding: 0.65rem 1rem; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody td:first-child { color: var(--text); font-weight: 500; }
+    .data-table tbody tr.highlight-row td { color: #f59e0b; }
+    .table-note {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--muted); line-height: 1.6; margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { gap: 1.5rem; }
@@ -644,9 +680,20 @@
       <!-- Result image (shown for projects with resultImage) OR Before/After Slider -->
       <div class="ba-section" id="ol-result-section">
         <div class="ba-label" id="ol-result-label">Results</div>
-        <!-- Result image panel -->
-        <div id="ol-result-img-wrap" style="display:none; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
-          <img id="ol-result-img" src="" alt="Project results" style="width:100%; display:block;" />
+        <!-- Result images panel (stacked vertically) -->
+        <div id="ol-result-img-wrap" style="display:none; flex-direction:column; gap:1.5rem;">
+          <div>
+            <div class="ba-label" id="ol-result-label-1" style="margin-bottom:0.75rem;"></div>
+            <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+              <img id="ol-result-img-1" src="" alt="Result 1" style="width:100%; display:block;" />
+            </div>
+          </div>
+          <div id="ol-result-img-2-wrap">
+            <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
+            <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+              <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
+            </div>
+          </div>
         </div>
         <!-- Before/After Slider (shown when no resultImage) -->
         <div id="baSliderWrap" style="display:block;">
@@ -675,6 +722,50 @@
       <div class="overlay-images">
         <div class="overlay-img-wrap" id="ol-img1">[ Result image 1 ]</div>
         <div class="overlay-img-wrap" id="ol-img2">[ Result image 2 ]</div>
+      </div>
+
+      <!-- Analysis tables (shown only for projects with analysisData) -->
+      <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
+
+        <div class="data-table-title">Convergence Speed after Channel Switch</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Mean Symbols</th>
+              <th>Std</th>
+              <th>Steady MSE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>2.3</td><td>8.5</td><td>0.050673</td></tr>
+            <tr><td>Momentum β=0.9</td><td>17.8</td><td>28.0</td><td>0.050414</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>9.7</td><td>19.5</td><td>0.046382</td></tr>
+            <tr><td>Mini-batch B=16</td><td>14.3</td><td>53.6</td><td>0.055680</td></tr>
+          </tbody>
+        </table>
+
+        <div class="data-table-title">Computational Complexity per Symbol Update (L=11 taps, B=16)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Multiplies</th>
+              <th>Additions</th>
+              <th>Extra Memory</th>
+              <th>Order</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>23</td><td>11</td><td>11</td><td>O(L)</td></tr>
+            <tr><td>Momentum β=0.9</td><td>24</td><td>22</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>45</td><td>33</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>Mini-batch B=16</td><td>352</td><td>176</td><td>11</td><td>O(BL)</td></tr>
+            <tr class="highlight-row"><td>RLS [reference]</td><td>275</td><td>132</td><td>121</td><td>O(L²)</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">RLS shown as reference only — not run here. O(L²) memory/compute cost makes RLS impractical for large L or real-time embedded equalizers, which is why O(L) methods dominate.</p>
+
       </div>
 
       <!-- GitHub CTA -->
@@ -805,10 +896,11 @@
           { val: '176', label: 'MC Runs' },
         ],
         github: 'https://github.com/yashaswikarthikreddydanda/channel-equalization',
-        resultImage: 'lms_equalizer_results.png',
-        resultLabel: 'NLMS Equalizer — Full Results Dashboard',
-        resultImage: 'optimizer_comparision_equalizer.png',
-        resultLabel: 'optimization comparision',
+        resultImages: [
+          { src: 'lms_equalizer_results.png',        label: 'NLMS Equalizer — Full Results Dashboard' },
+          { src: 'optimizer_comparison_equalizer.png', label: 'Optimizer Comparison — BER vs SNR' },
+        ],
+        showAnalysis: true,
       },
     };
 
@@ -830,26 +922,38 @@
         `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
       ).join('');
 
-      // Result image vs before/after slider
+      // Result images vs before/after slider
       const resultImgWrap = document.getElementById('ol-result-img-wrap');
       const sliderWrap    = document.getElementById('baSliderWrap');
       const resultLabel   = document.getElementById('ol-result-label');
 
-      if (p.resultImage) {
-        // Show result image, hide slider
-        document.getElementById('ol-result-img').src = p.resultImage;
-        resultLabel.textContent = p.resultLabel || 'Results';
-        resultImgWrap.style.display = 'block';
+      if (p.resultImages) {
+        // Two stacked images
+        const imgs = p.resultImages;
+        document.getElementById('ol-result-label-1').textContent = imgs[0].label;
+        document.getElementById('ol-result-img-1').src           = imgs[0].src;
+        if (imgs[1]) {
+          document.getElementById('ol-result-label-2').textContent        = imgs[1].label;
+          document.getElementById('ol-result-img-2').src                  = imgs[1].src;
+          document.getElementById('ol-result-img-2-wrap').style.display   = 'block';
+        } else {
+          document.getElementById('ol-result-img-2-wrap').style.display   = 'none';
+        }
+        resultLabel.style.display   = 'none';
+        resultImgWrap.style.display = 'flex';
         sliderWrap.style.display    = 'none';
       } else {
-        // Show before/after slider, hide result image
+        // Before/after slider
         resultLabel.textContent     = 'Before / After Comparison';
+        resultLabel.style.display   = 'block';
         resultImgWrap.style.display = 'none';
         sliderWrap.style.display    = 'block';
         setSlider(50);
       }
 
-      const overlay = document.getElementById('projectOverlay');
+      // Analysis tables — show only for ssp1
+      document.getElementById('ol-analysis-tables').style.display =
+        p.showAnalysis ? 'block' : 'none';
       overlay.classList.add('open');
       overlay.scrollTop = 0;
       document.body.style.overflow = 'hidden';
