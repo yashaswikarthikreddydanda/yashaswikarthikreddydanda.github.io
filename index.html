@@ -9,17 +9,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080b10;
-      --bg2: #0e1319;
-      --bg3: #151b24;
-      --border: rgba(74,222,128,0.08);
-      --border2: rgba(74,222,128,0.18);
+      --bg: #252525;
+      --bg2: #2a2a2a;
+      --bg3: #333333;
+      --border: rgba(13,148,136,0.15);
+      --border2: rgba(13,148,136,0.28);
       --text: #e8edf5;
-      --muted: #6b7888;
-      --accent: #4ade80;
-      --accent2: #a3e635;
-      --accent-dim: rgba(74,222,128,0.1);
-      --accent2-dim: rgba(163,230,53,0.08);
+      --muted: #8f8f8f;
+      --accent: #0d9488;
+      --accent2: #0f5f58;
+      --accent-dim: rgba(13,148,136,0.15);
+      --accent2-dim: rgba(15,95,88,0.12);
     }
 
     html { scroll-behavior: smooth; }
@@ -70,18 +70,18 @@
     .hero-grid {
       position: absolute; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(rgba(74,222,128,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(74,222,128,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(13,148,136,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13,148,136,0.03) 1px, transparent 1px);
       background-size: 60px 60px;
     }
     .hero-glow {
       position: absolute; top: 20%; right: 5%; width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(13,148,136,0.07) 0%, transparent 70%);
       z-index: 0; pointer-events: none;
     }
     .hero-glow2 {
       position: absolute; bottom: 10%; left: 10%; width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(163,230,53,0.05) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(15,95,88,0.05) 0%, transparent 70%);
       z-index: 0; pointer-events: none;
     }
     .hero-content { position: relative; z-index: 1; max-width: 800px; }
@@ -108,7 +108,7 @@
     .hero-name .first { color: var(--text); display: block; }
     .hero-name .last { color: var(--accent); display: block; }
     .hero-sub {
-      font-size: 1.02rem; color: var(--accent); max-width: 520px;
+      font-size: 1.02rem; color: #8f8f8f; max-width: 520px;
       margin-bottom: 2.5rem; line-height: 1.9;
       font-weight: 400; font-family: 'Inter', sans-serif;
       letter-spacing: 0.01em;
@@ -116,7 +116,7 @@
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-primary {
       display: inline-block; padding: 0.8rem 2rem;
-      background: var(--accent); color: #080b10;
+      background: var(--accent); color: #252525;
       font-family: 'Syne', sans-serif; font-weight: 700;
       font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase;
       text-decoration: none; border-radius: 2px;
@@ -144,6 +144,938 @@
       font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800;
       letter-spacing: -0.02em; margin-bottom: 1rem;
     }
+    .section-divider {
+      width: 48px; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 3rem;
+    }
+
+    /* ABOUT */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: #8f8f8f; line-height: 1.9; margin-bottom: 1.35rem;
+      font-size: 1.02rem; font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .about-text p span { color: #0d9488; font-weight: 600; font-family: 'Inter', sans-serif; }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .stat-box {
+      padding: 1.75rem; background: var(--bg3);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-box:nth-child(even) { border-right: none; }
+    .stat-box:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-num {
+      font-size: 2.2rem; font-weight: 800; color: var(--accent);
+      letter-spacing: -0.03em; line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* PROJECTS */
+    #projects { background: var(--bg); }
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 3rem; }
+    .cat-tile {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.75rem 1.5rem;
+      cursor: pointer; transition: border-color 0.2s, transform 0.18s, background 0.2s;
+      position: relative; overflow: hidden; user-select: none;
+    }
+    .cat-tile::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .cat-tile:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .cat-tile:hover::before { opacity: 1; }
+    .cat-tile.active { border-color: rgba(13,148,136,0.45); background: rgba(13,148,136,0.05); }
+    .cat-tile.active::before { opacity: 1; }
+    .cat-icon { font-size: 1.8rem; margin-bottom: 0.85rem; line-height: 1; }
+    .cat-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .cat-count { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; }
+    .project-panel { display: none; animation: slideDown 0.3s ease; }
+    .project-panel.open { display: block; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .panel-title { font-size: 1rem; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+    .panel-close {
+      background: none; border: 1px solid var(--border2); color: var(--muted);
+      font-size: 0.8rem; padding: 0.3rem 0.8rem; border-radius: 2px;
+      cursor: pointer; font-family: 'DM Mono', monospace; letter-spacing: 0.06em;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .panel-close:hover { color: var(--text); border-color: var(--border2); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+    .project-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.75rem;
+      cursor: pointer; transition: border-color 0.25s, transform 0.2s;
+      position: relative; overflow: hidden;
+      text-decoration: none; display: block; color: inherit;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .project-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .project-card:hover::before { opacity: 1; }
+    .project-num { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent); margin-bottom: 1rem; letter-spacing: 0.1em; }
+    .project-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .project-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.75; margin-bottom: 1.25rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.22rem 0.6rem; border-radius: 2px; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(13,148,136,0.15); }
+    .project-link-hint { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+    .project-card:hover .project-link-hint { color: var(--accent); }
+    .project-link-hint svg { width: 12px; height: 12px; fill: currentColor; }
+    .overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(4,6,10,0.97); overflow-y: auto; animation: overlayIn 0.3s ease; }
+    .overlay.open { display: block; }
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    .overlay-inner { max-width: 900px; margin: 0 auto; padding: 5rem 3rem; }
+    .overlay-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+    .overlay-back { display: flex; align-items: center; gap: 8px; background: none; border: 1px solid var(--border2); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.06em; padding: 0.45rem 1rem; border-radius: 2px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+    .overlay-back:hover { color: var(--text); border-color: var(--border2); }
+    .overlay-category { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase; }
+    .overlay-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .overlay-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .overlay-desc { color: var(--muted); font-size: 1rem; line-height: 1.85; margin-bottom: 2.5rem; max-width: 680px; }
+    .overlay-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 2.5rem; }
+    .metric-box { padding: 1.25rem 1.5rem; background: var(--bg2); border-right: 1px solid var(--border); }
+    .metric-box:last-child { border-right: none; }
+    .metric-val { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.3rem; }
+    .metric-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'DM Mono', monospace; }
+    .ba-section { margin-bottom: 2.5rem; }
+
+    /* Redesigned Results Panel (ssp1) */
+    .results-panel { margin-bottom: 2.5rem; }
+    .results-grid-top {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      border: 1px solid var(--border); border-radius: 4px 4px 0 0; overflow: hidden;
+      border-bottom: none;
+    }
+    .results-grid-bottom {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      border: 1px solid var(--border); border-radius: 0 0 4px 4px; overflow: hidden;
+    }
+    .res-cell {
+      padding: 1.25rem 1.5rem; background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .res-cell:last-child { border-right: none; }
+    .res-key {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .res-val {
+      font-size: 1.5rem; font-weight: 800; color: var(--accent);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .res-sub {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); margin-top: 0.1rem;
+    }
+    .res-cell.accent-dim { background: rgba(13,148,136,0.05); }
+    .res-sweep-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--accent2); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .res-sweep-val { font-size: 0.88rem; color: var(--text); font-weight: 600; }
+    .ba-label { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+    .ba-slider-wrap { position: relative; width: 100%; height: 320px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; cursor: col-resize; user-select: none; }
+    .ba-after { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg3); }
+    .ba-before { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg2); clip-path: inset(0 50% 0 0); }
+    .ba-after-img, .ba-before-img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .ba-divider { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); left: 50%; transform: translateX(-50%); z-index: 2; pointer-events: none; }
+    .ba-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 36px; height: 36px; border-radius: 50%; background: var(--accent); z-index: 3; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .ba-handle svg { width: 16px; height: 16px; fill: #080b10; }
+    .ba-pill { position: absolute; bottom: 12px; font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 2px; z-index: 4; letter-spacing: 0.06em; pointer-events: none; }
+    .ba-pill-before { left: 12px; background: rgba(8,11,16,0.8); color: var(--muted); }
+    .ba-pill-after { right: 12px; background: rgba(13,148,136,0.15); color: var(--accent); }
+    .overlay-images { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+    .overlay-img-wrap { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--bg2); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.8rem; font-family: 'DM Mono', monospace; }
+    .overlay-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .overlay-github { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #252525; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; padding: 0.9rem 2rem; border-radius: 2px; transition: opacity 0.2s, transform 0.15s; }
+    .overlay-github:hover { opacity: 0.85; transform: translateY(-1px); }
+    .overlay-github svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* SKILLS */
+    #skills { background: var(--bg2); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .skill-group {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.75rem;
+    }
+    .skill-group-title {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent2); font-family: 'DM Mono', monospace;
+      margin-bottom: 1.25rem;
+    }
+    .skill-list { display: flex; flex-direction: column; gap: 0.85rem; }
+    .skill-item { display: flex; align-items: center; justify-content: space-between; }
+    .skill-name { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .skill-bar-wrap {
+      width: 100px; height: 3px; background: var(--border);
+      border-radius: 2px; overflow: hidden;
+    }
+    .skill-bar {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    /* CONTACT */
+    #contact { background: var(--bg); text-align: center; }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact-text { color: var(--muted); margin-bottom: 2.5rem; font-size: 1rem; line-height: 1.85; }
+    .contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.6rem;
+      color: var(--muted); text-decoration: none; font-size: 0.9rem;
+      font-family: 'DM Mono', monospace;
+      padding: 0.7rem 1.4rem; border: 1px solid var(--border);
+      border-radius: 2px; transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-link:hover { color: var(--accent); border-color: rgba(13,148,136,0.35); }
+    .contact-link svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 4rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-text { font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .footer-accent { color: var(--accent); }
+
+    /* ANIMATIONS */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* DATA TABLES */
+    .data-tables-section { margin-bottom: 2.5rem; }
+    .data-table-title {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .data-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden;
+    }
+    .data-table thead tr { background: #1e2d3d; }
+    .data-table thead th {
+      padding: 0.75rem 1rem; text-align: left;
+      color: var(--accent); font-weight: 600;
+      border-bottom: 1px solid var(--border2);
+      letter-spacing: 0.06em;
+    }
+    .data-table tbody tr:nth-child(odd)  { background: var(--bg2); }
+    .data-table tbody tr:nth-child(even) { background: var(--bg3); }
+    .data-table tbody tr.highlight-row   { background: #2a1f0e; }
+    .data-table tbody td {
+      padding: 0.65rem 1rem; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody td:first-child { color: var(--text); font-weight: 500; }
+    .data-table tbody tr.highlight-row td { color: #f59e0b; }
+    .table-note {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--muted); line-height: 1.6; margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      section, #hero { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">YKR</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Available for opportunities</div>
+      <h1 class="hero-name">
+        <span class="first">Yashaswi Karthik Reddy</span>
+        <span class="last">Danda</span>
+      </h1>
+      <p class="hero-sub">Signal processing engineer with a deep affinity for the mathematics behind DSP and ML optimization — where the deeper you go, the more there is to engineer.</p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="fade-in">
+      <div class="section-label">01 — About</div>
+      <h2 class="section-title">Who I Am</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>I'm <span>Yashaswi Karthik Reddy Danda</span>, a recent graduate with a strong foundation in <span>signal processing</span> and <span>machine learning</span>. I build systems that sit at the intersection of mathematical rigor and real-world performance — from adaptive filters to intelligent algorithms.</p>
+        <p>My work spans the full breadth of <span>image & video processing and compression</span>, <span>DSP for wireless communications</span>, <span>audio DSP</span>, <span>camera ISP & computational photography</span>, and <span>ML & ML-optimized signal processing</span> — I enjoy working across all these domains, finding the right blend of classical signal theory and modern optimization to build systems that are both rigorous and efficient.</p>
+        <p>Outside of projects, I'm deepening my understanding of statistical signal processing, keeping up with the latest in ML research, and always looking for the next hard problem worth solving.</p>
+      </div>
+      <div class="about-stats fade-in">
+        <div class="stat-box">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Technologies</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Lines of Code</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="fade-in">
+      <div class="section-label">02 — Projects</div>
+      <h2 class="section-title">What I've Built</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Category Tiles -->
+    <div class="category-grid fade-in">
+      <div class="cat-tile" onclick="openCategory('video-compression')">
+        <div class="cat-icon">🗜️</div>
+        <div class="cat-name">Video Compression</div>
+        <div class="cat-count">1 project</div>
+      </div>
+      <div class="cat-tile" onclick="openCategory('video-processing')">
+        <div class="cat-icon">🎬</div>
+        <div class="cat-name">Video Processing</div>
+        <div class="cat-count">1 project</div>
+      </div>
+      <div class="cat-tile" onclick="openCategory('image-processing')">
+        <div class="cat-icon">🖼️</div>
+        <div class="cat-name">Image Processing</div>
+        <div class="cat-count">2 projects</div>
+      </div>
+      <div class="cat-tile" onclick="openCategory('machine-learning')">
+        <div class="cat-icon">🧠</div>
+        <div class="cat-name">Machine Learning</div>
+        <div class="cat-count">1 project</div>
+      </div>
+      <div class="cat-tile" onclick="openCategory('audio-processing')">
+        <div class="cat-icon">🎵</div>
+        <div class="cat-name">Audio Signal Processing</div>
+        <div class="cat-count">1 project</div>
+      </div>
+      <div class="cat-tile" onclick="openCategory('statistical-sp')">
+        <div class="cat-icon">📡</div>
+        <div class="cat-name">Statistical Signal Processing</div>
+        <div class="cat-count">1 project</div>
+      </div>
+    </div>
+
+    <!-- Video Compression Panel -->
+    <div class="project-panel" id="panel-video-compression">
+      <div class="panel-header">
+        <div class="panel-title">🗜️ Video Compression</div>
+        <button class="panel-close" onclick="closeCategory('video-compression')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('vc1')">
+          <div class="project-num">VC_01</div>
+          <h3 class="project-title">Video Compression Project</h3>
+          <p class="project-desc">A placeholder description for your video compression project. Update this with your actual project details, key techniques used, and results achieved.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">Codec</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Processing Panel -->
+    <div class="project-panel" id="panel-video-processing">
+      <div class="panel-header">
+        <div class="panel-title">🎬 Video Processing</div>
+        <button class="panel-close" onclick="closeCategory('video-processing')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('vp1')">
+          <div class="project-num">VP_01</div>
+          <h3 class="project-title">Video Processing Project</h3>
+          <p class="project-desc">A placeholder description for your video processing project. Update this with your actual project details, algorithms used, and outcomes.</p>
+          <div class="project-tags"><span class="tag">OpenCV</span><span class="tag">Python</span><span class="tag">CUDA</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Processing Panel -->
+    <div class="project-panel" id="panel-image-processing">
+      <div class="panel-header">
+        <div class="panel-title">🖼️ Image Processing</div>
+        <button class="panel-close" onclick="closeCategory('image-processing')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('ip1')">
+          <div class="project-num">IP_01</div>
+          <h3 class="project-title">Image Processing Project 1</h3>
+          <p class="project-desc">A placeholder description for your first image processing project. Update with real details, techniques, and what problem it solves.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+        <div class="project-card" onclick="openOverlay('ip2')">
+          <div class="project-num">IP_02</div>
+          <h3 class="project-title">Image Processing Project 2</h3>
+          <p class="project-desc">A placeholder description for your second image processing project. Describe what makes it unique and what it accomplishes.</p>
+          <div class="project-tags"><span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">MATLAB</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Machine Learning Panel -->
+    <div class="project-panel" id="panel-machine-learning">
+      <div class="panel-header">
+        <div class="panel-title">🧠 Machine Learning</div>
+        <button class="panel-close" onclick="closeCategory('machine-learning')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('ml1')">
+          <div class="project-num">ML_01</div>
+          <h3 class="project-title">Machine Learning Project</h3>
+          <p class="project-desc">A placeholder description for your ML project. Update with model architecture, dataset, training approach, and accuracy/benchmark results.</p>
+          <div class="project-tags"><span class="tag">PyTorch</span><span class="tag">Python</span><span class="tag">scikit-learn</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Signal Processing Panel -->
+    <div class="project-panel" id="panel-audio-processing">
+      <div class="panel-header">
+        <div class="panel-title">🎵 Audio Signal Processing</div>
+        <button class="panel-close" onclick="closeCategory('audio-processing')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('au1')">
+          <div class="project-num">AU_01</div>
+          <h3 class="project-title">Audio Signal Processing Project</h3>
+          <p class="project-desc">A placeholder description for your audio project. Update with DSP techniques, audio features extracted, and what the system achieves.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">librosa</span><span class="tag">DSP</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistical Signal Processing Panel -->
+    <div class="project-panel" id="panel-statistical-sp">
+      <div class="panel-header">
+        <div class="panel-title">📡 Statistical Signal Processing</div>
+        <button class="panel-close" onclick="closeCategory('statistical-sp')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('ssp1')">
+          <div class="project-num">SSP_01</div>
+          <h3 class="project-title">Adaptive Channel Equalization — Optimizer Comparison</h3>
+          <p class="project-desc">Benchmarked five adaptive equalizer update rules on a non-stationary BPSK multipath channel. Connects classical adaptive filtering theory to modern ML optimization — NLMS to SGD, RLS to Newton's method.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">RMSProp</span><span class="tag">Monte Carlo</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="fade-in">
+      <div class="section-label">03 — Skills</div>
+      <h2 class="section-title">What I Work With</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">C++</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Python</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">MATLAB</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">CUDA</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Frameworks & Tools</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">GStreamer</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">FFmpeg</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">SIMD</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Linux</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="fade-in">
+        <div class="section-label">04 — Contact</div>
+        <h2 class="section-title">Let's Connect</h2>
+        <div class="section-divider" style="margin: 0 auto 2rem;"></div>
+      </div>
+      <p class="contact-text fade-in">Have a project in mind, a role to discuss, or just want to say hello? I'm always open to thoughtful conversations and new opportunities.</p>
+      <div class="contact-links fade-in">
+        <a href="mailto:kd3400@rit.edu" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Email Me
+        </a>
+        <a href="https://github.com/yashaswikarthikreddydanda" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/yashaswikarthikdanda" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT DETAIL OVERLAY -->
+  <div class="overlay" id="projectOverlay">
+    <div class="overlay-inner">
+      <div class="overlay-topbar">
+        <button class="overlay-back" onclick="closeOverlay()">← Back to Projects</button>
+        <div class="overlay-category" id="ol-category"></div>
+      </div>
+      <div class="overlay-tags" id="ol-tags"></div>
+      <h2 class="overlay-title" id="ol-title"></h2>
+      <p class="overlay-desc" id="ol-desc"></p>
+
+      <!-- Results -->
+      <div class="ba-label" style="margin-bottom:0.75rem;">Results</div>
+      <!-- Generic metrics grid (all projects except ssp1) -->
+      <div class="overlay-metrics" id="ol-metrics"></div>
+      <!-- Custom results panel (ssp1) -->
+      <div id="ol-results-panel" style="display:none;"></div>
+
+      <!-- Analysis tables (shown only for projects with showAnalysis) -->
+      <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
+
+        <div class="data-table-title">Convergence Speed after Channel Switch</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Mean Symbols</th>
+              <th>Std</th>
+              <th>Steady MSE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>2.3</td><td>8.5</td><td>0.050673</td></tr>
+            <tr><td>Momentum β=0.9</td><td>17.8</td><td>28.0</td><td>0.050414</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>9.7</td><td>19.5</td><td>0.046382</td></tr>
+            <tr><td>Mini-batch B=16</td><td>14.3</td><td>53.6</td><td>0.055680</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Result images OR Before/After Slider — no wrapper box -->
+      <div id="ol-result-img-wrap" style="display:none; flex-direction:column; gap:1.5rem; margin-bottom:2.5rem;">
+        <div>
+          <div class="ba-label" id="ol-result-label-1" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-1" src="" alt="Result 1" style="width:100%; display:block;" />
+          </div>
+        </div>
+        <div id="ol-result-img-2-wrap">
+          <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
+          </div>
+        </div>
+      </div>
+      <!-- Before/After Slider (shown when no resultImages) -->
+      <div id="baSliderWrap" style="display:block; margin-bottom:2.5rem;">
+        <div class="ba-label" style="margin-bottom:0.75rem;">Before / After Comparison</div>
+        <div class="ba-slider-wrap" id="baWrap">
+          <div class="ba-after" id="baAfter">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-before" id="baBefore">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-divider" id="baDivider"></div>
+          <div class="ba-handle" id="baHandle">
+            <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+          </div>
+          <div class="ba-pill ba-pill-before">BEFORE</div>
+          <div class="ba-pill ba-pill-after">AFTER</div>
+        </div>
+      </div>
+
+      <!-- Complexity table (shown after pictures for ssp1) -->
+      <div class="data-tables-section" id="ol-complexity-table" style="display:none;">
+        <div class="data-table-title">Computational Complexity per Symbol Update (L=11 taps, B=16)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Multiplies</th>
+              <th>Additions</th>
+              <th>Extra Memory</th>
+              <th>Order</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>23</td><td>11</td><td>11</td><td>O(L)</td></tr>
+            <tr><td>Momentum β=0.9</td><td>24</td><td>22</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>45</td><td>33</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>Mini-batch B=16</td><td>352</td><td>176</td><td>11</td><td>O(BL)</td></tr>
+            <tr class="highlight-row"><td>RLS [reference]</td><td>275</td><td>132</td><td>121</td><td>O(L²)</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">RLS shown as reference only — not run here. O(L²) memory/compute cost makes RLS impractical for large L or real-time embedded equalizers, which is why O(L) methods dominate.</p>
+      </div>
+
+      <!-- GitHub CTA -->
+      <a class="overlay-github" id="ol-github" href="#" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-text">© 2026 <span class="footer-accent">Yashaswi Karthik Reddy Danda</span></div>
+    <div class="footer-text">Built with <span class="footer-accent">♥</span> & hosted on GitHub Pages</div>
+  </footer>
+
+  <script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Category tile interaction
+    function openCategory(id) {
+      document.querySelectorAll('.project-panel').forEach(p => p.classList.remove('open'));
+      document.querySelectorAll('.cat-tile').forEach(t => t.classList.remove('active'));
+      const panel = document.getElementById('panel-' + id);
+      if (panel) {
+        panel.classList.add('open');
+        event.currentTarget.classList.add('active');
+        setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      }
+    }
+    function closeCategory(id) {
+      document.getElementById('panel-' + id).classList.remove('open');
+      document.querySelectorAll('.cat-tile').forEach(t => t.classList.remove('active'));
+    }
+
+    // Project data — fill in your real details, GitHub links, and image paths
+    const projects = {
+      vc1: {
+        category: '🗜️ Video Compression',
+        title: 'Video Compression Project',
+        desc: 'Update this with your real project description. Explain the problem, your approach, the codec or algorithm used, and the outcome. What made this project unique or challenging?',
+        tags: ['C++', 'FFmpeg', 'Codec', 'SIMD'],
+        metrics: [
+          { val: '40%', label: 'Size Reduction' },
+          { val: '2×', label: 'Encode Speed' },
+          { val: '38dB', label: 'PSNR Score' },
+          { val: '0.96', label: 'SSIM Index' },
+        ],
+        github: 'https://github.com/yourusername/video-compression-project',
+      },
+      vp1: {
+  category: '🎬 Video Processing',
+  title: 'Multi-Frame Video Denoising Pipeline',
+  desc: 'Built a multi-frame denoising pipeline using Farnebäck optical flow to estimate motion vectors across frames. Applied block-wise SSIM weighting on 64×64 blocks — each block was compared to the reference frame and weighted by similarity before aggregation. Aligned and merged corresponding blocks across all frames, then rearranged to reconstruct the output. Achieved +6dB PSNR and +0.126 SSIM improvement over a noisy reference frame.',
+  tags: ['Python', 'OpenCV', 'Optical Flow', 'Farnebäck', 'SSIM', 'PSNR'],
+  metrics: [
+    { val: '+6dB', label: 'PSNR Gain' },
+    { val: '+0.126', label: 'SSIM Gain' },
+    { val: '64×64', label: 'Block Size' },
+    { val: 'Multi-frame', label: 'Aggregation' },
+  ],
+  github: '',
+},
+      ip1: {
+        category: '🖼️ Image Processing',
+        title: 'Image Processing Project 1',
+        desc: 'Update this with your real project description. What image enhancement, segmentation, or detection problem did you solve? What methods and datasets did you use?',
+        tags: ['Python', 'PIL', 'NumPy', 'MATLAB'],
+        metrics: [
+          { val: '97%', label: 'Accuracy' },
+          { val: '5ms', label: 'Per Frame' },
+          { val: '1080p', label: 'Resolution' },
+        ],
+        github: 'https://github.com/yourusername/image-project-1',
+      },
+      ip2: {
+        category: '🖼️ Image Processing',
+        title: 'Image Processing Project 2',
+        desc: 'Update this with your real project description. Describe the pipeline, the techniques applied, and what the results demonstrate about image quality or performance.',
+        tags: ['OpenCV', 'C++', 'MATLAB', 'SIMD'],
+        metrics: [
+          { val: '8×', label: 'Speedup' },
+          { val: '42dB', label: 'PSNR' },
+          { val: '<1ms', label: 'Latency' },
+        ],
+        github: 'https://github.com/yourusername/image-project-2',
+      },
+      ml1: {
+        category: '🧠 Machine Learning',
+        title: 'Machine Learning Project',
+        desc: 'Update this with your real project description. Explain the model architecture, training data, loss functions, and the benchmark results you achieved.',
+        tags: ['PyTorch', 'Python', 'CUDA', 'scikit-learn'],
+        metrics: [
+          { val: '94.2%', label: 'Accuracy' },
+          { val: '0.93', label: 'F1 Score' },
+          { val: '50K', label: 'Samples' },
+          { val: '12h', label: 'Train Time' },
+        ],
+        github: 'https://github.com/yourusername/ml-project',
+      },
+      au1: {
+        category: '🎵 Audio Signal Processing',
+        title: 'Audio Signal Processing Project',
+        desc: 'Update this with your real project description. What audio features did you extract, what DSP algorithms did you apply, and what did the system achieve in terms of accuracy or quality?',
+        tags: ['Python', 'librosa', 'DSP', 'MATLAB'],
+        metrics: [
+          { val: '22kHz', label: 'Sample Rate' },
+          { val: '96%', label: 'Accuracy' },
+          { val: '20ms', label: 'Frame Size' },
+        ],
+        github: 'https://github.com/yourusername/audio-project',
+      },
+      ssp1: {
+        category: '📡 Statistical Signal Processing',
+        title: 'Adaptive Channel Equalization — Optimizer Comparison',
+        desc: `<strong style="font-size:1.05rem;color:var(--text);display:block;margin-bottom:1rem;letter-spacing:-0.01em;">Implementation</strong>
+<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.75rem;">
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 1</span><br>Generated BPSK symbols mapped to +1/−1.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 2</span><br>Modeled a time-varying multipath channel alternating between ITU Pedestrian A (3 taps) and Vehicular A (5 taps) every 500 symbols to simulate non-stationarity.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 3</span><br>Added AWGN at configurable SNR.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 4</span><br>Implemented five adaptive equalizers — NLMS, Momentum SGD, RMSProp, Mini-batch LMS, Adam-LMS — each with 11 FIR taps and center-tap decision delay.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 5</span><br>Evaluated via Monte Carlo BER vs SNR sweep, convergence speed after channel switches, and computational complexity per symbol update.</div>
+</div>`,
+        tags: ['Python', 'NumPy', 'SciPy', 'NLMS', 'RMSProp', 'Adam-LMS', 'BPSK', 'Monte Carlo', 'ITU Vehicular A'],
+        resultsPanel: `<div class="results-panel">
+  <div class="results-grid-top">
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final BER</div>
+      <div class="res-val">0.15%</div>
+      <div class="res-sub">0.0015 at SNR 20 dB</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final MSE</div>
+      <div class="res-val">0.0475</div>
+      <div class="res-sub">last 500 samples</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Optimizers</div>
+      <div class="res-val">5</div>
+      <div class="res-sub">NLMS · SGD · RMSProp · Mini-LMS · Adam</div>
+    </div>
+  </div>
+  <div class="results-grid-bottom">
+    <div class="res-cell">
+      <div class="res-key">Simulation Config</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;">
+        <span class="tag">N=8000 symbols</span>
+        <span class="tag">SNR 20 dB</span>
+        <span class="tag">L=7 taps</span>
+        <span class="tag">μ=0.1</span>
+        <span class="tag">delay=3</span>
+      </div>
+    </div>
+    <div class="res-cell">
+      <div class="res-sweep-tag">BER Sweep</div>
+      <div class="res-sweep-val">Vehicular A channel · 8 Monte Carlo trials per SNR point</div>
+    </div>
+  </div>
+</div>`,
+        github: 'https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/adaptive_equalizer.py',
+        resultImages: [
+          { src: 'lms_equalizer_results.png',        label: 'NLMS Equalizer — Full Results Dashboard' },
+          { src: 'optimizer_comparision_equalizer.png', label: 'Optimizer Comparison — BER vs SNR' },
+        ],
+        showAnalysis: true,
+      },
+    };
+
+    function openOverlay(id) {
+      const p = projects[id];
+      if (!p) return;
+
+      document.getElementById('ol-category').textContent = p.category;
+      document.getElementById('ol-title').textContent = p.title;
+      document.getElementById('ol-desc').innerHTML = p.desc;
+      document.getElementById('ol-github').href = p.github;
+
+      // Tags
+      document.getElementById('ol-tags').innerHTML = p.tags.map(t =>
+        `<span class="tag">${t}</span>`).join('');
+
+      // Metrics / Results
+      const metricsEl = document.getElementById('ol-metrics');
+      const resultsPanelEl = document.getElementById('ol-results-panel');
+      if (p.resultsPanel) {
+        metricsEl.style.display = 'none';
+        resultsPanelEl.style.display = 'block';
+        resultsPanelEl.innerHTML = p.resultsPanel;
+      } else {
+        metricsEl.style.display = '';
+        resultsPanelEl.style.display = 'none';
+        metricsEl.innerHTML = p.metrics.map(m =>
+          `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
+        ).join('');
+      }
+
+      // Result images vs before/after slider
+      const resultImgWrap = document.getElementById('ol-result-img-wrap');
+      const sliderWrap    = document.getElementById('baSliderWrap');
+
+      if (p.resultImages) {
+        const imgs = p.resultImages;
+        document.getElementById('ol-result-label-1').textContent = imgs[0].label;
+        document.getElementById('ol-result-img-1').src           = imgs[0].src;
+        if (imgs[1]) {
+          document.getElementById('ol-result-label-2').textContent      = imgs[1].label;
+          document.getElementById('ol-result-img-2').src                = imgs[1].src;
+          document.getElementById('ol-result-img-2-wrap').style.display = 'block';
+        } else {
+          document.getElementById('ol-result-img-2-wrap').style.display = 'none';
+        }
+        resultImgWrap.style.display = 'flex';
+        sliderWrap.style.display    = 'none';
+      } else {
+        resultImgWrap.style.display = 'none';
+        sliderWrap.style.display    = 'block';
+        setSlider(50);
+      }
+
+      // Analysis tables — show only for ssp1
+      const showAnalysis = p.showAnalysis || false;
+      document.getElementById('ol-analysis-tables').style.display  = showAnalysis ? 'block' : 'none';
+      document.getElementById('ol-complexity-table').style.display = showAnalysis ? 'block' : 'none';
+
+      const overlay = document.getElementById('projectOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      document.getElementById('projectOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close overlay on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
+
+    // Before/After slider logic
+    function setSlider(pct) {
+      const baBefore = document.getElementById('baBefore');
+      const baDivider = document.getElementById('baDivider');
+      const baHandle = document.getElementById('baHandle');
+      baBefore.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      baDivider.style.left = pct + '%';
+      baHandle.style.left = pct + '%';
+    }
+
+    const baWrap = document.getElementById('baWrap');
+    let dragging = false;
+
+    function getSliderPct(e, el) {
+      const rect = el.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      return Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    }
+
+    baWrap.addEventListener('mousedown', e => { dragging = true; setSlider(getSliderPct(e, baWrap)); });
+    baWrap.addEventListener('touchstart', e => { dragging = true; setSlider(getSliderPct(e, baWrap)); }, { passive: true });
+    document.addEventListener('mousemove', e => { if (dragging) setSlider(getSliderPct(e, baWrap)); });
+    document.addEventListener('touchmove', e => { if (dragging) setSlider(getSliderPct(e, baWrap)); }, { passive: true });
+    document.addEventListener('mouseup', () => dragging = false);
+    document.addEventListener('touchend', () => dragging = false);
+  </script>
+</body>
+</html>
     .section-divider {
       width: 48px; height: 2px;
       background: linear-gradient(90deg, var(--accent), transparent);
