@@ -430,6 +430,11 @@
         <div class="cat-name">Audio Signal Processing</div>
         <div class="cat-count">1 project</div>
       </div>
+      <div class="cat-tile" onclick="openCategory('statistical-sp')">
+        <div class="cat-icon">📡</div>
+        <div class="cat-name">Statistical Signal Processing</div>
+        <div class="cat-count">1 project</div>
+      </div>
     </div>
 
     <!-- Video Compression Panel -->
@@ -519,6 +524,23 @@
           <h3 class="project-title">Audio Signal Processing Project</h3>
           <p class="project-desc">A placeholder description for your audio project. Update with DSP techniques, audio features extracted, and what the system achieves.</p>
           <div class="project-tags"><span class="tag">Python</span><span class="tag">librosa</span><span class="tag">DSP</span></div>
+          <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistical Signal Processing Panel -->
+    <div class="project-panel" id="panel-statistical-sp">
+      <div class="panel-header">
+        <div class="panel-title">📡 Statistical Signal Processing</div>
+        <button class="panel-close" onclick="closeCategory('statistical-sp')">✕ Close</button>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card" onclick="openOverlay('ssp1')">
+          <div class="project-num">SSP_01</div>
+          <h3 class="project-title">Adaptive Channel Equalization — Optimizer Comparison</h3>
+          <p class="project-desc">Benchmarked five adaptive equalizer update rules on a non-stationary BPSK multipath channel. Connects classical adaptive filtering theory to modern ML optimization — NLMS to SGD, RLS to Newton's method.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">RMSProp</span><span class="tag">Monte Carlo</span></div>
           <div class="project-link-hint"><svg viewBox="0 0 24 24"><path d="M15 12l-6 6V6l6 6z"/></svg> View details →</div>
         </div>
       </div>
@@ -619,26 +641,33 @@
       <!-- Metrics -->
       <div class="overlay-metrics" id="ol-metrics"></div>
 
-      <!-- Before / After Slider -->
-      <div class="ba-section">
-        <div class="ba-label">Before / After Comparison</div>
-        <div class="ba-slider-wrap" id="baWrap">
-          <div class="ba-after" id="baAfter">
-            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
-              Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+      <!-- Result image (shown for projects with resultImage) OR Before/After Slider -->
+      <div class="ba-section" id="ol-result-section">
+        <div class="ba-label" id="ol-result-label">Results</div>
+        <!-- Result image panel -->
+        <div id="ol-result-img-wrap" style="display:none; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+          <img id="ol-result-img" src="" alt="Project results" style="width:100%; display:block;" />
+        </div>
+        <!-- Before/After Slider (shown when no resultImage) -->
+        <div id="baSliderWrap" style="display:block;">
+          <div class="ba-slider-wrap" id="baWrap">
+            <div class="ba-after" id="baAfter">
+              <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+                Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+              </div>
             </div>
-          </div>
-          <div class="ba-before" id="baBefore">
-            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
-              Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            <div class="ba-before" id="baBefore">
+              <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+                Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+              </div>
             </div>
+            <div class="ba-divider" id="baDivider"></div>
+            <div class="ba-handle" id="baHandle">
+              <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+            </div>
+            <div class="ba-pill ba-pill-before">BEFORE</div>
+            <div class="ba-pill ba-pill-after">AFTER</div>
           </div>
-          <div class="ba-divider" id="baDivider"></div>
-          <div class="ba-handle" id="baHandle">
-            <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
-          </div>
-          <div class="ba-pill ba-pill-before">BEFORE</div>
-          <div class="ba-pill ba-pill-after">AFTER</div>
         </div>
       </div>
 
@@ -764,6 +793,21 @@
         ],
         github: 'https://github.com/yourusername/audio-project',
       },
+      ssp1: {
+        category: '📡 Statistical Signal Processing',
+        title: 'Adaptive Channel Equalization — Optimizer Comparison',
+        desc: 'Designed a BPSK digital communications testbed to benchmark five adaptive equalizer update rules on a time-varying multipath channel (ITU Vehicular A / Pedestrian A). The channel alternates every 500 symbols to simulate a non-stationary environment. Implemented NLMS, Momentum SGD, RMSProp, Mini-batch LMS, and Adam-LMS equalizers. Evaluated via Monte Carlo BER vs SNR (8 trials × 22 SNR points), convergence speed after channel switches, and computational complexity per symbol. Key finding: momentum-based methods degrade in non-stationary channels due to gradient inertia from prior channel states — directly motivating continual learning research.',
+        tags: ['Python', 'NumPy', 'SciPy', 'NLMS', 'RMSProp', 'Adam-LMS', 'BPSK', 'Monte Carlo', 'ITU Vehicular A'],
+        metrics: [
+          { val: '<10⁻⁵', label: 'BER at 20dB' },
+          { val: '5', label: 'Optimizers' },
+          { val: 'O(L)', label: 'Complexity' },
+          { val: '176', label: 'MC Runs' },
+        ],
+        github: 'https://github.com/yashaswikarthikreddydanda/channel-equalization',
+        resultImage: 'lms_equalizer_results.png',
+        resultLabel: 'NLMS Equalizer — Full Results Dashboard',
+      },
     };
 
     function openOverlay(id) {
@@ -784,8 +828,24 @@
         `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
       ).join('');
 
-      // Reset before/after slider to 50%
-      setSlider(50);
+      // Result image vs before/after slider
+      const resultImgWrap = document.getElementById('ol-result-img-wrap');
+      const sliderWrap    = document.getElementById('baSliderWrap');
+      const resultLabel   = document.getElementById('ol-result-label');
+
+      if (p.resultImage) {
+        // Show result image, hide slider
+        document.getElementById('ol-result-img').src = p.resultImage;
+        resultLabel.textContent = p.resultLabel || 'Results';
+        resultImgWrap.style.display = 'block';
+        sliderWrap.style.display    = 'none';
+      } else {
+        // Show before/after slider, hide result image
+        resultLabel.textContent     = 'Before / After Comparison';
+        resultImgWrap.style.display = 'none';
+        sliderWrap.style.display    = 'block';
+        setSlider(50);
+      }
 
       const overlay = document.getElementById('projectOverlay');
       overlay.classList.add('open');
