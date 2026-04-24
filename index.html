@@ -700,44 +700,41 @@
 
       </div>
 
-      <!-- Result image (shown for projects with resultImages) OR Before/After Slider -->
-      <div class="ba-section" id="ol-result-section">
-        <div class="ba-label" id="ol-result-label">Results</div>
-        <!-- Result images panel (stacked vertically) -->
-        <div id="ol-result-img-wrap" style="display:none; flex-direction:column; gap:1.5rem;">
-          <div>
-            <div class="ba-label" id="ol-result-label-1" style="margin-bottom:0.75rem;"></div>
-            <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
-              <img id="ol-result-img-1" src="" alt="Result 1" style="width:100%; display:block;" />
-            </div>
-          </div>
-          <div id="ol-result-img-2-wrap">
-            <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
-            <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
-              <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
-            </div>
+      <!-- Result images OR Before/After Slider — no wrapper box -->
+      <div id="ol-result-img-wrap" style="display:none; flex-direction:column; gap:1.5rem; margin-bottom:2.5rem;">
+        <div>
+          <div class="ba-label" id="ol-result-label-1" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-1" src="" alt="Result 1" style="width:100%; display:block;" />
           </div>
         </div>
-        <!-- Before/After Slider (shown when no resultImages) -->
-        <div id="baSliderWrap" style="display:block;">
-          <div class="ba-slider-wrap" id="baWrap">
-            <div class="ba-after" id="baAfter">
-              <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
-                Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
-              </div>
-            </div>
-            <div class="ba-before" id="baBefore">
-              <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
-                Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
-              </div>
-            </div>
-            <div class="ba-divider" id="baDivider"></div>
-            <div class="ba-handle" id="baHandle">
-              <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
-            </div>
-            <div class="ba-pill ba-pill-before">BEFORE</div>
-            <div class="ba-pill ba-pill-after">AFTER</div>
+        <div id="ol-result-img-2-wrap">
+          <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
           </div>
+        </div>
+      </div>
+      <!-- Before/After Slider (shown when no resultImages) -->
+      <div id="baSliderWrap" style="display:block; margin-bottom:2.5rem;">
+        <div class="ba-label" style="margin-bottom:0.75rem;">Before / After Comparison</div>
+        <div class="ba-slider-wrap" id="baWrap">
+          <div class="ba-after" id="baAfter">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-before" id="baBefore">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-divider" id="baDivider"></div>
+          <div class="ba-handle" id="baHandle">
+            <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+          </div>
+          <div class="ba-pill ba-pill-before">BEFORE</div>
+          <div class="ba-pill ba-pill-after">AFTER</div>
         </div>
       </div>
 
@@ -884,7 +881,7 @@
       ssp1: {
         category: '📡 Statistical Signal Processing',
         title: 'Adaptive Channel Equalization — Optimizer Comparison',
-        desc: 'Designed a BPSK digital communications testbed to benchmark five adaptive equalizer update rules on a time-varying multipath channel (ITU Vehicular A / Pedestrian A). The channel alternates every 500 symbols to simulate a non-stationary environment. Implemented NLMS, Momentum SGD, RMSProp, Mini-batch LMS, and Adam-LMS equalizers. Evaluated via Monte Carlo BER vs SNR (8 trials × 22 SNR points), convergence speed after channel switches, and computational complexity per symbol. Key finding: momentum-based methods degrade in non-stationary channels due to gradient inertia from prior channel states — directly motivating continual learning research.',
+        desc: 'Implementation: (1) Generated BPSK symbols mapped to +1/-1. (2) Modeled time-varying multipath channel alternating between ITU Pedestrian A (3 taps) and Vehicular A (5 taps) every 500 symbols to simulate non-stationarity. (3) Added AWGN at configurable SNR. (4) Implemented five adaptive equalizers — NLMS, Momentum SGD, RMSProp, Mini-batch LMS, Adam-LMS — each with 11 FIR taps and center-tap decision delay. (5) Evaluated via Monte Carlo BER vs SNR sweep, convergence speed after channel switches, and computational complexity per symbol update.\n\nResults: N_SYMBOLS=8000 | SNR=20dB | Taps=7 | μ=0.1 | Delay=3 | Final BER=0.0015 (0.15%) | Final MSE=0.04753 (last 500 samples) | BER sweep: Vehicular A channel, 8 Monte Carlo trials per SNR point.',
         tags: ['Python', 'NumPy', 'SciPy', 'NLMS', 'RMSProp', 'Adam-LMS', 'BPSK', 'Monte Carlo', 'ITU Vehicular A'],
         metrics: [
           { val: '<10⁻⁵', label: 'BER at 20dB' },
@@ -895,7 +892,7 @@
         github: 'https://github.com/yashaswikarthikreddydanda/channel-equalization',
         resultImages: [
           { src: 'lms_equalizer_results.png',        label: 'NLMS Equalizer — Full Results Dashboard' },
-          { src: 'optimizer_comparision_equalizer.png', label: 'Optimizer Comparison — BER vs SNR' },
+          { src: 'optimizer_comparison_equalizer.png', label: 'Optimizer Comparison — BER vs SNR' },
         ],
         showAnalysis: true,
       },
@@ -922,27 +919,21 @@
       // Result images vs before/after slider
       const resultImgWrap = document.getElementById('ol-result-img-wrap');
       const sliderWrap    = document.getElementById('baSliderWrap');
-      const resultLabel   = document.getElementById('ol-result-label');
 
       if (p.resultImages) {
-        // Two stacked images
         const imgs = p.resultImages;
         document.getElementById('ol-result-label-1').textContent = imgs[0].label;
         document.getElementById('ol-result-img-1').src           = imgs[0].src;
         if (imgs[1]) {
-          document.getElementById('ol-result-label-2').textContent        = imgs[1].label;
-          document.getElementById('ol-result-img-2').src                  = imgs[1].src;
-          document.getElementById('ol-result-img-2-wrap').style.display   = 'block';
+          document.getElementById('ol-result-label-2').textContent      = imgs[1].label;
+          document.getElementById('ol-result-img-2').src                = imgs[1].src;
+          document.getElementById('ol-result-img-2-wrap').style.display = 'block';
         } else {
-          document.getElementById('ol-result-img-2-wrap').style.display   = 'none';
+          document.getElementById('ol-result-img-2-wrap').style.display = 'none';
         }
-        resultLabel.style.display   = 'none';
         resultImgWrap.style.display = 'flex';
         sliderWrap.style.display    = 'none';
       } else {
-        // Before/after slider
-        resultLabel.textContent     = 'Before / After Comparison';
-        resultLabel.style.display   = 'block';
         resultImgWrap.style.display = 'none';
         sliderWrap.style.display    = 'block';
         setSlider(50);
