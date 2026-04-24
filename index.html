@@ -251,6 +251,43 @@
     .metric-val { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.3rem; }
     .metric-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'DM Mono', monospace; }
     .ba-section { margin-bottom: 2.5rem; }
+
+    /* Redesigned Results Panel (ssp1) */
+    .results-panel { margin-bottom: 2.5rem; }
+    .results-grid-top {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      border: 1px solid var(--border); border-radius: 4px 4px 0 0; overflow: hidden;
+      border-bottom: none;
+    }
+    .results-grid-bottom {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      border: 1px solid var(--border); border-radius: 0 0 4px 4px; overflow: hidden;
+    }
+    .res-cell {
+      padding: 1.25rem 1.5rem; background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .res-cell:last-child { border-right: none; }
+    .res-key {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .res-val {
+      font-size: 1.5rem; font-weight: 800; color: var(--accent);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .res-sub {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); margin-top: 0.1rem;
+    }
+    .res-cell.accent-dim { background: rgba(74,222,128,0.05); }
+    .res-sweep-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--accent2); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .res-sweep-val { font-size: 0.88rem; color: var(--text); font-weight: 600; }
     .ba-label { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
     .ba-slider-wrap { position: relative; width: 100%; height: 320px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; cursor: col-resize; user-select: none; }
     .ba-after { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg3); }
@@ -674,8 +711,12 @@
       <h2 class="overlay-title" id="ol-title"></h2>
       <p class="overlay-desc" id="ol-desc"></p>
 
-      <!-- Metrics -->
+      <!-- Results -->
+      <div class="ba-label" style="margin-bottom:0.75rem;">Results</div>
+      <!-- Generic metrics grid (all projects except ssp1) -->
       <div class="overlay-metrics" id="ol-metrics"></div>
+      <!-- Custom results panel (ssp1) -->
+      <div id="ol-results-panel" style="display:none;"></div>
 
       <!-- Analysis tables (shown only for projects with showAnalysis) -->
       <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
@@ -881,14 +922,50 @@
       ssp1: {
         category: '📡 Statistical Signal Processing',
         title: 'Adaptive Channel Equalization — Optimizer Comparison',
-        desc: 'Implementation: (1) Generated BPSK symbols mapped to +1/-1. (2) Modeled time-varying multipath channel alternating between ITU Pedestrian A (3 taps) and Vehicular A (5 taps) every 500 symbols to simulate non-stationarity. (3) Added AWGN at configurable SNR. (4) Implemented five adaptive equalizers — NLMS, Momentum SGD, RMSProp, Mini-batch LMS, Adam-LMS — each with 11 FIR taps and center-tap decision delay. (5) Evaluated via Monte Carlo BER vs SNR sweep, convergence speed after channel switches, and computational complexity per symbol update.\n\nResults: N_SYMBOLS=8000 | SNR=20dB | Taps=7 | μ=0.1 | Delay=3 | Final BER=0.0015 (0.15%) | Final MSE=0.04753 (last 500 samples) | BER sweep: Vehicular A channel, 8 Monte Carlo trials per SNR point.',
+        desc: `<strong style="font-size:1.05rem;color:var(--text);display:block;margin-bottom:1rem;letter-spacing:-0.01em;">Implementation</strong>
+<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.75rem;">
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 1</span><br>Generated BPSK symbols mapped to +1/−1.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 2</span><br>Modeled a time-varying multipath channel alternating between ITU Pedestrian A (3 taps) and Vehicular A (5 taps) every 500 symbols to simulate non-stationarity.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 3</span><br>Added AWGN at configurable SNR.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 4</span><br>Implemented five adaptive equalizers — NLMS, Momentum SGD, RMSProp, Mini-batch LMS, Adam-LMS — each with 11 FIR taps and center-tap decision delay.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 5</span><br>Evaluated via Monte Carlo BER vs SNR sweep, convergence speed after channel switches, and computational complexity per symbol update.</div>
+</div>`,
         tags: ['Python', 'NumPy', 'SciPy', 'NLMS', 'RMSProp', 'Adam-LMS', 'BPSK', 'Monte Carlo', 'ITU Vehicular A'],
-        metrics: [
-          { val: '<10⁻⁵', label: 'BER at 20dB' },
-          { val: '5', label: 'Optimizers' },
-          { val: 'O(L)', label: 'Complexity' },
-          { val: '176', label: 'MC Runs' },
-        ],
+        resultsPanel: `<div class="results-panel">
+  <div class="results-grid-top">
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final BER</div>
+      <div class="res-val">0.15%</div>
+      <div class="res-sub">0.0015 at SNR 20 dB</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final MSE</div>
+      <div class="res-val">0.0475</div>
+      <div class="res-sub">last 500 samples</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Optimizers</div>
+      <div class="res-val">5</div>
+      <div class="res-sub">NLMS · SGD · RMSProp · Mini-LMS · Adam</div>
+    </div>
+  </div>
+  <div class="results-grid-bottom">
+    <div class="res-cell">
+      <div class="res-key">Simulation Config</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;">
+        <span class="tag">N=8000 symbols</span>
+        <span class="tag">SNR 20 dB</span>
+        <span class="tag">L=7 taps</span>
+        <span class="tag">μ=0.1</span>
+        <span class="tag">delay=3</span>
+      </div>
+    </div>
+    <div class="res-cell">
+      <div class="res-sweep-tag">BER Sweep</div>
+      <div class="res-sweep-val">Vehicular A channel · 8 Monte Carlo trials per SNR point</div>
+    </div>
+  </div>
+</div>`,
         github: 'https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/adaptive_equalizer.py',
         resultImages: [
           { src: 'lms_equalizer_results.png',        label: 'NLMS Equalizer — Full Results Dashboard' },
@@ -904,17 +981,27 @@
 
       document.getElementById('ol-category').textContent = p.category;
       document.getElementById('ol-title').textContent = p.title;
-      document.getElementById('ol-desc').textContent = p.desc;
+      document.getElementById('ol-desc').innerHTML = p.desc;
       document.getElementById('ol-github').href = p.github;
 
       // Tags
       document.getElementById('ol-tags').innerHTML = p.tags.map(t =>
         `<span class="tag">${t}</span>`).join('');
 
-      // Metrics
-      document.getElementById('ol-metrics').innerHTML = p.metrics.map(m =>
-        `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
-      ).join('');
+      // Metrics / Results
+      const metricsEl = document.getElementById('ol-metrics');
+      const resultsPanelEl = document.getElementById('ol-results-panel');
+      if (p.resultsPanel) {
+        metricsEl.style.display = 'none';
+        resultsPanelEl.style.display = 'block';
+        resultsPanelEl.innerHTML = p.resultsPanel;
+      } else {
+        metricsEl.style.display = '';
+        resultsPanelEl.style.display = 'none';
+        metricsEl.innerHTML = p.metrics.map(m =>
+          `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
+        ).join('');
+      }
 
       // Result images vs before/after slider
       const resultImgWrap = document.getElementById('ol-result-img-wrap');
