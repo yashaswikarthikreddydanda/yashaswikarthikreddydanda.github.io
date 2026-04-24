@@ -677,7 +677,30 @@
       <!-- Metrics -->
       <div class="overlay-metrics" id="ol-metrics"></div>
 
-      <!-- Result image (shown for projects with resultImage) OR Before/After Slider -->
+      <!-- Analysis tables (shown only for projects with showAnalysis) -->
+      <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
+
+        <div class="data-table-title">Convergence Speed after Channel Switch</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Mean Symbols</th>
+              <th>Std</th>
+              <th>Steady MSE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>2.3</td><td>8.5</td><td>0.050673</td></tr>
+            <tr><td>Momentum β=0.9</td><td>17.8</td><td>28.0</td><td>0.050414</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>9.7</td><td>19.5</td><td>0.046382</td></tr>
+            <tr><td>Mini-batch B=16</td><td>14.3</td><td>53.6</td><td>0.055680</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Result image (shown for projects with resultImages) OR Before/After Slider -->
       <div class="ba-section" id="ol-result-section">
         <div class="ba-label" id="ol-result-label">Results</div>
         <!-- Result images panel (stacked vertically) -->
@@ -695,7 +718,7 @@
             </div>
           </div>
         </div>
-        <!-- Before/After Slider (shown when no resultImage) -->
+        <!-- Before/After Slider (shown when no resultImages) -->
         <div id="baSliderWrap" style="display:block;">
           <div class="ba-slider-wrap" id="baWrap">
             <div class="ba-after" id="baAfter">
@@ -718,33 +741,8 @@
         </div>
       </div>
 
-      <!-- Extra images -->
-      <div class="overlay-images">
-        <div class="overlay-img-wrap" id="ol-img1">[ Result image 1 ]</div>
-        <div class="overlay-img-wrap" id="ol-img2">[ Result image 2 ]</div>
-      </div>
-
-      <!-- Analysis tables (shown only for projects with analysisData) -->
-      <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
-
-        <div class="data-table-title">Convergence Speed after Channel Switch</div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Optimizer</th>
-              <th>Mean Symbols</th>
-              <th>Std</th>
-              <th>Steady MSE</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>NLMS</td><td>2.3</td><td>8.5</td><td>0.050673</td></tr>
-            <tr><td>Momentum β=0.9</td><td>17.8</td><td>28.0</td><td>0.050414</td></tr>
-            <tr><td>RMSProp β=0.99</td><td>9.7</td><td>19.5</td><td>0.046382</td></tr>
-            <tr><td>Mini-batch B=16</td><td>14.3</td><td>53.6</td><td>0.055680</td></tr>
-          </tbody>
-        </table>
-
+      <!-- Complexity table (shown after pictures for ssp1) -->
+      <div class="data-tables-section" id="ol-complexity-table" style="display:none;">
         <div class="data-table-title">Computational Complexity per Symbol Update (L=11 taps, B=16)</div>
         <table class="data-table">
           <thead>
@@ -765,7 +763,6 @@
           </tbody>
         </table>
         <p class="table-note">RLS shown as reference only — not run here. O(L²) memory/compute cost makes RLS impractical for large L or real-time embedded equalizers, which is why O(L) methods dominate.</p>
-
       </div>
 
       <!-- GitHub CTA -->
@@ -952,8 +949,11 @@
       }
 
       // Analysis tables — show only for ssp1
-      document.getElementById('ol-analysis-tables').style.display =
-        p.showAnalysis ? 'block' : 'none';
+      const showAnalysis = p.showAnalysis || false;
+      document.getElementById('ol-analysis-tables').style.display  = showAnalysis ? 'block' : 'none';
+      document.getElementById('ol-complexity-table').style.display = showAnalysis ? 'block' : 'none';
+
+      const overlay = document.getElementById('projectOverlay');
       overlay.classList.add('open');
       overlay.scrollTop = 0;
       document.body.style.overflow = 'hidden';
