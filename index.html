@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yashaswi Karthik Reddy Danda</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -12,14 +12,14 @@
       --bg: #080b10;
       --bg2: #0e1319;
       --bg3: #151b24;
-      --border: rgba(255,255,255,0.07);
-      --border2: rgba(255,255,255,0.13);
+      --border: rgba(74,222,128,0.08);
+      --border2: rgba(74,222,128,0.18);
       --text: #e8edf5;
       --muted: #6b7888;
       --accent: #4ade80;
       --accent2: #a3e635;
-      --accent-dim: rgba(74,222,128,0.12);
-      --accent2-dim: rgba(163,230,53,0.1);
+      --accent-dim: rgba(74,222,128,0.1);
+      --accent2-dim: rgba(163,230,53,0.08);
     }
 
     html { scroll-behavior: smooth; }
@@ -88,13 +88,13 @@
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'DM Mono', monospace; font-size: 0.78rem;
-      color: var(--accent); border: 1px solid rgba(74,222,128,0.25);
+      color: #4ade80; border: 1px solid rgba(74,222,128,0.25);
       padding: 0.35rem 0.9rem; border-radius: 2px; margin-bottom: 2rem;
       letter-spacing: 0.08em;
     }
     .hero-tag::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); animation: pulse 2s infinite;
+      background: #4ade80; animation: pulse 2s infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
@@ -108,9 +108,10 @@
     .hero-name .first { color: var(--text); display: block; }
     .hero-name .last { color: var(--accent); display: block; }
     .hero-sub {
-      font-size: 1.1rem; color: var(--muted); max-width: 520px;
-      margin-bottom: 2.5rem; line-height: 1.75;
-      font-weight: 400;
+      font-size: 1.02rem; color: var(--accent); max-width: 520px;
+      margin-bottom: 2.5rem; line-height: 1.9;
+      font-weight: 400; font-family: 'Inter', sans-serif;
+      letter-spacing: 0.01em;
     }
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-primary {
@@ -156,10 +157,12 @@
       align-items: start;
     }
     .about-text p {
-      color: var(--muted); line-height: 1.85; margin-bottom: 1.25rem;
-      font-size: 1rem; font-weight: 400;
+      color: var(--accent); line-height: 1.9; margin-bottom: 1.35rem;
+      font-size: 1.02rem; font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.01em;
     }
-    .about-text p span { color: var(--text); font-weight: 600; }
+    .about-text p span { color: var(--accent); font-weight: 600; font-family: 'Inter', sans-serif; }
     .about-stats {
       display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
       border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
@@ -426,7 +429,7 @@
         <span class="first">Yashaswi Karthik Reddy</span>
         <span class="last">Danda</span>
       </h1>
-      <p class="hero-sub">Software engineer crafting clean, performant, and thoughtful digital experiences. Passionate about building systems that scale and code that lasts.</p>
+      <p class="hero-sub">Signal processing engineer with a deep affinity for the mathematics behind DSP and ML optimization — where the deeper you go, the more there is to engineer.</p>
       <div class="hero-ctas">
         <a href="#projects" class="btn-primary">View Projects</a>
         <a href="#contact" class="btn-ghost">Get in Touch</a>
@@ -443,9 +446,9 @@
     </div>
     <div class="about-grid">
       <div class="about-text fade-in">
-        <p>I'm <span>Yashaswi Karthik Reddy Danda</span>, a software engineer who loves turning complex problems into elegant solutions. My work spans from backend systems to interactive front-ends.</p>
-        <p>I believe great software is built at the intersection of <span>technical rigor</span> and <span>thoughtful design</span>. Whether architecting APIs or optimizing queries, I bring the same attention to detail to every layer of the stack.</p>
-        <p>When I'm not coding, I'm exploring new technologies, contributing to open-source, or diving into a good technical read.</p>
+        <p>I'm <span>Yashaswi Karthik Reddy Danda</span>, a recent graduate with a strong foundation in <span>signal processing</span> and <span>machine learning</span>. I build systems that sit at the intersection of mathematical rigor and real-world performance — from adaptive filters to intelligent algorithms.</p>
+        <p>My work spans the full breadth of <span>image & video processing and compression</span>, <span>DSP for wireless communications</span>, <span>audio DSP</span>, <span>camera ISP & computational photography</span>, and <span>ML & ML-optimized signal processing</span> — I enjoy working across all these domains, finding the right blend of classical signal theory and modern optimization to build systems that are both rigorous and efficient.</p>
+        <p>Outside of projects, I'm deepening my understanding of statistical signal processing, keeping up with the latest in ML research, and always looking for the next hard problem worth solving.</p>
       </div>
       <div class="about-stats fade-in">
         <div class="stat-box">
