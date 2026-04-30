@@ -1005,74 +1005,7 @@
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
           <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">EWC shows high sensitivity to λ — a sweep from 100 to 50,000 reveals λ=1000 as optimal, with degradation at extremes.</p>
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Continual Learning Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-</head>
-<body>
-
-<p>
-From a signal processing perspective, the validity of a continual learning benchmark is governed by the degree of distributional shift between tasks. If multiple domains share similar spectral and structural statistics, their data can be approximated as lying in overlapping (or low principal angle) subspaces of a common feature space. In such cases, learning reduces to reusing an existing basis rather than adapting to new information.
-</p>
-
-<p>
-This is evident in the Scene, Satellite, and Texture domains. Their dominant components—edges, gradients, and mid-frequency structures—exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels, i.e.,
-</p>
-
-<p>
-\[
-x \in \mathbb{R}^{H \times W} \rightarrow [x, x, x] \in \mathbb{R}^{H \times W \times 3}
-\]
-</p>
-
-<p>
-which introduces no new information and effectively constrains the signal to a rank-1 subspace across channels. This redundancy further compresses the effective input space and amplifies inter-domain similarity.
-</p>
-
-<p>
-Consequently, these domains do not introduce statistically independent components. In linear terms, if we consider feature covariance matrices \( \Sigma_i \), then for these tasks we have significant overlap in their eigenspaces:
-</p>
-
-<p>
-\[
-\text{span}(\Sigma_{\text{Scene}}) \approx 
-\text{span}(\Sigma_{\text{Satellite}}) \approx 
-\text{span}(\Sigma_{\text{Texture}})
-\]
-</p>
-
-<p>
-As a result, most methods exhibit strong retention—not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
-</p>
-
-<p>
-This leads to a weak evaluation setting. Observed stability reflects high mutual coherence between task distributions rather than a true plasticity–stability tradeoff. In essence, the model is not required to reconcile conflicting representations—it is operating within a shared, low-diversity signal manifold.
-</p>
-
-<p>
-The Medical domain, however, deviates significantly from this regime. Its feature distribution introduces components that are weakly aligned—or effectively orthogonal—to the existing basis. Formally, this corresponds to a shift where:
-</p>
-
-<p>
-\[
-\text{span}(\Sigma_{\text{Medical}}) \not\subseteq 
-\text{span}(\Sigma_{\text{others}})
-\]
-</p>
-
-<p>
-This induces genuine competition in parameter space, making catastrophic forgetting a direct consequence of adapting to new signal components. Here, the plasticity–stability tradeoff becomes unavoidable: incorporating new eigen-directions perturbs previously learned ones.
-</p>
-
-<p>
-Therefore, the Medical domain is the only task in this framework that meaningfully probes continual learning. Performance deviations in this domain reflect true interference and adaptation dynamics. By contrast, the remaining domains largely measure projection onto an already learned subspace, where apparent robustness is an artifact of shared structure and redundant channel representation rather than evidence of effective continual learning.
-</p>
-
-</body>
-</html>
+       
         </div>
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
