@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     :root {
       --bg: #f2f0eb;
       --bg2: #e9e7e1;
@@ -21,8 +21,8 @@
       --accent-dim: rgba(193,18,31,0.08);
       --accent2-dim: rgba(154,14,24,0.06);
     }
- 
- 
+
+
     /* Dark Mode (opt-in) */
     body.dark {
       --bg: #0d1117;
@@ -46,9 +46,9 @@
     body.dark .cat-tile.active { border-color: rgba(232,64,80,0.4); background: rgba(232,64,80,0.06); }
     body.dark .arxiv-res-cell.best { background: rgba(232,64,80,0.08); }
     body.dark .arxiv-res-cell.best .arxiv-res-val { color: #e84050; }
- 
+
     html { scroll-behavior: smooth; }
- 
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -56,12 +56,12 @@
       line-height: 1.6;
       overflow-x: hidden;
     }
- 
+
     /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: rgba(193,18,31,0.28); border-radius: 2px; }
- 
+
     /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -72,9 +72,9 @@
       border-bottom: 1px solid var(--border);
       transition: background 0.3s;
     }
- 
+
     /* Light Theme */
- 
+
     /* Theme Toggle Button */
     .theme-toggle {
       background: none; border: 1px solid var(--border2);
@@ -97,7 +97,7 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--text); }
- 
+
     /* HERO */
     #hero {
       min-height: 100vh;
@@ -171,7 +171,7 @@
       transition: border-color 0.2s, color 0.2s;
     }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
- 
+
     /* SECTIONS */
     section { padding: 7rem 4rem; }
     .section-label {
@@ -188,7 +188,7 @@
       background: linear-gradient(90deg, var(--accent), transparent);
       margin-bottom: 3rem;
     }
- 
+
     /* ABOUT */
     #about { background: var(--bg2); }
     .about-grid {
@@ -219,7 +219,7 @@
       margin-bottom: 0.4rem;
     }
     .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
- 
+
     /* PROJECTS */
     #projects { background: var(--bg); }
     /* PROJECT LIST LAYOUT */
@@ -325,7 +325,7 @@
     .metric-val { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.3rem; }
     .metric-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'DM Mono', monospace; }
     .ba-section { margin-bottom: 2.5rem; }
- 
+
     /* Redesigned Results Panel (ssp1) */
     .results-panel { margin-bottom: 2.5rem; }
     .results-grid-top {
@@ -379,7 +379,7 @@
     .overlay-github { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #ffffff; font-family: 'Georgia', 'Times New Roman', serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; padding: 0.9rem 2rem; border-radius: 2px; transition: opacity 0.2s, transform 0.15s; }
     .overlay-github:hover { opacity: 0.85; transform: translateY(-1px); }
     .overlay-github svg { width: 16px; height: 16px; fill: currentColor; }
- 
+
     /* SKILLS */
     #skills { background: var(--bg2); }
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
@@ -403,7 +403,7 @@
       height: 100%; border-radius: 2px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
     }
- 
+
     /* CONTACT */
     #contact { background: var(--bg); text-align: center; }
     .contact-inner { max-width: 600px; margin: 0 auto; }
@@ -418,7 +418,7 @@
     }
     .contact-link:hover { color: var(--accent); border-color: rgba(20,210,190,0.35); }
     .contact-link svg { width: 16px; height: 16px; fill: currentColor; }
- 
+
     /* FOOTER */
     footer {
       padding: 2rem 4rem; border-top: 1px solid var(--border);
@@ -427,7 +427,7 @@
     }
     .footer-text { font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
     .footer-accent { color: var(--accent); }
- 
+
     /* ARXIV OVERLAY */
     .arxiv-overlay {
       display: none; position: fixed; inset: 0; z-index: 600;
@@ -542,11 +542,11 @@
     }
     .arxiv-github:hover { opacity: 0.85; transform: translateY(-1px); }
     .arxiv-github svg { width: 16px; height: 16px; fill: currentColor; }
- 
+
     /* ANIMATIONS */
     .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .fade-in.visible { opacity: 1; transform: none; }
- 
+
     /* DATA TABLES */
     .data-tables-section { margin-bottom: 2.5rem; }
     .data-table-title {
@@ -582,7 +582,7 @@
       color: var(--muted); line-height: 1.6; margin-top: -1rem;
       margin-bottom: 2rem;
     }
- 
+
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { gap: 1.5rem; }
@@ -593,7 +593,7 @@
   </style>
 </head>
 <body>
- 
+
   <!-- NAV -->
   <nav>
     <div class="nav-logo">YKR</div>
@@ -607,7 +607,7 @@
       <span id="themeLabel">Dark</span>
     </button>
   </nav>
- 
+
   <!-- HERO -->
   <section id="hero">
     <div class="hero-grid"></div>
@@ -626,7 +626,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- PROJECTS -->
   <section id="projects">
     <div class="fade-in">
@@ -634,74 +634,10 @@
       <h2 class="section-title">What I've Built</h2>
       <div class="section-divider"></div>
     </div>
- 
+
     <!-- Project List -->
     <div class="fade-in" id="proj-list-root">
- 
-      <!-- Video Compression -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🗜️</span>
-          <span class="proj-cat-name">Video Compression</span>
-          <span class="proj-cat-count">1 project</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('vc1')">
-            <span class="proj-row-num">VC_01</span>
-            <span class="proj-row-title">Video Compression Project</span>
-            <div class="proj-row-tags"><span class="tag">C++</span><span class="tag">FFmpeg</span><span class="tag">SIMD</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
- 
-      <!-- Video Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🎬</span>
-          <span class="proj-cat-name">Video Processing</span>
-          <span class="proj-cat-count">1 project</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('vp1')">
-            <span class="proj-row-num">VP_01</span>
-            <span class="proj-row-title">Multi-Frame Video Denoising Pipeline</span>
-            <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">Optical Flow</span><span class="tag">SSIM</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
- 
-      <!-- Image Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🖼️</span>
-          <span class="proj-cat-name">Image Processing</span>
-          <span class="proj-cat-count">2 projects</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('ip1')">
-            <span class="proj-row-num">IP_01</span>
-            <span class="proj-row-title">Image Processing Project 1</span>
-            <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <!-- Hidden extras — shown on "View more" -->
-          <div class="proj-extra" id="extra-image-processing">
-            <div class="proj-row" onclick="openOverlay('ip2')">
-              <span class="proj-row-num">IP_02</span>
-              <span class="proj-row-title">Image Processing Project 2</span>
-              <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">MATLAB</span></div>
-              <span class="proj-row-arrow">→</span>
-            </div>
-          </div>
-          <button class="proj-view-more" id="vm-image-processing" onclick="toggleViewMore('image-processing')">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-            View more projects
-          </button>
-        </div>
-      </div>
- 
+
       <!-- Machine Learning -->
       <div class="proj-category">
         <div class="proj-cat-header">
@@ -718,7 +654,87 @@
           </div>
         </div>
       </div>
- 
+
+      <!-- Statistical Signal Processing -->
+      <div class="proj-category">
+        <div class="proj-cat-header">
+          <span class="proj-cat-icon">📡</span>
+          <span class="proj-cat-name">Statistical Signal Processing</span>
+          <span class="proj-cat-count">1 project</span>
+        </div>
+        <div class="proj-list">
+          <div class="proj-row" onclick="openOverlay('ssp1')">
+            <span class="proj-row-num">SSP_01</span>
+            <span class="proj-row-title">Adaptive Channel Equalization — Optimizer Comparison</span>
+            <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">Monte Carlo</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+        </div>
+
+
+      <!-- Video Compression -->
+      <div class="proj-category">
+        <div class="proj-cat-header">
+          <span class="proj-cat-icon">🗜️</span>
+          <span class="proj-cat-name">Video Compression</span>
+          <span class="proj-cat-count">1 project</span>
+        </div>
+        <div class="proj-list">
+          <div class="proj-row" onclick="openOverlay('vc1')">
+            <span class="proj-row-num">VC_01</span>
+            <span class="proj-row-title">Video Compression Project</span>
+            <div class="proj-row-tags"><span class="tag">C++</span><span class="tag">FFmpeg</span><span class="tag">SIMD</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Processing -->
+      <div class="proj-category">
+        <div class="proj-cat-header">
+          <span class="proj-cat-icon">🎬</span>
+          <span class="proj-cat-name">Video Processing</span>
+          <span class="proj-cat-count">1 project</span>
+        </div>
+        <div class="proj-list">
+          <div class="proj-row" onclick="openOverlay('vp1')">
+            <span class="proj-row-num">VP_01</span>
+            <span class="proj-row-title">Multi-Frame Video Denoising Pipeline</span>
+            <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">Optical Flow</span><span class="tag">SSIM</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Processing -->
+      <div class="proj-category">
+        <div class="proj-cat-header">
+          <span class="proj-cat-icon">🖼️</span>
+          <span class="proj-cat-name">Image Processing</span>
+          <span class="proj-cat-count">2 projects</span>
+        </div>
+        <div class="proj-list">
+          <div class="proj-row" onclick="openOverlay('ip1')">
+            <span class="proj-row-num">IP_01</span>
+            <span class="proj-row-title">Image Processing Project 1</span>
+            <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-extra" id="extra-image-processing">
+            <div class="proj-row" onclick="openOverlay('ip2')">
+              <span class="proj-row-num">IP_02</span>
+              <span class="proj-row-title">Image Processing Project 2</span>
+              <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">MATLAB</span></div>
+              <span class="proj-row-arrow">→</span>
+            </div>
+          </div>
+          <button class="proj-view-more" id="vm-image-processing" onclick="toggleViewMore('image-processing')">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            View more projects
+          </button>
+        </div>
+      </div>
+
       <!-- Audio Signal Processing -->
       <div class="proj-category">
         <div class="proj-cat-header">
@@ -735,23 +751,537 @@
           </div>
         </div>
       </div>
- 
-      <!-- Statistical Signal Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">📡</span>
-          <span class="proj-cat-name">Statistical Signal Processing</span>
-          <span class="proj-cat-count">1 project</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('ssp1')">
-            <span class="proj-row-num">SSP_01</span>
-            <span class="proj-row-title">Adaptive Channel Equalization — Optimizer Comparison</span>
-            <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">Monte Carlo</span></div>
-            <span class="proj-row-arrow">→</span>
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="fade-in">
+      <div class="section-label">02 — Skills</div>
+      <h2 class="section-title">What I Work With</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">C++</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Python</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">MATLAB</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">CUDA</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div>
           </div>
         </div>
       </div>
- 
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Frameworks & Tools</div>
+        <div class="skill-list">
+          <div class="skill-item">
+            <span class="skill-name">GStreamer</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">FFmpeg</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">SIMD</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+          </div>
+          <div class="skill-item">
+            <span class="skill-name">Linux</span>
+            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+          </div>
+        </div>
+      </div>
     </div>
- 
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="fade-in">
+        <div class="section-label">03 — Contact</div>
+        <h2 class="section-title">Let's Connect</h2>
+        <div class="section-divider" style="margin: 0 auto 2rem;"></div>
+      </div>
+      <p class="contact-text fade-in">Have a project in mind, a role to discuss, or just want to say hello? I'm always open to thoughtful conversations and new opportunities.</p>
+      <div class="contact-links fade-in">
+        <a href="mailto:kd3400@rit.edu" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Email Me
+        </a>
+        <a href="https://github.com/yashaswikarthikreddydanda" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/yashaswikarthikdanda" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT DETAIL OVERLAY -->
+  <div class="overlay" id="projectOverlay">
+    <div class="overlay-inner">
+      <div class="overlay-topbar">
+        <button class="overlay-back" onclick="closeOverlay()">← Back to Projects</button>
+        <div class="overlay-category" id="ol-category"></div>
+      </div>
+      <div class="overlay-tags" id="ol-tags"></div>
+      <h2 class="overlay-title" id="ol-title"></h2>
+      <p class="overlay-desc" id="ol-desc"></p>
+
+      <!-- Results -->
+      <div class="ba-label" style="margin-bottom:0.75rem;">Results</div>
+      <!-- Generic metrics grid (all projects except ssp1) -->
+      <div class="overlay-metrics" id="ol-metrics"></div>
+      <!-- Custom results panel (ssp1) -->
+      <div id="ol-results-panel" style="display:none;"></div>
+
+      <!-- Analysis tables (shown only for projects with showAnalysis) -->
+      <div class="data-tables-section" id="ol-analysis-tables" style="display:none;">
+
+        <div class="data-table-title">Convergence Speed after Channel Switch</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Mean Symbols</th>
+              <th>Std</th>
+              <th>Steady MSE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>2.3</td><td>8.5</td><td>0.050673</td></tr>
+            <tr><td>Momentum β=0.9</td><td>17.8</td><td>28.0</td><td>0.050414</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>9.7</td><td>19.5</td><td>0.046382</td></tr>
+            <tr><td>Mini-batch B=16</td><td>14.3</td><td>53.6</td><td>0.055680</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Result images OR Before/After Slider — no wrapper box -->
+      <div id="ol-result-img-wrap" style="display:none; flex-direction:column; gap:1.5rem; margin-bottom:2.5rem;">
+        <div>
+          <div class="ba-label" id="ol-result-label-1" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-1" src="" alt="Result 1" style="width:100%; display:block;" />
+          </div>
+        </div>
+        <div id="ol-result-img-2-wrap">
+          <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
+          </div>
+        </div>
+      </div>
+      <!-- Before/After Slider (shown when no resultImages) -->
+      <div id="baSliderWrap" style="display:block; margin-bottom:2.5rem;">
+        <div class="ba-label" style="margin-bottom:0.75rem;">Before / After Comparison</div>
+        <div class="ba-slider-wrap" id="baWrap">
+          <div class="ba-after" id="baAfter">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your AFTER image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-before" id="baBefore">
+            <div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;padding:1rem;">
+              Add your BEFORE image here<br><span style="font-size:0.7rem;opacity:0.6">Replace src in the HTML</span>
+            </div>
+          </div>
+          <div class="ba-divider" id="baDivider"></div>
+          <div class="ba-handle" id="baHandle">
+            <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+          </div>
+          <div class="ba-pill ba-pill-before">BEFORE</div>
+          <div class="ba-pill ba-pill-after">AFTER</div>
+        </div>
+      </div>
+
+      <!-- Complexity table (shown after pictures for ssp1) -->
+      <div class="data-tables-section" id="ol-complexity-table" style="display:none;">
+        <div class="data-table-title">Computational Complexity per Symbol Update (L=11 taps, B=16)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Optimizer</th>
+              <th>Multiplies</th>
+              <th>Additions</th>
+              <th>Extra Memory</th>
+              <th>Order</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NLMS</td><td>23</td><td>11</td><td>11</td><td>O(L)</td></tr>
+            <tr><td>Momentum β=0.9</td><td>24</td><td>22</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>RMSProp β=0.99</td><td>45</td><td>33</td><td>22</td><td>O(L)</td></tr>
+            <tr><td>Mini-batch B=16</td><td>352</td><td>176</td><td>11</td><td>O(BL)</td></tr>
+            <tr class="highlight-row"><td>RLS [reference]</td><td>275</td><td>132</td><td>121</td><td>O(L²)</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">RLS shown as reference only — not run here. O(L²) memory/compute cost makes RLS impractical for large L or real-time embedded equalizers, which is why O(L) methods dominate.</p>
+      </div>
+
+      <!-- GitHub CTA -->
+      <a class="overlay-github" id="ol-github" href="#" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
+
+  <!-- ARXIV PAPER OVERLAY -->
+  <div class="arxiv-overlay" id="arxivOverlay">
+    <div class="arxiv-inner">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeArxivOverlay()">← Back to Projects</button>
+        <div class="arxiv-badge">ML_01 &nbsp;·&nbsp; 2025</div>
+      </div>
+      <div class="arxiv-subject">cs.LG &nbsp;·&nbsp; Computer Vision &nbsp;·&nbsp; Continual Learning</div>
+      <h1 class="arxiv-title">Cross-Domain Continual Learning with Replay and Regularization: A Comparative Analysis of EWC, Experience Replay, and DER++</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        Continual learning systems must balance <strong>stability and plasticity</strong> when adapting to sequential tasks, particularly in cross-domain settings where data distributions differ significantly. In this work, we present a comparative study of regularization-based and replay-based methods for cross-domain continual image classification. Specifically, we evaluate <strong>Elastic Weight Consolidation (EWC)</strong>, <strong>Experience Replay</strong>, <strong>Dark Experience Replay (DER)</strong>, and <strong>DER++</strong> on a sequence of heterogeneous visual tasks spanning natural scenes, medical imaging, satellite imagery, and texture classification.
+        <br><br>
+        Our results show that naive fine-tuning suffers from severe catastrophic forgetting, while EWC provides moderate improvements by constraining parameter updates, albeit with sensitivity to the regularization strength. Experience Replay significantly mitigates forgetting by retaining representative samples from previous tasks, but its performance remains limited in more challenging domains. In contrast, DER and DER++ further improve retention by incorporating <strong>logit-based knowledge distillation</strong>, preserving richer information about past decision boundaries. Among all methods, <strong>DER++ achieves the highest average accuracy (0.948)</strong> and the lowest forgetting, with particularly strong gains in the most challenging domain (medical imaging).
+        <br><br>
+        We also analyze forward and backward transfer across tasks, revealing that cross-domain transfer is highly task-dependent, with both positive and negative effects observed. These findings highlight the importance of replay-based strategies, especially those leveraging soft targets, for robust continual learning in heterogeneous environments.
+      </p>
+      <div class="arxiv-keywords">
+        <span class="tag">Continual Learning</span><span class="tag">Catastrophic Forgetting</span>
+        <span class="tag">EWC</span><span class="tag">Experience Replay</span><span class="tag">DER++</span>
+        <span class="tag">Knowledge Distillation</span><span class="tag">ResNet-18</span>
+        <span class="tag">Task-Incremental</span><span class="tag">PyTorch</span>
+      </div>
+      <hr class="arxiv-divider">
+      <div class="arxiv-section-label">Results Summary</div>
+      <div class="arxiv-results-grid">
+        <div class="arxiv-res-cell"><div class="arxiv-res-method">Naive</div><div class="arxiv-res-val">0.889</div><div class="arxiv-res-label">Avg Acc</div></div>
+        <div class="arxiv-res-cell"><div class="arxiv-res-method">EWC</div><div class="arxiv-res-val">0.912</div><div class="arxiv-res-label">Avg Acc</div></div>
+        <div class="arxiv-res-cell"><div class="arxiv-res-method">Replay</div><div class="arxiv-res-val">0.925</div><div class="arxiv-res-label">Avg Acc</div></div>
+        <div class="arxiv-res-cell"><div class="arxiv-res-method">DER</div><div class="arxiv-res-val">0.916</div><div class="arxiv-res-label">Avg Acc</div></div>
+        <div class="arxiv-res-cell best"><div class="arxiv-res-method">DER++ ★</div><div class="arxiv-res-val">0.948</div><div class="arxiv-res-label">Avg Acc</div></div>
+      </div>
+      <hr class="arxiv-divider">
+      <div class="arxiv-section-label">Figure 1 — 5-Method Comparison</div>
+      <div class="arxiv-figure">
+        <img src="continual_learning_comparison.png" alt="5-Method Comparison"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;align-items:center;justify-content:center;height:180px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.78rem;flex-direction:column;gap:0.4rem;">
+          <div>[ Figure: continual_learning_comparison.png ]</div>
+          <div style="font-size:0.65rem;opacity:0.6;">Place image in same directory as index.html</div>
+        </div>
+      </div>
+      <div class="arxiv-figure-cap"><strong>Figure 1.</strong> Heatmap comparison of all five methods across 4 sequential tasks. DER++ maintains the most uniformly high retention, especially for the Medical domain (0.74 → 0.84 vs Replay).</div>
+      <hr class="arxiv-divider">
+      <div class="arxiv-section-label">Key Findings</div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.5rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Naive fine-tuning exhibits severe catastrophic forgetting — Scene accuracy drops from 0.97 → 0.54 after training on Task 2.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">EWC shows high sensitivity to λ — a sweep from 100 to 50,000 reveals λ=1000 as optimal, with degradation at extremes.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">DER++ achieves the highest backward transfer on Texture (+0.157) and best Medical retention, demonstrating that soft logit targets preserve richer decision boundary information.</p>
+        </div>
+      </div>
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Code on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-text">© 2026 <span class="footer-accent">Yashaswi Karthik Reddy Danda</span></div>
+    <div class="footer-text">Built with <span class="footer-accent">♥</span> & hosted on GitHub Pages</div>
+  </footer>
+
+  <script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // View more toggle
+    function toggleViewMore(id) {
+      const extra = document.getElementById('extra-' + id);
+      const btn   = document.getElementById('vm-' + id);
+      if (!extra) return;
+      const isOpen = extra.classList.toggle('open');
+      btn.classList.toggle('expanded', isOpen);
+      btn.innerHTML = isOpen
+        ? '<svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:currentColor"><path d="M9 18l6-6-6-6"/></svg> Show less'
+        : '<svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:currentColor"><path d="M9 18l6-6-6-6"/></svg> View more projects';
+    }
+
+    // Project data — fill in your real details, GitHub links, and image paths
+    const projects = {
+      vc1: {
+        category: '🗜️ Video Compression',
+        title: 'Video Compression Project',
+        desc: 'Update this with your real project description. Explain the problem, your approach, the codec or algorithm used, and the outcome. What made this project unique or challenging?',
+        tags: ['C++', 'FFmpeg', 'Codec', 'SIMD'],
+        metrics: [
+          { val: '40%', label: 'Size Reduction' },
+          { val: '2×', label: 'Encode Speed' },
+          { val: '38dB', label: 'PSNR Score' },
+          { val: '0.96', label: 'SSIM Index' },
+        ],
+        github: 'https://github.com/yourusername/video-compression-project',
+      },
+      vp1: {
+  category: '🎬 Video Processing',
+  title: 'Multi-Frame Video Denoising Pipeline',
+  desc: 'Built a multi-frame denoising pipeline using Farnebäck optical flow to estimate motion vectors across frames. Applied block-wise SSIM weighting on 64×64 blocks — each block was compared to the reference frame and weighted by similarity before aggregation. Aligned and merged corresponding blocks across all frames, then rearranged to reconstruct the output. Achieved +6dB PSNR and +0.126 SSIM improvement over a noisy reference frame.',
+  tags: ['Python', 'OpenCV', 'Optical Flow', 'Farnebäck', 'SSIM', 'PSNR'],
+  metrics: [
+    { val: '+6dB', label: 'PSNR Gain' },
+    { val: '+0.126', label: 'SSIM Gain' },
+    { val: '64×64', label: 'Block Size' },
+    { val: 'Multi-frame', label: 'Aggregation' },
+  ],
+  github: '',
+},
+      ip1: {
+        category: '🖼️ Image Processing',
+        title: 'Image Processing Project 1',
+        desc: 'Update this with your real project description. What image enhancement, segmentation, or detection problem did you solve? What methods and datasets did you use?',
+        tags: ['Python', 'PIL', 'NumPy', 'MATLAB'],
+        metrics: [
+          { val: '97%', label: 'Accuracy' },
+          { val: '5ms', label: 'Per Frame' },
+          { val: '1080p', label: 'Resolution' },
+        ],
+        github: 'https://github.com/yourusername/image-project-1',
+      },
+      ip2: {
+        category: '🖼️ Image Processing',
+        title: 'Image Processing Project 2',
+        desc: 'Update this with your real project description. Describe the pipeline, the techniques applied, and what the results demonstrate about image quality or performance.',
+        tags: ['OpenCV', 'C++', 'MATLAB', 'SIMD'],
+        metrics: [
+          { val: '8×', label: 'Speedup' },
+          { val: '42dB', label: 'PSNR' },
+          { val: '<1ms', label: 'Latency' },
+        ],
+        github: 'https://github.com/yourusername/image-project-2',
+      },
+      ml1: {
+        category: '🧠 Machine Learning',
+        title: 'Machine Learning Project',
+        desc: 'Update this with your real project description. Explain the model architecture, training data, loss functions, and the benchmark results you achieved.',
+        tags: ['PyTorch', 'Python', 'CUDA', 'scikit-learn'],
+        metrics: [
+          { val: '94.2%', label: 'Accuracy' },
+          { val: '0.93', label: 'F1 Score' },
+          { val: '50K', label: 'Samples' },
+          { val: '12h', label: 'Train Time' },
+        ],
+        github: 'https://github.com/yourusername/ml-project',
+      },
+      au1: {
+        category: '🎵 Audio Signal Processing',
+        title: 'Audio Signal Processing Project',
+        desc: 'Update this with your real project description. What audio features did you extract, what DSP algorithms did you apply, and what did the system achieve in terms of accuracy or quality?',
+        tags: ['Python', 'librosa', 'DSP', 'MATLAB'],
+        metrics: [
+          { val: '22kHz', label: 'Sample Rate' },
+          { val: '96%', label: 'Accuracy' },
+          { val: '20ms', label: 'Frame Size' },
+        ],
+        github: 'https://github.com/yourusername/audio-project',
+      },
+      ssp1: {
+        category: '📡 Statistical Signal Processing',
+        title: 'Adaptive Channel Equalization — Optimizer Comparison',
+        desc: `<strong style="font-size:1.05rem;color:var(--text);display:block;margin-bottom:1rem;letter-spacing:-0.01em;">Implementation</strong>
+<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.75rem;">
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 1</span><br>Generated BPSK symbols mapped to +1/−1.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 2</span><br>Modeled a time-varying multipath channel alternating between ITU Pedestrian A (3 taps) and Vehicular A (5 taps) every 500 symbols to simulate non-stationarity.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 3</span><br>Added AWGN at configurable SNR.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 4</span><br>Implemented five adaptive equalizers — NLMS, Momentum SGD, RMSProp, Mini-batch LMS, Adam-LMS — each with 11 FIR taps and center-tap decision delay.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 5</span><br>Evaluated via Monte Carlo BER vs SNR sweep, convergence speed after channel switches, and computational complexity per symbol update.</div>
+</div>`,
+        tags: ['Python', 'NumPy', 'SciPy', 'NLMS', 'RMSProp', 'Adam-LMS', 'BPSK', 'Monte Carlo', 'ITU Vehicular A'],
+        resultsPanel: `<div class="results-panel">
+  <div class="results-grid-top">
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final BER</div>
+      <div class="res-val">0.15%</div>
+      <div class="res-sub">0.0015 at SNR 20 dB</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Final MSE</div>
+      <div class="res-val">0.0475</div>
+      <div class="res-sub">last 500 samples</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Optimizers</div>
+      <div class="res-val">5</div>
+      <div class="res-sub">NLMS · SGD · RMSProp · Mini-LMS · Adam</div>
+    </div>
+  </div>
+  <div class="results-grid-bottom">
+    <div class="res-cell">
+      <div class="res-key">Simulation Config</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;">
+        <span class="tag">N=8000 symbols</span>
+        <span class="tag">SNR 20 dB</span>
+        <span class="tag">L=7 taps</span>
+        <span class="tag">μ=0.1</span>
+        <span class="tag">delay=3</span>
+      </div>
+    </div>
+    <div class="res-cell">
+      <div class="res-sweep-tag">BER Sweep</div>
+      <div class="res-sweep-val">Vehicular A channel · 8 Monte Carlo trials per SNR point</div>
+    </div>
+  </div>
+</div>`,
+        github: 'https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/adaptive_equalizer.py',
+        resultImages: [
+          { src: 'lms_equalizer_results.png',        label: 'NLMS Equalizer — Full Results Dashboard' },
+          { src: 'optimizer_comparision_equalizer.png', label: 'Optimizer Comparison — BER vs SNR' },
+        ],
+        showAnalysis: true,
+      },
+    };
+
+    function openOverlay(id) {
+      const p = projects[id];
+      if (!p) return;
+
+      document.getElementById('ol-category').textContent = p.category;
+      document.getElementById('ol-title').textContent = p.title;
+      document.getElementById('ol-desc').innerHTML = p.desc;
+      document.getElementById('ol-github').href = p.github;
+
+      // Tags
+      document.getElementById('ol-tags').innerHTML = p.tags.map(t =>
+        `<span class="tag">${t}</span>`).join('');
+
+      // Metrics / Results
+      const metricsEl = document.getElementById('ol-metrics');
+      const resultsPanelEl = document.getElementById('ol-results-panel');
+      if (p.resultsPanel) {
+        metricsEl.style.display = 'none';
+        resultsPanelEl.style.display = 'block';
+        resultsPanelEl.innerHTML = p.resultsPanel;
+      } else {
+        metricsEl.style.display = '';
+        resultsPanelEl.style.display = 'none';
+        metricsEl.innerHTML = p.metrics.map(m =>
+          `<div class="metric-box"><div class="metric-val">${m.val}</div><div class="metric-label">${m.label}</div></div>`
+        ).join('');
+      }
+
+      // Result images vs before/after slider
+      const resultImgWrap = document.getElementById('ol-result-img-wrap');
+      const sliderWrap    = document.getElementById('baSliderWrap');
+
+      if (p.resultImages) {
+        const imgs = p.resultImages;
+        document.getElementById('ol-result-label-1').textContent = imgs[0].label;
+        document.getElementById('ol-result-img-1').src           = imgs[0].src;
+        if (imgs[1]) {
+          document.getElementById('ol-result-label-2').textContent      = imgs[1].label;
+          document.getElementById('ol-result-img-2').src                = imgs[1].src;
+          document.getElementById('ol-result-img-2-wrap').style.display = 'block';
+        } else {
+          document.getElementById('ol-result-img-2-wrap').style.display = 'none';
+        }
+        resultImgWrap.style.display = 'flex';
+        sliderWrap.style.display    = 'none';
+      } else {
+        resultImgWrap.style.display = 'none';
+        sliderWrap.style.display    = 'block';
+        setSlider(50);
+      }
+
+      // Analysis tables — show only for ssp1
+      const showAnalysis = p.showAnalysis || false;
+      document.getElementById('ol-analysis-tables').style.display  = showAnalysis ? 'block' : 'none';
+      document.getElementById('ol-complexity-table').style.display = showAnalysis ? 'block' : 'none';
+
+      const overlay = document.getElementById('projectOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      document.getElementById('projectOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close overlay on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
+
+    // Before/After slider logic
+    function setSlider(pct) {
+      const baBefore = document.getElementById('baBefore');
+      const baDivider = document.getElementById('baDivider');
+      const baHandle = document.getElementById('baHandle');
+      baBefore.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      baDivider.style.left = pct + '%';
+      baHandle.style.left = pct + '%';
+    }
+
+    const baWrap = document.getElementById('baWrap');
+    let dragging = false;
+
+    function getSliderPct(e, el) {
+      const rect = el.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      return Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    }
+
+    baWrap.addEventListener('mousedown', e => { dragging = true; setSlider(getSliderPct(e, baWrap)); });
+    baWrap.addEventListener('touchstart', e => { dragging = true; setSlider(getSliderPct(e, baWrap)); }, { passive: true });
+    document.addEventListener('mousemove', e => { if (dragging) setSlider(getSliderPct(e, baWrap)); });
+    document.addEventListener('touchmove', e => { if (dragging) setSlider(getSliderPct(e, baWrap)); }, { passive: true });
+    document.addEventListener('mouseup', () => dragging = false);
+    document.addEventListener('touchend', () => dragging = false);
+
+    // Theme toggle
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark');
+      document.getElementById('themeIcon').textContent  = isDark ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+  </script>
+</body>
+</html>
