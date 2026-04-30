@@ -39,7 +39,7 @@
     }
     body.dark nav { background: rgba(13,17,23,0.92); }
     body.dark .overlay { background: rgba(13,17,23,0.99); }
-    body.dark .arxiv-overlay { background: rgba(13,17,23,0.99); }
+    body.dark .arxiv-overlay { display: none; position: fixed; inset: 0; z-index: 600; background: var(--bg); overflow-y: auto; animation: overlayIn 0.3s ease; }
     body.dark .data-table thead tr { background: #1f2430; }
     body.dark .data-table tbody tr.highlight-row { background: #2a1018; }
     body.dark .data-table tbody tr.highlight-row td { color: #e84050; }
@@ -648,7 +648,7 @@
         <div class="proj-list">
           <div class="proj-row" onclick="openArxivOverlay()">
             <span class="proj-row-num">ML_01</span>
-            <span class="proj-row-title">Cross-Domain Continual Learning with Replay and Regularization: A Comparative Analysis of EWC, Experience Replay, and DER++</span>
+            <span class="proj-row-title">Cross-Domain Continual Learning with Replay and Regularization</span>
             <div class="proj-row-tags"><span class="tag">PyTorch</span><span class="tag">DER++</span><span class="tag">EWC</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
@@ -987,10 +987,10 @@
       <hr class="arxiv-divider">
       <div class="arxiv-section-label">Figure 1 — 5-Method Comparison</div>
       <div class="arxiv-figure">
-        <img src="Continal_learning_results.png" alt="5-Method Comparison"
+        <img src="continual_learning_comparison.png" alt="5-Method Comparison"
              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
         <div style="display:none;align-items:center;justify-content:center;height:180px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.78rem;flex-direction:column;gap:0.4rem;">
-          <div>[ Figure: Continal_learning_results.png]</div>
+          <div>[ Figure: continual_learning_comparison.png ]</div>
           <div style="font-size:0.65rem;opacity:0.6;">Place image in same directory as index.html</div>
         </div>
       </div>
@@ -1281,6 +1281,18 @@
       const isDark = document.body.classList.toggle('dark');
       document.getElementById('themeIcon').textContent  = isDark ? '☀️' : '🌙';
       document.getElementById('themeLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    // arXiv overlay
+    function openArxivOverlay() {
+      const overlay = document.getElementById('arxivOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeArxivOverlay() {
+      document.getElementById('arxivOverlay').classList.remove('open');
+      document.body.style.overflow = '';
     }
   </script>
 </body>
