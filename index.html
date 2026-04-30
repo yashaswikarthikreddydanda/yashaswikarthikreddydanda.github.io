@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yashaswi Karthik Reddy Danda</title>
@@ -997,6 +998,61 @@
       <div class="arxiv-figure-cap"><strong>Figure 1.</strong> Heatmap comparison of all five methods across 4 sequential tasks. DER++ maintains the most uniformly high retention, especially for the Medical domain (0.74 → 0.84 vs Replay).</div>
       <hr class="arxiv-divider">
       <div class="arxiv-section-label">Key Findings</div>
+      <hr class="arxiv-divider">
+
+<div class="arxiv-section-label"> Analysis</div>
+
+<div class="arxiv-abstract">
+  From a signal processing perspective, the validity of a continual learning benchmark is governed by the degree of distributional shift between tasks. If multiple domains share similar spectral and structural statistics, their data can be approximated as lying in overlapping (or low principal angle) subspaces of a common feature space. In such cases, learning reduces to reusing an existing basis rather than adapting to new information.
+  <br><br>
+
+  This is evident in the Scene, Satellite, and Texture domains. Their dominant components—edges, gradients, and mid-frequency structures—exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels:
+</div>
+
+<div style="text-align:center; margin: 1.5rem 0;">
+  \[
+  x \in \mathbb{R}^{H \times W} \rightarrow [x, x, x] \in \mathbb{R}^{H \times W \times 3}
+  \]
+</div>
+
+<div class="arxiv-abstract">
+  This introduces no new information and effectively constrains the signal to a rank-1 subspace across channels. This redundancy compresses the effective input space and amplifies inter-domain similarity.
+  <br><br>
+
+  Consequently, these domains do not introduce statistically independent components. Considering feature covariance matrices \( \Sigma_i \), we observe significant overlap in their eigenspaces:
+</div>
+
+<div style="text-align:center; margin: 1.5rem 0;">
+  \[
+  \text{span}(\Sigma_{\text{Scene}}) \approx 
+  \text{span}(\Sigma_{\text{Satellite}}) \approx 
+  \text{span}(\Sigma_{\text{Texture}})
+  \]
+</div>
+
+<div class="arxiv-abstract">
+  As a result, most methods exhibit strong retention—not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
+  <br><br>
+
+  This leads to a weak evaluation setting. Observed stability reflects high mutual coherence between task distributions rather than a true plasticity–stability tradeoff. The model operates within a shared, low-diversity signal manifold.
+  <br><br>
+
+  The Medical domain, however, deviates significantly. Its feature distribution introduces components that are weakly aligned—or effectively orthogonal—to the existing basis:
+</div>
+
+<div style="text-align:center; margin: 1.5rem 0;">
+  \[
+  \text{span}(\Sigma_{\text{Medical}}) \not\subseteq 
+  \text{span}(\Sigma_{\text{others}})
+  \]
+</div>
+
+<div class="arxiv-abstract">
+  This induces genuine competition in parameter space, making catastrophic forgetting a direct consequence of adapting to new signal components. The plasticity–stability tradeoff becomes unavoidable: incorporating new eigen-directions perturbs previously learned ones.
+  <br><br>
+
+  Therefore, the Medical domain is the only task in this framework that meaningfully probes continual learning. Performance deviations here reflect true interference and adaptation dynamics. By contrast, the remaining domains largely measure projection onto an already learned subspace, where apparent robustness is an artifact of shared structure and redundant channel representation rather than evidence of effective continual learning.
+</div>
       <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.5rem;">
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
