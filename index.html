@@ -1006,7 +1006,7 @@
   From a signal processing perspective, the validity of a continual learning benchmark is governed by the degree of distributional shift between tasks. If multiple domains share similar spectral and structural statistics, their data can be approximated as lying in overlapping (or low principal angle) subspaces of a common feature space. In such cases, learning reduces to reusing an existing basis rather than adapting to new information.
   <br><br>
 
-  This is evident in the Scene, Satellite, and Texture domains. Their dominant components—edges, gradients, and mid-frequency structures—exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels:
+  This is evident in the Scene, Satellite, and Texture domains. Their dominant components edges, gradients, and mid-frequency structures exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels:
 </div>
 
 <div style="text-align:center; margin: 1.5rem 0;">
@@ -1031,13 +1031,13 @@
 </div>
 
 <div class="arxiv-abstract">
-  As a result, most methods exhibit strong retention—not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
+  As a result, most methods exhibit strong retention, not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
   <br><br>
 
   This leads to a weak evaluation setting. Observed stability reflects high mutual coherence between task distributions rather than a true plasticity–stability tradeoff. The model operates within a shared, low-diversity signal manifold.
   <br><br>
 
-  The Medical domain, however, deviates significantly. Its feature distribution introduces components that are weakly aligned—or effectively orthogonal—to the existing basis:
+  The Medical domain, however, deviates significantly. Its feature distribution introduces components that are weakly aligned or effectively orthogonal to the existing basis:
 </div>
 
 <div style="text-align:center; margin: 1.5rem 0;">
