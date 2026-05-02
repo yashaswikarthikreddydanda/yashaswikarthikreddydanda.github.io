@@ -1205,7 +1205,7 @@
       <div class="arxiv-section-label" style="margin-top:1.75rem;">PSNR &amp; SSIM per Frame</div>
       <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg3);margin-bottom:2rem;">
         <img
-          src="mc_metrics.png"
+          src="mc_metrics (1).png"
           alt="PSNR and SSIM per frame — Noisy vs Baseline Kalman vs MC-Kalman"
           style="width:100%;display:block;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
@@ -1225,6 +1225,9 @@
           style="width:100%;display:block;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
         />
+        <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.5rem;">
+        Note: Noise degrades flow accuracy — this is why MC gain is measured better by SSIM than PSNR
+      </p>
         <div style="display:none;align-items:center;justify-content:center;height:120px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;flex-direction:column;gap:0.4rem;">
           <div>[ mc_metrics.png ]</div>
           <div style="font-size:0.65rem;opacity:0.6;">Place in repository root alongside index.html</div>
