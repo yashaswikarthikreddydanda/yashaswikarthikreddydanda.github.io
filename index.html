@@ -1216,7 +1216,21 @@
         </div>
       </div>
       <hr class="arxiv-divider">
-
+<!-- PSNR / SSIM per-frame graph -->
+      <div class="arxiv-section-label" style="margin-top:1.75rem;">PSNR &amp; SSIM per Frame</div>
+      <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg3);margin-bottom:2rem;">
+        <img
+          src="mc_metrics.png"
+          alt="PSNR and SSIM per frame — Noisy vs Baseline Kalman vs MC-Kalman"
+          style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div style="display:none;align-items:center;justify-content:center;height:120px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;flex-direction:column;gap:0.4rem;">
+          <div>[ mc_metrics.png ]</div>
+          <div style="font-size:0.65rem;opacity:0.6;">Place in repository root alongside index.html</div>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
       <!-- ── SECTION 2: TRY IT YOURSELF ── -->
       <div class="arxiv-section-label">Try It Yourself</div>
       <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.5rem;">
