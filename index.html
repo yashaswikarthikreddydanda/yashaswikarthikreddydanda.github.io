@@ -1182,25 +1182,38 @@
         </tbody>
       </table>
 
-      <!-- Bar chart comparing PSNR and SSIM -->
-      <canvas id="vp1Chart" height="90" style="width:100%;margin-bottom:2rem;"></canvas>
-
       <!-- My synthetic demo video -->
       <div class="arxiv-section-label" style="margin-top:0.5rem;">Synthetic Demo — Three-Panel Output</div>
       <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
-        The video from the GitHub repo shows <strong>Noisy | Baseline Kalman | MC-Kalman</strong> side by side on the same synthetic sequence. Upload <code style="font-family:'DM Mono',monospace;font-size:0.76rem;background:var(--bg3);padding:0.1rem 0.35rem;border-radius:2px;">mc_kalman_denoised.mp4</code> from Colab / GitHub to play it here.
+        Noisy &nbsp;|&nbsp; Baseline Kalman &nbsp;|&nbsp; MC-Kalman — same synthetic sequence, σ=25.
       </p>
       <div class="vp-video-wrap" id="vp1DemoWrap">
-        <div class="vp-video-placeholder" id="vp1DemoPlaceholder">
+        <img
+          src="mc_kalman_denoised2-ezgif.com-optimize.gif"
+          alt="MC-Kalman three-panel demo: Noisy | Baseline | MC-Kalman"
+          style="width:100%;display:block;"
+          onerror="this.style.display='none';document.getElementById('vp1DemoPlaceholder').style.display='flex';"
+        />
+        <div class="vp-video-placeholder" id="vp1DemoPlaceholder" style="display:none;">
           <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:var(--muted);opacity:0.3;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-          <span style="margin-top:0.5rem;">No demo video loaded</span>
-          <span style="font-size:0.68rem;opacity:0.5;">Upload mc_kalman_denoised.mp4</span>
-          <label class="vp-video-upload-btn" style="margin-top:0.6rem;">
-            Upload Demo Video
-            <input type="file" accept="video/*" style="display:none;" onchange="loadVp1DemoVideo(this)">
-          </label>
+          <span style="margin-top:0.5rem;">GIF not found in repo</span>
+          <span style="font-size:0.68rem;opacity:0.5;">Add mc_kalman_denoised2-ezgif.com-optimize.gif to your repository root</span>
         </div>
-        <video id="vp1DemoVideo" controls loop style="display:none;width:100%;max-height:320px;background:#000;"></video>
+      </div>
+
+      <!-- PSNR / SSIM per-frame graph -->
+      <div class="arxiv-section-label" style="margin-top:1.75rem;">PSNR &amp; SSIM per Frame</div>
+      <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg3);margin-bottom:2rem;">
+        <img
+          src="mc_metrics.png"
+          alt="PSNR and SSIM per frame — Noisy vs Baseline Kalman vs MC-Kalman"
+          style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div style="display:none;align-items:center;justify-content:center;height:120px;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;flex-direction:column;gap:0.4rem;">
+          <div>[ mc_metrics.png ]</div>
+          <div style="font-size:0.65rem;opacity:0.6;">Place in repository root alongside index.html</div>
+        </div>
       </div>
       <hr class="arxiv-divider">
 
@@ -1758,7 +1771,6 @@
       overlay.scrollTop = 0;
       document.body.style.overflow = 'hidden';
       updateVp1Params();
-      drawVp1Chart();
     }
     function closeVp1Overlay() {
       document.getElementById('vp1Overlay').classList.remove('open');
@@ -1768,104 +1780,6 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); }
     });
-
-    // ── Bar chart ────────────────────────────────────────────────────────
-    function drawVp1Chart() {
-      const canvas = document.getElementById('vp1Chart');
-      if (!canvas) return;
-      const dpr = window.devicePixelRatio || 1;
-      const W = canvas.offsetWidth || 700;
-      const H = 220;
-      canvas.width  = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width  = W + 'px';
-      canvas.style.height = H + 'px';
-      const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
-
-      const isDark = document.body.classList.contains('dark');
-      const textCol  = isDark ? '#e6edf3' : '#0d1b2a';
-      const mutedCol = isDark ? '#7d8590' : '#4e5d6c';
-      const bgCol    = isDark ? '#1f2430' : '#dedad2';
-      const accentCol = '#c1121f';
-      const baseCol   = '#c89a30';
-      const noisyCol  = '#6b7a8a';
-
-      // Two groups: PSNR and SSIM (normalized to 0-100 for display)
-      const groups = [
-        {
-          label: 'PSNR (dB)',
-          bars: [
-            { label: 'Noisy',    val: 21.04, max: 35, color: noisyCol },
-            { label: 'Baseline', val: 22.82, max: 35, color: baseCol },
-            { label: 'MC-Kalman', val: 30.81, max: 35, color: accentCol },
-          ]
-        },
-        {
-          label: 'SSIM',
-          bars: [
-            { label: 'Noisy',    val: 0.1285, max: 1.0, color: noisyCol },
-            { label: 'Baseline', val: 0.4569, max: 1.0, color: baseCol },
-            { label: 'MC-Kalman', val: 0.6119, max: 1.0, color: accentCol },
-          ]
-        }
-      ];
-
-      const padL = 60, padR = 20, padT = 28, padB = 44;
-      const groupW = (W - padL - padR) / groups.length;
-      const barGap = 6, groupPad = 20;
-
-      ctx.clearRect(0, 0, W, H);
-
-      // Background grid lines
-      ctx.font = '10px DM Mono, monospace';
-      for (let i = 0; i <= 4; i++) {
-        const y = padT + (H - padT - padB) * (1 - i / 4);
-        ctx.beginPath();
-        ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
-        ctx.lineWidth = 1;
-        ctx.moveTo(padL, y); ctx.lineTo(W - padR, y);
-        ctx.stroke();
-      }
-
-      groups.forEach((g, gi) => {
-        const gx = padL + gi * groupW;
-        const bW = (groupW - groupPad * 2 - barGap * (g.bars.length - 1)) / g.bars.length;
-        const chartH = H - padT - padB;
-
-        g.bars.forEach((b, bi) => {
-          const x = gx + groupPad + bi * (bW + barGap);
-          const barH = (b.val / b.max) * chartH;
-          const y = padT + chartH - barH;
-
-          // Bar
-          ctx.fillStyle = b.color;
-          ctx.globalAlpha = bi === 2 ? 1.0 : 0.65;
-          ctx.beginPath();
-          ctx.roundRect(x, y, bW, barH, [3, 3, 0, 0]);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-
-          // Value label above bar
-          ctx.fillStyle = bi === 2 ? accentCol : mutedCol;
-          ctx.font = `${bi === 2 ? 600 : 400} 10px DM Mono, monospace`;
-          ctx.textAlign = 'center';
-          const dispVal = g.label === 'PSNR (dB)' ? b.val.toFixed(2) : b.val.toFixed(4);
-          ctx.fillText(dispVal, x + bW / 2, y - 4);
-
-          // Bottom label
-          ctx.fillStyle = mutedCol;
-          ctx.font = '9px DM Mono, monospace';
-          ctx.fillText(b.label, x + bW / 2, H - padB + 14);
-        });
-
-        // Group label
-        ctx.fillStyle = mutedCol;
-        ctx.font = '11px DM Mono, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(g.label, gx + groupW / 2, H - 6);
-      });
-    }
 
     // ── Demo video upload ─────────────────────────────────────────────────
     function loadVp1DemoVideo(input) {
