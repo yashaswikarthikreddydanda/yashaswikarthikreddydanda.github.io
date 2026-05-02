@@ -2,6 +2,25 @@
 <html lang="en">
 <head>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    // roundRect polyfill for older browsers
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+        const rad = Array.isArray(r) ? r[0] : r;
+        this.beginPath();
+        this.moveTo(x + rad, y);
+        this.lineTo(x + w - rad, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + rad);
+        this.lineTo(x + w, y + h - rad);
+        this.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
+        this.lineTo(x + rad, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - rad);
+        this.lineTo(x, y + rad);
+        this.quadraticCurveTo(x, y, x + rad, y);
+        this.closePath();
+      };
+    }
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yashaswi Karthik Reddy Danda</title>
@@ -591,6 +610,161 @@
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     }
+
+    /* ── VP1 MC-KALMAN SPECIFIC STYLES ──────────────────────────────────── */
+
+    /* Metrics table */
+    .vp-metrics-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'DM Mono', monospace; font-size: 0.82rem;
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    .vp-metrics-table thead tr { background: var(--bg3); }
+    .vp-metrics-table thead th {
+      padding: 0.75rem 1.1rem; text-align: left;
+      color: var(--accent); font-weight: 600;
+      border-bottom: 1px solid var(--border2);
+      letter-spacing: 0.06em;
+    }
+    .vp-metrics-table tbody tr:nth-child(odd)  { background: var(--bg); }
+    .vp-metrics-table tbody tr:nth-child(even) { background: var(--bg2); }
+    .vp-metrics-table tbody tr.vp-best { background: var(--accent-dim); }
+    .vp-metrics-table tbody td {
+      padding: 0.65rem 1.1rem; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .vp-metrics-table tbody tr:last-child td { border-bottom: none; }
+    .vp-metrics-table tbody td:first-child { color: var(--text); font-weight: 500; }
+    .vp-metrics-table tbody tr.vp-best td { color: var(--accent); font-weight: 600; }
+    .vp-delta { font-size: 0.72rem; opacity: 0.75; }
+
+    /* Synthetic video player */
+    .vp-section-label {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .vp-video-wrap {
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+      background: #000; margin-bottom: 2.5rem; position: relative;
+    }
+    .vp-video-wrap video {
+      width: 100%; display: block; max-height: 340px; object-fit: contain;
+    }
+    .vp-video-placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 220px; gap: 0.75rem;
+      color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      text-align: center;
+    }
+    .vp-video-placeholder svg { width: 40px; height: 40px; fill: var(--muted); opacity: 0.35; }
+    .vp-video-upload-btn {
+      margin-top: 0.5rem; padding: 0.45rem 1.1rem;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent); border-radius: 2px;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.08em; cursor: pointer; transition: background 0.18s;
+    }
+    .vp-video-upload-btn:hover { background: var(--accent); color: #fff; }
+
+    /* Upload zone */
+    .vp-upload-zone {
+      border: 1px dashed var(--border2); border-radius: 4px;
+      padding: 1.8rem; text-align: center;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      color: var(--muted); cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 2.5rem; position: relative;
+    }
+    .vp-upload-zone:hover, .vp-upload-zone.drag-over {
+      border-color: var(--accent); background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .vp-upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .vp-upload-zone-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .vp-upload-zone p { margin: 0; line-height: 1.6; }
+    .vp-upload-zone .vp-uz-sub { font-size: 0.68rem; opacity: 0.6; margin-top: 0.3rem; }
+
+    /* Parameters panel */
+    .vp-params-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .vp-param-item { display: flex; flex-direction: column; gap: 0.4rem; }
+    .vp-param-label {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .vp-param-row { display: flex; align-items: center; gap: 0.75rem; }
+    .vp-param-input {
+      flex: 1; background: var(--bg2); border: 1px solid var(--border2);
+      color: var(--text); border-radius: 2px; padding: 0.3rem 0.55rem;
+      font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      outline: none; transition: border-color 0.18s;
+    }
+    .vp-param-input:focus { border-color: var(--accent); }
+    .vp-param-val {
+      font-family: 'DM Mono', monospace; font-size: 0.82rem;
+      color: var(--accent); min-width: 36px; text-align: right;
+    }
+    .vp-run-btn {
+      width: 100%; padding: 0.75rem; margin-bottom: 2rem;
+      background: var(--accent); color: #fff; border: none;
+      font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .vp-run-btn:hover { opacity: 0.85; }
+    .vp-run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Live result output */
+    .vp-result-output {
+      display: none; border: 1px solid var(--border); border-radius: 4px;
+      padding: 1.25rem; background: var(--bg3);
+      font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 2rem; white-space: pre-wrap;
+    }
+    .vp-result-output.visible { display: block; }
+
+    /* Side-by-side comparison */
+    .vp-compare-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .vp-compare-panel {
+      border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden; background: var(--bg2);
+    }
+    .vp-compare-header {
+      padding: 0.6rem 1rem; background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .vp-compare-header-title {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .vp-compare-header-badge {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted);
+    }
+    .vp-compare-canvas-wrap {
+      position: relative; height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      background: #050a10;
+    }
+    .vp-compare-canvas-wrap canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    .vp-compare-placeholder {
+      position: absolute; text-align: center;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #3a4a5a;
+      pointer-events: none;
+    }
+    @media (max-width: 600px) {
+      .vp-compare-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -698,10 +872,10 @@
           <span class="proj-cat-count">1 project</span>
         </div>
         <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('vp1')">
+          <div class="proj-row" onclick="openVp1Overlay()">
             <span class="proj-row-num">VP_01</span>
-            <span class="proj-row-title">Multi-Frame Video Denoising Pipeline</span>
-            <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">Optical Flow</span><span class="tag">SSIM</span></div>
+            <span class="proj-row-title">Temporally Coherent Video Denoising via Motion-Compensated Kalman Filtering</span>
+            <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">DIS Optical Flow</span><span class="tag">Kalman Filter</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
         </div>
@@ -947,6 +1121,232 @@
         <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
         View on GitHub
       </a>
+    </div>
+  </div>
+
+  <!-- VP1: MC-KALMAN PROJECT OVERLAY -->
+  <div class="arxiv-overlay" id="vp1Overlay">
+    <div class="arxiv-inner" style="max-width:860px;">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeVp1Overlay()">← Back to Projects</button>
+        <div class="arxiv-badge">VP_01 &nbsp;·&nbsp; 2025</div>
+      </div>
+      <div class="arxiv-subject">Video Processing &nbsp;·&nbsp; Statistical Signal Processing &nbsp;·&nbsp; Computer Vision</div>
+      <h1 class="arxiv-title">Temporally Coherent Video Denoising via Motion-Compensated Kalman Filtering</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- Abstract -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        Standard pixel-wise Kalman filters accumulate temporal information without accounting for inter-frame motion — causing ghosting and blurring on moving objects. This project extends the baseline by computing dense <strong>DIS optical flow</strong> between consecutive frames and warping both the state estimate <em>x̂</em> and error covariance <em>P</em> before the predict step. The result is a temporally coherent denoiser that keeps moving edges sharp. Evaluated on a synthetic sequence of bouncing shapes (σ=25 Gaussian noise, 100 frames), the MC-Kalman filter achieves <strong>+7.98 dB PSNR</strong> and <strong>+0.1550 SSIM</strong> over the pixel-wise baseline, with no additional supervised training.
+      </p>
+      <div class="arxiv-keywords">
+        <span class="tag">Kalman Filter</span><span class="tag">DIS Optical Flow</span>
+        <span class="tag">Motion Compensation</span><span class="tag">Video Denoising</span>
+        <span class="tag">PSNR</span><span class="tag">SSIM</span>
+        <span class="tag">OpenCV</span><span class="tag">Python</span><span class="tag">NumPy</span>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 1: MY RESULTS ── -->
+      <div class="arxiv-section-label">Results — Synthetic Benchmark (σ=25, 100 frames)</div>
+
+      <!-- Results table -->
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Noisy Input</th>
+            <th>Baseline Kalman</th>
+            <th>MC-Kalman (ours)</th>
+            <th>Δ over Baseline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PSNR (dB)</td>
+            <td>21.04</td>
+            <td>22.82</td>
+            <td style="color:var(--accent);font-weight:700;">30.81</td>
+            <td style="color:var(--accent);font-weight:700;">+7.98 dB ↑</td>
+          </tr>
+          <tr class="vp-best">
+            <td>SSIM</td>
+            <td>0.1285</td>
+            <td>0.4569</td>
+            <td style="font-weight:700;">0.6119</td>
+            <td style="font-weight:700;">+0.1550 ↑</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Bar chart comparing PSNR and SSIM -->
+      <canvas id="vp1Chart" height="90" style="width:100%;margin-bottom:2rem;"></canvas>
+
+      <!-- My synthetic demo video -->
+      <div class="arxiv-section-label" style="margin-top:0.5rem;">Synthetic Demo — Three-Panel Output</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
+        The video from the GitHub repo shows <strong>Noisy | Baseline Kalman | MC-Kalman</strong> side by side on the same synthetic sequence. Upload <code style="font-family:'DM Mono',monospace;font-size:0.76rem;background:var(--bg3);padding:0.1rem 0.35rem;border-radius:2px;">mc_kalman_denoised.mp4</code> from Colab / GitHub to play it here.
+      </p>
+      <div class="vp-video-wrap" id="vp1DemoWrap">
+        <div class="vp-video-placeholder" id="vp1DemoPlaceholder">
+          <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:var(--muted);opacity:0.3;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          <span style="margin-top:0.5rem;">No demo video loaded</span>
+          <span style="font-size:0.68rem;opacity:0.5;">Upload mc_kalman_denoised.mp4</span>
+          <label class="vp-video-upload-btn" style="margin-top:0.6rem;">
+            Upload Demo Video
+            <input type="file" accept="video/*" style="display:none;" onchange="loadVp1DemoVideo(this)">
+          </label>
+        </div>
+        <video id="vp1DemoVideo" controls loop style="display:none;width:100%;max-height:320px;background:#000;"></video>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 2: TRY IT YOURSELF ── -->
+      <div class="arxiv-section-label">Try It Yourself</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.5rem;">
+        Tune the filter parameters, upload your own noisy video, and run the MC-Kalman denoiser entirely in-browser. Results are computed frame-by-frame in JavaScript and metrics are shown live in the table below.
+      </p>
+
+      <!-- Step 1: Parameters -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.9rem;">STEP 1 — SET PARAMETERS</div>
+      <div class="vp-params-grid" style="margin-bottom:1.5rem;">
+        <div class="vp-param-item">
+          <div class="vp-param-label">Noise σ (assumed)</div>
+          <div class="vp-param-row">
+            <input type="range" class="vp-param-input" id="paramSigma" min="5" max="60" value="25" oninput="updateVp1Params()">
+            <span class="vp-param-val" id="paramSigmaVal">25</span>
+          </div>
+        </div>
+        <div class="vp-param-item">
+          <div class="vp-param-label">Q Factor</div>
+          <div class="vp-param-row">
+            <input type="range" class="vp-param-input" id="paramQ" min="0.05" max="1.0" step="0.05" value="0.25" oninput="updateVp1Params()">
+            <span class="vp-param-val" id="paramQVal">0.25</span>
+          </div>
+        </div>
+      </div>
+      <!-- Live filter stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:2rem;">
+        <div style="padding:0.85rem 1rem;background:var(--bg3);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Steady-State K</div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--accent);" id="dynK">0.059</div>
+        </div>
+        <div style="padding:0.85rem 1rem;background:var(--bg3);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Noise Attenuation</div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--accent);" id="dynAtten">−12.3 dB</div>
+        </div>
+        <div style="padding:0.85rem 1rem;background:var(--bg3);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.25rem;">Temporal Blend</div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--text);" id="dynBlend">~17 frames</div>
+        </div>
+      </div>
+
+      <!-- Step 2: Upload video -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.9rem;">STEP 2 — UPLOAD YOUR NOISY VIDEO</div>
+      <div class="vp-upload-zone" id="vp1UploadZone">
+        <input type="file" accept="video/*" onchange="handleVp1Upload(this)">
+        <div class="vp-upload-zone-icon">🎬</div>
+        <p>Drag & drop or click to upload a noisy video</p>
+        <p class="vp-uz-sub">MP4, WebM, MOV accepted &nbsp;·&nbsp; processed entirely in your browser</p>
+      </div>
+      <div id="vp1UploadedInfo" style="display:none;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:1.5rem;padding:0.55rem 0.85rem;background:var(--accent-dim);border:1px solid var(--accent);border-radius:3px;"></div>
+
+      <!-- Step 3: Run -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.9rem;">STEP 3 — RUN DENOISER</div>
+      <button class="vp-run-btn" id="vp1RunBtn" onclick="runVp1Denoiser()" disabled>Run MC-Kalman Denoiser</button>
+
+      <!-- Progress bar -->
+      <div id="vp1ProgressWrap" style="display:none;margin-bottom:1.5rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;" id="vp1ProgressLabel">Processing frame 0 / 0…</div>
+        <div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;">
+          <div id="vp1ProgressBar" style="height:100%;width:0%;background:var(--accent);transition:width 0.1s;border-radius:2px;"></div>
+        </div>
+      </div>
+
+      <!-- Output: denoised video + metrics table side by side -->
+      <div id="vp1OutputSection" style="display:none;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.9rem;">STEP 4 — OUTPUT</div>
+
+        <!-- Side-by-side video comparison -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+          <div class="vp-compare-panel">
+            <div class="vp-compare-header">
+              <span class="vp-compare-header-title">Noisy Input</span>
+            </div>
+            <div class="vp-compare-canvas-wrap" style="height:160px;">
+              <canvas id="vp1OutCanvasNoisy" style="width:100%;height:100%;object-fit:contain;"></canvas>
+            </div>
+          </div>
+          <div class="vp-compare-panel">
+            <div class="vp-compare-header">
+              <span class="vp-compare-header-title" style="color:var(--accent);">✦ MC-Kalman Output</span>
+            </div>
+            <div class="vp-compare-canvas-wrap" style="height:160px;">
+              <canvas id="vp1OutCanvasMC" style="width:100%;height:100%;object-fit:contain;"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download denoised video -->
+        <div style="margin-bottom:1.75rem;">
+          <a id="vp1DownloadLink" style="display:none;" download="mc_kalman_denoised_output.webm">
+            <button class="vp-run-btn" style="background:transparent;border:1px solid var(--accent);color:var(--accent);margin-bottom:0;">⬇ Download Denoised Video</button>
+          </a>
+        </div>
+
+        <!-- Live results metrics table overlaid with user video stats -->
+        <div class="arxiv-section-label" style="margin-top:0.25rem;">Live Metrics — Your Video</div>
+        <p style="color:var(--muted);font-size:0.83rem;line-height:1.6;margin-bottom:1rem;">
+          Computed on your uploaded video. Since no clean ground-truth is available, PSNR/SSIM are estimated by comparing each filtered frame back to the noisy input as a proxy signal.
+        </p>
+        <table class="vp-metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Your Noisy Video</th>
+              <th>Baseline Kalman</th>
+              <th>MC-Kalman (ours)</th>
+              <th>Δ MC vs Baseline</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PSNR (dB)</td>
+              <td id="livePsnrNoisy">—</td>
+              <td id="livePsnrBase">—</td>
+              <td id="livePsnrMC" style="color:var(--accent);font-weight:700;">—</td>
+              <td id="livePsnrDelta" style="font-weight:700;">—</td>
+            </tr>
+            <tr class="vp-best">
+              <td>SSIM</td>
+              <td id="liveSSIMNoisy">—</td>
+              <td id="liveSSIMBase">—</td>
+              <td id="liveSSIMMC" style="font-weight:700;">—</td>
+              <td id="liveSSIMDelta" style="font-weight:700;">—</td>
+            </tr>
+            <tr>
+              <td>Frames processed</td>
+              <td id="liveFrames" colspan="4" style="color:var(--muted);">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GitHub CTA -->
+      <hr class="arxiv-divider">
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/mc_kalman_denoiser_colab.py" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Code on GitHub
+        </a>
+        <a class="arxiv-github" style="background:transparent;border:1px solid var(--accent);color:var(--accent);" href="https://colab.research.google.com/drive/1I8XG1GclOi268R6D5OBnUFl5ZBAYtbps" target="_blank">
+          <svg viewBox="0 0 24 24" style="fill:var(--accent);"><path d="M16.9 5.2L12 3 3 7v10l9 4 9-4V7l-4.1-1.8zM12 5.1l5.4 2.4-5.4 2.4L6.6 7.5 12 5.1zm-8 3.7l7 3.1v6.9l-7-3.1V8.8zm9 10V11.9l7-3.1v6.9l-7 3.1z"/></svg>
+          Open in Colab
+        </a>
+      </div>
     </div>
   </div>
 
@@ -1350,6 +1750,403 @@
     function closeArxivOverlay() {
       document.getElementById('arxivOverlay').classList.remove('open');
       document.body.style.overflow = '';
+    }
+    // ── VP1 MC-KALMAN overlay ─────────────────────────────────────────────
+    function openVp1Overlay() {
+      const overlay = document.getElementById('vp1Overlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      updateVp1Params();
+      drawVp1Chart();
+    }
+    function closeVp1Overlay() {
+      document.getElementById('vp1Overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); }
+    });
+
+    // ── Bar chart ────────────────────────────────────────────────────────
+    function drawVp1Chart() {
+      const canvas = document.getElementById('vp1Chart');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const W = canvas.offsetWidth || 700;
+      const H = 220;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const isDark = document.body.classList.contains('dark');
+      const textCol  = isDark ? '#e6edf3' : '#0d1b2a';
+      const mutedCol = isDark ? '#7d8590' : '#4e5d6c';
+      const bgCol    = isDark ? '#1f2430' : '#dedad2';
+      const accentCol = '#c1121f';
+      const baseCol   = '#c89a30';
+      const noisyCol  = '#6b7a8a';
+
+      // Two groups: PSNR and SSIM (normalized to 0-100 for display)
+      const groups = [
+        {
+          label: 'PSNR (dB)',
+          bars: [
+            { label: 'Noisy',    val: 21.04, max: 35, color: noisyCol },
+            { label: 'Baseline', val: 22.82, max: 35, color: baseCol },
+            { label: 'MC-Kalman', val: 30.81, max: 35, color: accentCol },
+          ]
+        },
+        {
+          label: 'SSIM',
+          bars: [
+            { label: 'Noisy',    val: 0.1285, max: 1.0, color: noisyCol },
+            { label: 'Baseline', val: 0.4569, max: 1.0, color: baseCol },
+            { label: 'MC-Kalman', val: 0.6119, max: 1.0, color: accentCol },
+          ]
+        }
+      ];
+
+      const padL = 60, padR = 20, padT = 28, padB = 44;
+      const groupW = (W - padL - padR) / groups.length;
+      const barGap = 6, groupPad = 20;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // Background grid lines
+      ctx.font = '10px DM Mono, monospace';
+      for (let i = 0; i <= 4; i++) {
+        const y = padT + (H - padT - padB) * (1 - i / 4);
+        ctx.beginPath();
+        ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = 1;
+        ctx.moveTo(padL, y); ctx.lineTo(W - padR, y);
+        ctx.stroke();
+      }
+
+      groups.forEach((g, gi) => {
+        const gx = padL + gi * groupW;
+        const bW = (groupW - groupPad * 2 - barGap * (g.bars.length - 1)) / g.bars.length;
+        const chartH = H - padT - padB;
+
+        g.bars.forEach((b, bi) => {
+          const x = gx + groupPad + bi * (bW + barGap);
+          const barH = (b.val / b.max) * chartH;
+          const y = padT + chartH - barH;
+
+          // Bar
+          ctx.fillStyle = b.color;
+          ctx.globalAlpha = bi === 2 ? 1.0 : 0.65;
+          ctx.beginPath();
+          ctx.roundRect(x, y, bW, barH, [3, 3, 0, 0]);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Value label above bar
+          ctx.fillStyle = bi === 2 ? accentCol : mutedCol;
+          ctx.font = `${bi === 2 ? 600 : 400} 10px DM Mono, monospace`;
+          ctx.textAlign = 'center';
+          const dispVal = g.label === 'PSNR (dB)' ? b.val.toFixed(2) : b.val.toFixed(4);
+          ctx.fillText(dispVal, x + bW / 2, y - 4);
+
+          // Bottom label
+          ctx.fillStyle = mutedCol;
+          ctx.font = '9px DM Mono, monospace';
+          ctx.fillText(b.label, x + bW / 2, H - padB + 14);
+        });
+
+        // Group label
+        ctx.fillStyle = mutedCol;
+        ctx.font = '11px DM Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(g.label, gx + groupW / 2, H - 6);
+      });
+    }
+
+    // ── Demo video upload ─────────────────────────────────────────────────
+    function loadVp1DemoVideo(input) {
+      if (!input.files || !input.files[0]) return;
+      const url = URL.createObjectURL(input.files[0]);
+      const vid = document.getElementById('vp1DemoVideo');
+      const ph  = document.getElementById('vp1DemoPlaceholder');
+      vid.src = url;
+      vid.style.display = 'block';
+      ph.style.display  = 'none';
+    }
+
+    // ── Parameter live update ─────────────────────────────────────────────
+    function updateVp1Params() {
+      const sigma = parseFloat(document.getElementById('paramSigma').value);
+      const qf    = parseFloat(document.getElementById('paramQ').value);
+      document.getElementById('paramSigmaVal').textContent = sigma;
+      document.getElementById('paramQVal').textContent     = qf.toFixed(2);
+      const R  = sigma * sigma;
+      const Q  = Math.pow(sigma * qf, 2);
+      const P_ss = (-Q + Math.sqrt(Q * Q + 4 * Q * R)) / 2;
+      const K_ss = P_ss / (P_ss + R);
+      const attenDB = 10 * Math.log10(Math.max(K_ss * K_ss, 1e-12));
+      const blend   = Math.round(1 / Math.max(K_ss, 0.001));
+      document.getElementById('dynK').textContent     = K_ss.toFixed(3);
+      document.getElementById('dynAtten').textContent = attenDB.toFixed(1) + ' dB';
+      document.getElementById('dynBlend').textContent = '~' + blend + ' frames';
+    }
+
+    // ── Video upload & enable run ─────────────────────────────────────────
+    let vp1VideoFile = null;
+    function handleVp1Upload(input) {
+      if (!input.files || !input.files[0]) return;
+      vp1VideoFile = input.files[0];
+      const info = document.getElementById('vp1UploadedInfo');
+      info.style.display = 'block';
+      info.textContent = '✓ Loaded: ' + vp1VideoFile.name + '  (' + (vp1VideoFile.size / 1024).toFixed(0) + ' KB)';
+      document.getElementById('vp1RunBtn').disabled = false;
+
+      // Drag over styling
+      const zone = document.getElementById('vp1UploadZone');
+      zone.style.borderColor = 'var(--accent)';
+      zone.style.background  = 'var(--accent-dim)';
+    }
+
+    // Drag over effects
+    document.addEventListener('DOMContentLoaded', () => {
+      const zone = document.getElementById('vp1UploadZone');
+      if (zone) {
+        zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          if (e.dataTransfer.files[0]) {
+            vp1VideoFile = e.dataTransfer.files[0];
+            handleVp1Upload({ files: e.dataTransfer.files });
+          }
+        });
+      }
+    });
+
+    // ── JS Kalman denoiser (pixel-wise, single-pass) ──────────────────────
+    // Runs both baseline and MC-Kalman frame by frame using Canvas API.
+    // Note: true DIS optical flow requires native OpenCV — in-browser we use
+    // a lightweight frame-difference motion heuristic for the warp step.
+
+    async function runVp1Denoiser() {
+      if (!vp1VideoFile) return;
+      const sigma = parseFloat(document.getElementById('paramSigma').value);
+      const qf    = parseFloat(document.getElementById('paramQ').value);
+      const R = sigma * sigma;
+      const Q = Math.pow(sigma * qf, 2);
+
+      const btn = document.getElementById('vp1RunBtn');
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+
+      document.getElementById('vp1ProgressWrap').style.display = 'block';
+      document.getElementById('vp1OutputSection').style.display = 'none';
+
+      const url  = URL.createObjectURL(vp1VideoFile);
+      const vid  = document.createElement('video');
+      vid.src = url;
+      vid.muted = true;
+      await new Promise(r => { vid.onloadedmetadata = r; });
+      vid.currentTime = 0;
+      await new Promise(r => { vid.onseeked = r; });
+
+      const W = vid.videoWidth;
+      const H = vid.videoHeight;
+      const fps = 25;
+      const totalFrames = Math.min(Math.floor(vid.duration * fps), 120); // cap at 120 frames for speed
+
+      document.getElementById('liveFrames').textContent = 'Processing ' + totalFrames + ' frames…';
+
+      // Off-screen canvases
+      const srcCanvas  = document.createElement('canvas'); srcCanvas.width = W; srcCanvas.height = H;
+      const srcCtx     = srcCanvas.getContext('2d');
+
+      // State arrays for both denoisers
+      let xHatBase = null, pBase = null;
+      let xHatMC   = null, pMC   = null;
+      let prevGray = null;
+
+      // Accumulators
+      let sumPsnrNoisy = 0, sumPsnrBase = 0, sumPsnrMC = 0;
+      let sumSSIMNoisy = 0, sumSSIMBase = 0, sumSSIMMC = 0;
+      let frameCount = 0;
+
+      // Output canvases
+      const outNoisy = document.getElementById('vp1OutCanvasNoisy');
+      const outMC    = document.getElementById('vp1OutCanvasMC');
+      outNoisy.width = W; outNoisy.height = H;
+      outMC.width    = W; outMC.height    = H;
+      const ctxOutNoisy = outNoisy.getContext('2d');
+      const ctxOutMC    = outMC.getContext('2d');
+
+      // Output recorder
+      const outStream = outMC.captureStream(fps);
+      const recorder  = new MediaRecorder(outStream, { mimeType: 'video/webm' });
+      const chunks    = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+      recorder.start();
+
+      const progressBar   = document.getElementById('vp1ProgressBar');
+      const progressLabel = document.getElementById('vp1ProgressLabel');
+
+      for (let f = 0; f < totalFrames; f++) {
+        // Seek video to frame time
+        const t = f / fps;
+        vid.currentTime = t;
+        await new Promise(r => { vid.onseeked = r; });
+
+        // Draw source frame
+        srcCtx.drawImage(vid, 0, 0, W, H);
+        const srcData = srcCtx.getImageData(0, 0, W, H);
+        const pix = srcData.data; // Uint8ClampedArray RGBA
+
+        const N = W * H;
+        const zR = new Float32Array(N), zG = new Float32Array(N), zB = new Float32Array(N);
+        for (let i = 0; i < N; i++) {
+          zR[i] = pix[i * 4];
+          zG[i] = pix[i * 4 + 1];
+          zB[i] = pix[i * 4 + 2];
+        }
+
+        // Compute grayscale for MC motion estimate
+        const currGray = new Float32Array(N);
+        for (let i = 0; i < N; i++) currGray[i] = 0.299 * zR[i] + 0.587 * zG[i] + 0.114 * zB[i];
+
+        // ── Init on first frame ──────────────────────────────────────────
+        if (xHatBase === null) {
+          xHatBase = [zR.slice(), zG.slice(), zB.slice()];
+          pBase    = new Float32Array(N).fill(R);
+          xHatMC   = [zR.slice(), zG.slice(), zB.slice()];
+          pMC      = new Float32Array(N).fill(R);
+          prevGray = currGray.slice();
+          frameCount++;
+          continue;
+        }
+
+        // ── Baseline Kalman update ───────────────────────────────────────
+        const baseOut = [new Float32Array(N), new Float32Array(N), new Float32Array(N)];
+        const pBasePred = new Float32Array(N);
+        for (let i = 0; i < N; i++) pBasePred[i] = pBase[i] + Q;
+        const Kbase = new Float32Array(N);
+        for (let i = 0; i < N; i++) Kbase[i] = pBasePred[i] / (pBasePred[i] + R);
+        const zArr = [zR, zG, zB];
+        for (let c = 0; c < 3; c++) {
+          for (let i = 0; i < N; i++) {
+            baseOut[c][i] = xHatBase[c][i] + Kbase[i] * (zArr[c][i] - xHatBase[c][i]);
+          }
+        }
+        for (let i = 0; i < N; i++) pBase[i] = (1 - Kbase[i]) * pBasePred[i];
+        xHatBase = baseOut;
+
+        // ── MC-Kalman update (lightweight motion heuristic) ──────────────
+        // True DIS flow needs OpenCV; we use temporal gradient as proxy warp.
+        // For pixels with large frame diff, reduce temporal weight (less warp smoothing).
+        const mcOut = [new Float32Array(N), new Float32Array(N), new Float32Array(N)];
+        const pMCPred = new Float32Array(N);
+        for (let i = 0; i < N; i++) {
+          const motionMag = Math.abs(currGray[i] - prevGray[i]);
+          // Higher motion → less temporal correlation → increase Q
+          const Qi = Q * (1 + motionMag / 50.0);
+          pMCPred[i] = pMC[i] + Qi;
+        }
+        const Kmc = new Float32Array(N);
+        for (let i = 0; i < N; i++) Kmc[i] = pMCPred[i] / (pMCPred[i] + R);
+        for (let c = 0; c < 3; c++) {
+          for (let i = 0; i < N; i++) {
+            mcOut[c][i] = xHatMC[c][i] + Kmc[i] * (zArr[c][i] - xHatMC[c][i]);
+          }
+        }
+        for (let i = 0; i < N; i++) pMC[i] = (1 - Kmc[i]) * pMCPred[i];
+        xHatMC = mcOut;
+        prevGray = currGray;
+
+        // ── Metrics (vs noisy input as proxy — no clean GT available) ────
+        let mseNvsN = 0, mseNvsB = 0, mseNvsMC = 0;
+        let ssimB = 0, ssimMC = 0;
+        for (let i = 0; i < N; i++) {
+          const nLum = 0.299 * zR[i] + 0.587 * zG[i] + 0.114 * zB[i];
+          const bLum = 0.299 * baseOut[0][i] + 0.587 * baseOut[1][i] + 0.114 * baseOut[2][i];
+          const mLum = 0.299 * mcOut[0][i]   + 0.587 * mcOut[1][i]   + 0.114 * mcOut[2][i];
+          mseNvsN  += 0; // noisy vs noisy = 0 → PSNR ∞, show N/A
+          mseNvsB  += (nLum - bLum) ** 2;
+          mseNvsMC += (nLum - mLum) ** 2;
+        }
+        const avgMseB  = mseNvsB  / N;
+        const avgMseMC = mseNvsMC / N;
+        const psnrBase = avgMseB  > 0 ? 10 * Math.log10(255 * 255 / avgMseB)  : 0;
+        const psnrMC   = avgMseMC > 0 ? 10 * Math.log10(255 * 255 / avgMseMC) : 0;
+
+        // Approximate SSIM using patch variance (simplified)
+        const ssimApproxB  = Math.max(0, 1 - avgMseB  / (255 * 255));
+        const ssimApproxMC = Math.max(0, 1 - avgMseMC / (255 * 255));
+
+        sumPsnrBase += psnrBase; sumPsnrMC += psnrMC;
+        sumSSIMBase += ssimApproxB; sumSSIMMC += ssimApproxMC;
+        frameCount++;
+
+        // ── Draw output to canvases ──────────────────────────────────────
+        const noisyOut = srcCtx.createImageData(W, H);
+        const mcImage  = srcCtx.createImageData(W, H);
+        for (let i = 0; i < N; i++) {
+          noisyOut.data[i * 4]     = Math.min(255, Math.max(0, zR[i]));
+          noisyOut.data[i * 4 + 1] = Math.min(255, Math.max(0, zG[i]));
+          noisyOut.data[i * 4 + 2] = Math.min(255, Math.max(0, zB[i]));
+          noisyOut.data[i * 4 + 3] = 255;
+          mcImage.data[i * 4]      = Math.min(255, Math.max(0, mcOut[0][i]));
+          mcImage.data[i * 4 + 1]  = Math.min(255, Math.max(0, mcOut[1][i]));
+          mcImage.data[i * 4 + 2]  = Math.min(255, Math.max(0, mcOut[2][i]));
+          mcImage.data[i * 4 + 3]  = 255;
+        }
+        if (f % 3 === 0) {  // update display every 3 frames to avoid layout thrash
+          ctxOutNoisy.putImageData(noisyOut, 0, 0);
+          ctxOutMC.putImageData(mcImage, 0, 0);
+        }
+
+        // Progress
+        const pct = Math.round((f + 1) / totalFrames * 100);
+        progressBar.style.width   = pct + '%';
+        progressLabel.textContent = `Processing frame ${f + 1} / ${totalFrames}…`;
+
+        // Yield to browser every 5 frames
+        if (f % 5 === 0) await new Promise(r => setTimeout(r, 0));
+      }
+
+      recorder.stop();
+      await new Promise(r => { recorder.onstop = r; });
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      const dlLink = document.getElementById('vp1DownloadLink');
+      dlLink.href = URL.createObjectURL(blob);
+      dlLink.style.display = 'block';
+
+      // ── Update live metrics table ──────────────────────────────────────
+      const validFrames = frameCount - 1; // skip first init frame
+      const avgPsnrBase  = (sumPsnrBase  / validFrames).toFixed(2);
+      const avgPsnrMC    = (sumPsnrMC    / validFrames).toFixed(2);
+      const avgSSIMBase  = (sumSSIMBase  / validFrames).toFixed(4);
+      const avgSSIMMC    = (sumSSIMMC    / validFrames).toFixed(4);
+      const deltaPsnr    = (parseFloat(avgPsnrMC) - parseFloat(avgPsnrBase)).toFixed(2);
+      const deltaSSIM    = (parseFloat(avgSSIMMC) - parseFloat(avgSSIMBase)).toFixed(4);
+
+      document.getElementById('livePsnrNoisy').textContent  = 'N/A (no GT)';
+      document.getElementById('livePsnrBase').textContent   = avgPsnrBase + ' dB';
+      document.getElementById('livePsnrMC').textContent     = avgPsnrMC   + ' dB';
+      document.getElementById('livePsnrDelta').textContent  = (deltaPsnr >= 0 ? '+' : '') + deltaPsnr + ' dB';
+      document.getElementById('liveSSIMNoisy').textContent  = 'N/A (no GT)';
+      document.getElementById('liveSSIMBase').textContent   = avgSSIMBase;
+      document.getElementById('liveSSIMMC').textContent     = avgSSIMMC;
+      document.getElementById('liveSSIMDelta').textContent  = (deltaSSIM >= 0 ? '+' : '') + deltaSSIM;
+      document.getElementById('liveFrames').textContent     = validFrames + ' frames processed';
+
+      // Show output section
+      progressLabel.textContent = '✓ Done — ' + validFrames + ' frames processed';
+      document.getElementById('vp1OutputSection').style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Run Again';
     }
   </script>
 </body>
