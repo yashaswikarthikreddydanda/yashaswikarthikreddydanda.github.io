@@ -978,7 +978,7 @@
         <div class="proj-list">
           <div class="proj-row" onclick="openOverlay('vc1')">
             <span class="proj-row-num">VC_01</span>
-            <span class="proj-row-title">Video Compression Project</span>
+            <span class="proj-row-title">Content-Aware Intra and Inter Prediction with Texture and Motion Analysis</span>
             <div class="proj-row-tags"><span class="tag">C++</span><span class="tag">FFmpeg</span><span class="tag">SIMD</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
@@ -2422,16 +2422,27 @@
     const projects = {
       vc1: {
         category: '🗜️ Video Compression',
-        title: 'Video Compression Project',
-        desc: 'Update this with your real project description. Explain the problem, your approach, the codec or algorithm used, and the outcome. What made this project unique or challenging?',
-        tags: ['C++', 'FFmpeg', 'Codec', 'SIMD'],
+        title: 'Content-Aware Intra and Inter Prediction with Texture and Motion Analysis',
+        desc: `<div style="display:flex;flex-direction:column;gap:0.85rem;">
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent);border:1px solid rgba(193,18,31,0.3);padding:0.3rem 0.85rem;border-radius:2px;letter-spacing:0.06em;">⏳ Pending Publishing &nbsp;·&nbsp; SPIE</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--accent);border:1px solid rgba(193,18,31,0.3);padding:0.3rem 0.85rem;border-radius:2px;letter-spacing:0.06em;">⚖️ Pending Patent &nbsp;·&nbsp; US Patents</span>
+          </div>
+          <p style="color:var(--muted);font-size:1rem;line-height:1.85;font-family:'Georgia',serif;margin:0;">This is my <strong style="color:var(--text);">Master's thesis</strong>. Full methodology, results, and implementation details will be made public upon publication.</p>
+          <p style="color:var(--muted);font-size:0.88rem;font-family:'DM Mono',monospace;letter-spacing:0.04em;margin:0;">Will update soon.</p>
+          <a href="https://repository.rit.edu/theses/12470/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--accent);text-decoration:none;border:1px solid rgba(193,18,31,0.3);padding:0.45rem 1rem;border-radius:2px;letter-spacing:0.05em;transition:border-color 0.2s,background 0.2s;width:fit-content;" onmouseover="this.style.background='rgba(193,18,31,0.06)'" onmouseout="this.style.background='transparent'">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor;flex-shrink:0;"><path d="M14 3v2H5v14h14v-9h2v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10zm7-2v6h-2V4.414l-9.293 9.293-1.414-1.414L17.586 3H13V1h8z"/></svg>
+            View full thesis at RIT Repository
+          </a>
+        </div>`,
+        tags: ['C++', 'FFmpeg', 'SIMD', "Master's Thesis"],
         metrics: [
-          { val: '40%', label: 'Size Reduction' },
-          { val: '2×', label: 'Encode Speed' },
-          { val: '38dB', label: 'PSNR Score' },
-          { val: '0.96', label: 'SSIM Index' },
+          { val: 'SPIE', label: 'Pending Publishing' },
+          { val: 'US', label: 'Pending Patent' },
+          { val: 'M.S.', label: 'Thesis' },
         ],
-        github: 'https://github.com/yourusername/video-compression-project',
+        noSlider: true,
+        github: '',
       },
       vp1: {
   category: '🎬 Video Processing',
@@ -2559,6 +2570,7 @@
       document.getElementById('ol-title').textContent = p.title;
       document.getElementById('ol-desc').innerHTML = p.desc;
       document.getElementById('ol-github').href = p.github;
+      document.getElementById('ol-github').style.display = p.github ? '' : 'none';
 
       // Tags
       document.getElementById('ol-tags').innerHTML = p.tags.map(t =>
@@ -2598,8 +2610,8 @@
         sliderWrap.style.display    = 'none';
       } else {
         resultImgWrap.style.display = 'none';
-        sliderWrap.style.display    = 'block';
-        setSlider(50);
+        sliderWrap.style.display    = p.noSlider ? 'none' : 'block';
+        if (!p.noSlider) setSlider(50);
       }
 
       // Analysis tables — show only for ssp1
