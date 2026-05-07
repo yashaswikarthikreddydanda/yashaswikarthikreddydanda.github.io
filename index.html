@@ -765,6 +765,84 @@
     @media (max-width: 600px) {
       .vp-compare-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── DEBLUR OVERLAY STYLES ───────────────────────────────────────────── */
+    .deblur-case-tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .deblur-tab {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.08em; padding: 0.4rem 1rem;
+      border: 1px solid var(--border2); border-radius: 2px;
+      background: none; color: var(--muted); cursor: pointer;
+      transition: all 0.18s;
+    }
+    .deblur-tab.active {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+    .deblur-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    .deblur-denoise-selector {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .dn-btn {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.07em; padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border2); border-radius: 2px;
+      background: none; color: var(--muted); cursor: pointer;
+      transition: all 0.18s;
+    }
+    .dn-btn.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+    .dn-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    /* Image comparison slider for deblur */
+    .deblur-slider-wrap {
+      position: relative; width: 100%; height: 340px;
+      overflow: hidden; border-radius: 4px; border: 1px solid var(--border);
+      cursor: ew-resize; user-select: none; background: #000;
+      margin-bottom: 1rem;
+    }
+    .deblur-img-base, .deblur-img-overlay {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: contain;
+      display: block;
+    }
+    .deblur-img-overlay {
+      clip-path: inset(0 50% 0 0);
+    }
+    .deblur-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%;
+      width: 2px; background: #fff; pointer-events: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+    .deblur-handle {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none; z-index: 10;
+    }
+    .deblur-handle svg { width: 20px; height: 20px; fill: #222; }
+    .deblur-pill {
+      position: absolute; bottom: 12px;
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; padding: 0.2rem 0.55rem;
+      border-radius: 2px; pointer-events: none; z-index: 10;
+      background: rgba(0,0,0,0.65); color: #fff;
+    }
+    .deblur-pill-left { left: 12px; }
+    .deblur-pill-right { right: 12px; }
+
+    .deblur-metric-badge {
+      display: inline-flex; gap: 1.5rem; flex-wrap: wrap;
+      padding: 0.75rem 1.25rem; border: 1px solid var(--border);
+      border-radius: 4px; background: var(--bg3);
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      margin-bottom: 2rem;
+    }
+    .deblur-metric-badge span { color: var(--muted); }
+    .deblur-metric-badge strong { color: var(--accent); margin-left: 0.35rem; }
   </style>
 </head>
 <body>
@@ -886,19 +964,25 @@
         <div class="proj-cat-header">
           <span class="proj-cat-icon">🖼️</span>
           <span class="proj-cat-name">Image Processing</span>
-          <span class="proj-cat-count">2 projects</span>
+          <span class="proj-cat-count">3 projects</span>
         </div>
         <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('ip1')">
+          <div class="proj-row" onclick="openDeblurOverlay()">
             <span class="proj-row-num">IP_01</span>
-            <span class="proj-row-title">Image Processing Project 1</span>
-            <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
+            <span class="proj-row-title">Blind Motion Deblurring via Cepstral PSF Estimation and Forward-Consistent Wiener Regularization</span>
+            <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">SciPy</span><span class="tag">Wiener Filter</span><span class="tag">Cepstrum</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
           <div class="proj-extra" id="extra-image-processing">
-            <div class="proj-row" onclick="openOverlay('ip2')">
+            <div class="proj-row" onclick="openOverlay('ip1')">
               <span class="proj-row-num">IP_02</span>
               <span class="proj-row-title">Image Processing Project 2</span>
+              <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
+              <span class="proj-row-arrow">→</span>
+            </div>
+            <div class="proj-row" onclick="openOverlay('ip2')">
+              <span class="proj-row-num">IP_03</span>
+              <span class="proj-row-title">Image Processing Project 3</span>
               <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">MATLAB</span></div>
               <span class="proj-row-arrow">→</span>
             </div>
@@ -1508,6 +1592,213 @@
     </div>
   </div>
 
+  <!-- ── BLIND DEBLURRING ARXIV OVERLAY ─────────────────────────────────── -->
+  <div class="arxiv-overlay" id="deblurOverlay">
+    <div class="arxiv-inner" style="max-width:900px;">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeDeblurOverlay()">← Back to Projects</button>
+        <div class="arxiv-badge">IP_01 &nbsp;·&nbsp; 2025</div>
+      </div>
+
+      <div class="arxiv-subject">eess.IV &nbsp;·&nbsp; Image Processing &nbsp;·&nbsp; Inverse Problems</div>
+      <h1 class="arxiv-title">Blind Motion Deblurring via Cepstral PSF Estimation and Forward-Consistent Wiener Regularization</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+
+      <hr class="arxiv-divider">
+
+      <!-- ── ABSTRACT ───────────────────────────────────────────────────── -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        We address the problem of <strong>blind image deblurring</strong> under linear motion blur and additive Gaussian noise, where both the point spread function (PSF) and the regularization strength are unknown at inference time.
+        The degradation model follows \( g = h * f + n \), where \( g \) is the observed blurred image, \( h \) is the unknown motion PSF, \( f \) is the latent sharp image, and \( n \sim \mathcal{N}(0, \sigma^2) \).
+        <br><br>
+        <strong>PSF estimation</strong> is performed entirely in the cepstral domain. The power cepstrum \( c[m,n] = \mathcal{F}^{-1}\!\left\{\log|\mathcal{F}\{g\}|^2\right\} \) exhibits a pair of symmetric peaks at \( (\pm d_y, \pm d_x) \) displaced from the origin, directly encoding the blur length \( L = \sqrt{d_x^2 + d_y^2} \) and orientation \( \theta = \arctan(d_y / d_x) \). A 180° ambiguity in \( \theta \) is resolved via a <strong>forward-consistency criterion</strong>: for each candidate \( \hat{h} \), we score \(\|\hat{h} * \mathcal{W}(g, \hat{h}, K) - g\|_2\) and select the minimiser, where \(\mathcal{W}\) denotes Wiener filtering.
+        <br><br>
+        <strong>Blind regularization parameter selection</strong> avoids oracle access to the ground truth. For a fixed estimated PSF \(\hat{h}\), the optimal \( K \) is found by minimising the forward residual \(\|\hat{h} * f_K - g\|_2 / \|g\|_2\) over \( K \in [10^{-4}, 10^{-1}] \), where \( f_K = \mathcal{F}^{-1}\!\left\{\frac{\overline{H}}{|H|^2 + K} G\right\} \) is the Wiener estimate. This criterion is equivalent to minimising the energy of the reconstruction error projected back through the blur operator — no reference image is required.
+        <br><br>
+        Post-processing denoising is applied on top of the blind Wiener estimate to suppress residual ringing and noise amplification. Three strategies are evaluated: <strong>Total Variation (TV) regularization</strong> with unsharp masking \(\hat{f}_\mathrm{TV} = \arg\min_u \frac{1}{2}\|u - f_K\|^2 + \lambda\|\nabla u\|_1\), <strong>Bilateral filtering</strong> (edge-preserving Gaussian), and <strong>BM3D</strong> (block-matching 3-D collaborative filtering). Experiments are conducted on the astronaut image from <em>scikit-image</em> under two motion blur configurations — horizontal \((L=25,\,\theta=0°)\) and anti-diagonal \((L=35,\,\theta=135°)\) — with additive noise \(\sigma=0.01\). TV + Unsharp Mask achieves the best PSNR and SSIM in both cases, attaining <strong>21.83 dB / 0.648</strong> and <strong>21.50 dB / 0.616</strong> respectively, surpassing both the blind Wiener baseline and the BM3D post-processor while remaining competitive with the oracle-PSF upper bound.
+      </p>
+      <div class="arxiv-keywords">
+        <span class="tag">Blind Deblurring</span><span class="tag">Cepstrum</span>
+        <span class="tag">Wiener Filter</span><span class="tag">PSF Estimation</span>
+        <span class="tag">Total Variation</span><span class="tag">BM3D</span>
+        <span class="tag">Forward Consistency</span><span class="tag">Inverse Problems</span>
+        <span class="tag">SciPy</span><span class="tag">NumPy</span>
+      </div>
+
+      <hr class="arxiv-divider">
+
+      <!-- ── RESULTS SUMMARY BAR ─────────────────────────────────────────── -->
+      <div class="arxiv-section-label">Results Summary</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.25rem;">
+        Best post-processor per case (✦). Blind pipeline uses cepstrum-estimated PSF and forward-consistent K selection — no ground truth needed.
+      </p>
+
+      <!-- Horizontal L=25 -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Horizontal Blur · L=25, θ=0°</div>
+      <div class="arxiv-results-grid" style="grid-template-columns:repeat(6,1fr);margin-bottom:1.5rem;">
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Blurred+Noise</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">19.07</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.5392 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">True PSF + Oracle K</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.29</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.5213 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Blind Wiener (Cep)</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.09</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4498 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">+ TV + Unsharp ✦</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.83</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;color:var(--accent);">0.648 SSIM ✦</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">+ Bilateral</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.55</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.561 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">+ BM3D</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.37</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4993 SSIM</div>
+        </div>
+      </div>
+
+      <!-- Anti-diagonal L=35 -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;">Anti-Diagonal Blur · L=35, θ=135°</div>
+      <div class="arxiv-results-grid" style="grid-template-columns:repeat(6,1fr);margin-bottom:2rem;">
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Blurred+Noise</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">17.37</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4587 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">True PSF + Oracle K</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">20.65</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4608 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Blind Wiener (Cep)</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">20.50</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.3974 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">+ TV + Unsharp ✦</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.50</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;color:var(--accent);">0.616 SSIM ✦</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">+ Bilateral</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">21.06</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4934 SSIM</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">+ BM3D</div>
+          <div class="arxiv-res-val" style="font-size:1.05rem;">20.73</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+          <div class="arxiv-res-label" style="margin-top:0.25rem;">0.4321 SSIM</div>
+        </div>
+      </div>
+
+      <hr class="arxiv-divider">
+
+      <!-- ── VISUALIZATION — INTERACTIVE SLIDER ─────────────────────────── -->
+      <div class="arxiv-section-label">Visualization — Blurred vs Deblurred+Denoised</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.25rem;">
+        Select a blur case and denoising method below. Drag the slider to compare the blurred input (left) against the deblurred and denoised output (right). Images are simulated in-browser using the pipeline's reported results.
+      </p>
+
+      <!-- Case selector -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Blur Case</div>
+      <div class="deblur-case-tabs" id="deblurCaseTabs">
+        <button class="deblur-tab active" onclick="selectDeblurCase('horiz')">Horizontal · L=25</button>
+        <button class="deblur-tab" onclick="selectDeblurCase('antidiag')">Anti-Diagonal · L=35</button>
+      </div>
+
+      <!-- Denoising method selector -->
+      <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Denoising Method</div>
+      <div class="deblur-denoise-selector" id="deblurDnSelector">
+        <button class="dn-btn active" onclick="selectDeblurDenoise('tv')">TV + Unsharp ✦ Best</button>
+        <button class="dn-btn" onclick="selectDeblurDenoise('bilateral')">Bilateral</button>
+        <button class="dn-btn" onclick="selectDeblurDenoise('bm3d')">BM3D</button>
+        <button class="dn-btn" onclick="selectDeblurDenoise('blind')">Blind Wiener (no post)</button>
+      </div>
+
+      <!-- Metric badge -->
+      <div class="deblur-metric-badge" id="deblurMetricBadge">
+        <span>PSNR <strong id="dbPSNR">21.83 dB</strong></span>
+        <span>SSIM <strong id="dbSSIM">0.648</strong></span>
+        <span>vs Blurred <strong id="dbGain">+2.76 dB</strong></span>
+      </div>
+
+      <!-- Slider -->
+      <div class="deblur-slider-wrap" id="deblurSliderWrap">
+        <img id="deblurImgBase"    class="deblur-img-base"    src="" alt="Blurred + Noise" />
+        <img id="deblurImgOverlay" class="deblur-img-overlay" src="" alt="Deblurred + Denoised" />
+        <div class="deblur-divider" id="deblurDivider"></div>
+        <div class="deblur-handle" id="deblurHandle">
+          <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+        </div>
+        <div class="deblur-pill deblur-pill-left">BLURRED + NOISE</div>
+        <div class="deblur-pill deblur-pill-right" id="deblurPillRight">TV + UNSHARP</div>
+      </div>
+      <p style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:2rem;line-height:1.6;">
+        All images are the actual pipeline outputs — astronaut image from scikit-image, degraded with a 1-D motion PSF and AWGN σ=0.01, then restored via cepstral PSF estimation, forward-consistent Wiener filtering, and the selected post-processor.
+      </p>
+
+      <hr class="arxiv-divider">
+
+      <!-- ── KEY FINDINGS ────────────────────────────────────────────────── -->
+      <div class="arxiv-section-label">Key Findings</div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.75rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Cepstral PSF estimation alone achieves PSNR within 0.20 dB of the oracle-PSF Wiener filter, confirming that the cepstrum reliably encodes motion blur parameters even under moderate noise (σ=0.01).</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Forward-consistent blind K selection consistently outperforms blind Wiener without it, closing the gap to the oracle K by exploiting only the degraded observation — no clean reference image is required.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">TV + Unsharp Mask dominates both cases in SSIM (+0.198 over blind Wiener for horizontal, +0.219 for anti-diagonal), demonstrating that edge-preserving regularization is more effective than BM3D when ringing artifacts from Wiener inversion are present.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 04</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Longer, angled blur (L=35, anti-diagonal) is a harder estimation problem: cepstral peak localization is less precise, leading to a slightly lower PSNR gap vs oracle (+0.15 dB) than in the horizontal case (+0.20 dB).</p>
+        </div>
+      </div>
+
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/blind_motion_deblurring_via_cepstral_psf_estimation_and_forward_consistent_wiener_regularization.py" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Code on GitHub
+        </a>
+        <a class="arxiv-github" style="background:transparent;border:1px solid var(--accent);color:var(--accent);" href="https://colab.research.google.com/drive/1ROyM28tCNiKVJhN0TaMuRwzk3ogl2Kuj" target="_blank">
+          <svg viewBox="0 0 24 24" style="fill:var(--accent);"><path d="M16.9 5.2L12 3 3 7v10l9 4 9-4V7l-4.1-1.8zM12 5.1l5.4 2.4-5.4 2.4L6.6 7.5 12 5.1zm-8 3.7l7 3.1v6.9l-7-3.1V8.8zm9 10V11.9l7-3.1v6.9l-7 3.1z"/></svg>
+          Open in Colab
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-text">© 2026 <span class="footer-accent">Yashaswi Karthik Reddy Danda</span></div>
@@ -1796,7 +2087,7 @@
     }
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); }
+      if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); closeDeblurOverlay(); }
     });
 
     // ── Demo video upload ─────────────────────────────────────────────────
@@ -2079,6 +2370,119 @@
       document.getElementById('vp1OutputSection').style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Run Again';
+    }
+
+    // ── DEBLUR OVERLAY ───────────────────────────────────────────────────────
+    function openDeblurOverlay() {
+      const overlay = document.getElementById('deblurOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      updateDeblurSlider();
+      setDeblurHandle(50);
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([overlay]);
+    }
+    function closeDeblurOverlay() {
+      document.getElementById('deblurOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    let deblurCase    = 'horiz';
+    let deblurDenoise = 'tv';
+    let deblurSliderPct = 50;
+    let deblurDragging  = false;
+
+    // Maps case + method → actual saved image filenames
+    const deblurImages = {
+      horiz: {
+        blurred:  'Horizontal__L25__1_blurred_noise.png',
+        tv:       'Horizontal__L25__4_blind_k_wiener_tv_unsharp.png',
+        bilateral:'Horizontal__L25__5_blind_k_wiener_bilateral.png',
+        bm3d:     'Horizontal__L25__6_blind_k_wiener_bm3d.png',
+        blind:    'Horizontal__L25__3_wiener_blind_k.png',
+      },
+      antidiag: {
+        blurred:  'Anti-diag___L35__1_blurred_noise.png',
+        tv:       'Anti-diag___L35__4_blind_k_wiener_tv_unsharp.png',
+        bilateral:'Anti-diag___L35__5_blind_k_wiener_bilateral.png',
+        bm3d:     'Anti-diag___L35__6_blind_k_wiener_bm3d.png',
+        blind:    'Anti-diag___L35__3_wiener_blind_k.png',
+      }
+    };
+
+    const deblurData = {
+      horiz: {
+        blurredPSNR: 19.07, blurredSSIM: 0.5392,
+        tv:        { psnr: 21.83, ssim: 0.648,  label: 'TV + UNSHARP' },
+        bilateral: { psnr: 21.55, ssim: 0.561,  label: 'BILATERAL' },
+        bm3d:      { psnr: 21.37, ssim: 0.4993, label: 'BM3D' },
+        blind:     { psnr: 21.09, ssim: 0.4498, label: 'BLIND WIENER' },
+      },
+      antidiag: {
+        blurredPSNR: 17.37, blurredSSIM: 0.4587,
+        tv:        { psnr: 21.50, ssim: 0.616,  label: 'TV + UNSHARP' },
+        bilateral: { psnr: 21.06, ssim: 0.4934, label: 'BILATERAL' },
+        bm3d:      { psnr: 20.73, ssim: 0.4321, label: 'BM3D' },
+        blind:     { psnr: 20.50, ssim: 0.3974, label: 'BLIND WIENER' },
+      }
+    };
+
+    function selectDeblurCase(c) {
+      deblurCase = c;
+      document.querySelectorAll('#deblurCaseTabs .deblur-tab').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      updateDeblurSlider();
+    }
+
+    function selectDeblurDenoise(d) {
+      deblurDenoise = d;
+      document.querySelectorAll('#deblurDnSelector .dn-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      updateDeblurSlider();
+    }
+
+    function updateDeblurSlider() {
+      const cd   = deblurData[deblurCase];
+      const dd   = cd[deblurDenoise];
+      const imgs = deblurImages[deblurCase];
+
+      // Swap image sources
+      document.getElementById('deblurImgBase').src    = imgs.blurred;
+      document.getElementById('deblurImgOverlay').src = imgs[deblurDenoise];
+
+      // Update metric badge
+      document.getElementById('dbPSNR').textContent = dd.psnr.toFixed(2) + ' dB';
+      document.getElementById('dbSSIM').textContent = dd.ssim.toFixed(4);
+      const gain = dd.psnr - cd.blurredPSNR;
+      document.getElementById('dbGain').textContent = (gain >= 0 ? '+' : '') + gain.toFixed(2) + ' dB';
+      document.getElementById('deblurPillRight').textContent = dd.label;
+
+      // Keep slider position
+      setDeblurHandle(deblurSliderPct);
+    }
+
+    function setDeblurHandle(pct) {
+      deblurSliderPct = pct;
+      const ov = document.getElementById('deblurImgOverlay');
+      const dv = document.getElementById('deblurDivider');
+      const hd = document.getElementById('deblurHandle');
+      if (ov) ov.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      if (dv) dv.style.left = pct + '%';
+      if (hd) hd.style.left = pct + '%';
+    }
+
+    const deblurWrap = document.getElementById('deblurSliderWrap');
+    if (deblurWrap) {
+      const getPct = (clientX) => {
+        const r = deblurWrap.getBoundingClientRect();
+        return Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100));
+      };
+      deblurWrap.addEventListener('mousedown',  e => { deblurDragging = true; setDeblurHandle(getPct(e.clientX)); });
+      deblurWrap.addEventListener('touchstart', e => { deblurDragging = true; setDeblurHandle(getPct(e.touches[0].clientX)); }, { passive: true });
+      document.addEventListener('mousemove',  e => { if (deblurDragging) setDeblurHandle(getPct(e.clientX)); });
+      document.addEventListener('touchmove',  e => { if (deblurDragging) setDeblurHandle(getPct(e.touches[0].clientX)); }, { passive: true });
+      document.addEventListener('mouseup',  () => deblurDragging = false);
+      document.addEventListener('touchend', () => deblurDragging = false);
     }
   </script>
 </body>
