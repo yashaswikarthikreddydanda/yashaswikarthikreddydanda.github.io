@@ -1053,14 +1053,20 @@
       <div class="proj-category">
         <div class="proj-cat-header">
           <span class="proj-cat-icon">📡</span>
-          <span class="proj-cat-name">Wireless Communications &amp; Signal Estimation</span>
-          <span class="proj-cat-count">1 project</span>
+          <span class="proj-cat-name">Physics-Informed Neural Networks &amp; Signal Processing</span>
+          <span class="proj-cat-count">2 projects</span>
         </div>
         <div class="proj-list">
           <div class="proj-row" onclick="openPinnOverlay()">
             <span class="proj-row-num">WC_01</span>
             <span class="proj-row-title">Physics-Informed Neural Network OFDM Channel Estimation with Doppler–Delay Regularization</span>
             <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PyTorch</span><span class="tag">OFDM</span><span class="tag">Channel Estimation</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-row" onclick="openWaveOverlay()">
+            <span class="proj-row-num">WC_02</span>
+            <span class="proj-row-title">PINN Wave Equation Solver: Optimizer &amp; LR Schedule Comparison Study</span>
+            <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PDE</span><span class="tag">L-BFGS</span><span class="tag">PyTorch</span><span class="tag">Wave Equation</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
         </div>
@@ -1168,6 +1174,277 @@
       </div>
     </div>
   </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PINN WAVE EQUATION ARXIV OVERLAY  (WC_02)
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="arxiv-overlay" id="waveOverlay">
+    <div class="arxiv-inner" style="max-width:900px;">
+
+      <!-- Top bar -->
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeWaveOverlay()">← Back to Projects</button>
+        <div class="arxiv-badge">WC_02 &nbsp;·&nbsp; 2025</div>
+      </div>
+
+      <div class="arxiv-subject">Physics-Informed Machine Learning &nbsp;·&nbsp; PDE Solvers &nbsp;·&nbsp; Optimizer Analysis</div>
+
+      <h1 class="arxiv-title">
+        Solving the 1D Wave Equation with Physics-Informed Neural Networks:<br>
+        A Systematic Optimizer and Learning-Rate Schedule Comparison
+      </h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- Abstract -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        Physics-Informed Neural Networks (PINNs) embed governing differential equations directly into the neural network training objective, enabling mesh-free PDE solving without labeled interior data. This study benchmarks <strong>seven optimization strategies</strong> — Adam, Adam+CosineAnnealing, Adam+ReduceLROnPlateau, Adam+OneCycleLR, RMSprop, Adagrad, and L-BFGS — against the canonical <strong>1D wave equation</strong> \(u_{tt} = c^2 u_{xx}\) with known analytic solution \(u(x,t) = \sin(\pi x)\cos(\pi ct)\). We additionally introduce and evaluate a <strong>two-phase hybrid strategy</strong> (Adam+OneCycleLR global exploration → L-BFGS precision refinement) that achieves the lowest L2 relative error of <strong>9.3 × 10⁻⁴</strong> in 33.9 s — outperforming standalone L-BFGS (1.3 × 10⁻³) while remaining competitive on wall-clock time. Key finding: second-order curvature information is essential for PINN convergence, but first-order warm-up substantially improves the quality of the local basin entered by L-BFGS.
+      </p>
+      <div class="arxiv-keywords">
+        <span class="tag">PINN</span><span class="tag">Wave Equation</span><span class="tag">L-BFGS</span>
+        <span class="tag">Adam</span><span class="tag">OneCycleLR</span><span class="tag">Two-Phase Training</span>
+        <span class="tag">PDE</span><span class="tag">PyTorch</span><span class="tag">Automatic Differentiation</span>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Section 1: Problem Formulation -->
+      <div class="arxiv-section-label">1. Problem Formulation</div>
+      <p style="color:var(--muted);font-size:0.92rem;line-height:1.9;margin-bottom:1.1rem;font-family:'Georgia',serif;">
+        We solve the <strong>1-D wave equation</strong> on the spatio-temporal domain \(\Omega = [0,1] \times [0,1]\):
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.1rem;overflow-x:auto;text-align:center;">
+        \[ \frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}, \quad x \in [0,1],\; t \in [0,1],\; c = 1 \]
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:0.9rem;font-family:'Georgia',serif;">
+        Subject to Dirichlet boundary conditions and sinusoidal initial data:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.1rem;overflow-x:auto;text-align:center;">
+        \[ u(0,t) = u(1,t) = 0, \quad u(x,0) = \sin(\pi x), \quad \frac{\partial u}{\partial t}(x,0) = 0 \]
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1.5rem;font-family:'Georgia',serif;">
+        The closed-form analytic solution is \(u^*(x,t) = \sin(\pi x)\cos(\pi c t)\), providing an exact
+        reference for computing L2 relative error throughout training.
+      </p>
+      <hr class="arxiv-divider">
+
+      <!-- Section 2: PINN Architecture & Loss -->
+      <div class="arxiv-section-label">2. PINN Architecture &amp; Physics Loss</div>
+      <p style="color:var(--muted);font-size:0.92rem;line-height:1.9;margin-bottom:1.1rem;font-family:'Georgia',serif;">
+        The network \(\mathcal{N}_\theta : (x,t) \mapsto \hat{u}\) is a fully-connected MLP with
+        <strong>5 hidden layers × 128 neurons</strong>, Tanh activations, and Xavier initialization —
+        giving <strong>66,561 trainable parameters</strong>. Second-order derivatives needed for the PDE
+        residual are computed via PyTorch's automatic differentiation with
+        \(\texttt{create\_graph=True}\).
+      </p>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1rem;font-family:'Georgia',serif;">
+        The <strong>composite PINN loss</strong> is a weighted sum of four terms:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.5rem;margin-bottom:1rem;overflow-x:auto;text-align:center;">
+        \[ \mathcal{L} = w_r \underbrace{\bigl\|\hat{u}_{tt} - c^2\hat{u}_{xx}\bigr\|^2_{\Omega_c}}_{\text{PDE residual}} + w_{ic_1} \underbrace{\bigl\|\hat{u}(x,0) - \sin(\pi x)\bigr\|^2}_{\text{IC displacement}} + w_{ic_2} \underbrace{\bigl\|\hat{u}_t(x,0)\bigr\|^2}_{\text{IC velocity}} + w_{bc} \underbrace{\bigl\|\hat{u}\!\restriction_{\partial\Omega}\bigr\|^2}_{\text{BCs}} \]
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1.5rem;font-family:'Georgia',serif;">
+        where \(\Omega_c\) is a set of 10,000 randomly sampled collocation points interior to the domain,
+        and 200 points are used per boundary/IC constraint. The PDE residual
+        \(\mathcal{R} = \hat{u}_{tt} - c^2 \hat{u}_{xx}\) is evaluated via double automatic differentiation
+        at each forward pass.
+      </p>
+      <hr class="arxiv-divider">
+
+      <!-- Section 3: Optimizer Strategies -->
+      <div class="arxiv-section-label">3. Optimizer &amp; LR Schedule Strategies</div>
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr><th>#</th><th>Strategy</th><th>Epochs / Iters</th><th>LR (initial)</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Adam</td><td>5,000</td><td>1e-3</td><td>Constant LR baseline</td></tr>
+          <tr><td>2</td><td>Adam + CosineAnnealing</td><td>5,000</td><td>1e-3 → 1e-6</td><td>Smooth LR decay via cosine schedule</td></tr>
+          <tr><td>3</td><td>Adam + ReduceLROnPlateau</td><td>5,000</td><td>1e-3 (×0.5)</td><td>Patience=200 epochs before halving</td></tr>
+          <tr><td>4</td><td>Adam + OneCycleLR</td><td>5,000</td><td>1e-3 → 5e-3</td><td>Warm-up + annealing; pct_start=0.3</td></tr>
+          <tr><td>5</td><td>RMSprop</td><td>5,000</td><td>1e-3</td><td>Adaptive gradient normalisation</td></tr>
+          <tr><td>6</td><td>Adagrad</td><td>5,000</td><td>1e-2</td><td>Accumulated squared gradient scaling</td></tr>
+          <tr><td>7</td><td>L-BFGS</td><td>500 iter</td><td>Strong Wolfe</td><td>Quasi-Newton, second-order curvature</td></tr>
+          <tr class="vp-best"><td>8★</td><td>Two-Phase (Adam+OneCycle → L-BFGS)</td><td>3000 + 500</td><td>5e-3 → Wolfe</td><td>Global explore → precision refine</td></tr>
+        </tbody>
+      </table>
+      <hr class="arxiv-divider">
+
+      <!-- Section 4: Results -->
+      <div class="arxiv-section-label">4. Results — Final Leaderboard</div>
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr><th>Rank</th><th>Strategy</th><th>Best L2 Error</th><th>Final Loss</th><th>Wall Time (s)</th></tr>
+        </thead>
+        <tbody>
+          <tr class="vp-best"><td>1</td><td style="font-weight:700;">Two-Phase ★</td><td style="font-weight:800;color:var(--accent);">9.30 × 10⁻⁴</td><td>8.17 × 10⁻⁶</td><td>33.9</td></tr>
+          <tr><td>2</td><td>L-BFGS</td><td style="color:var(--accent);">1.28 × 10⁻³</td><td>1.37 × 10⁻⁵</td><td>35.4</td></tr>
+          <tr><td>3</td><td>Adam + OneCycleLR</td><td>2.54 × 10⁻³</td><td>1.69 × 10⁻⁴</td><td>23.0</td></tr>
+          <tr><td>4</td><td>Adam + CosineAnnealing</td><td>3.98 × 10⁻³</td><td>1.79 × 10⁻⁴</td><td>23.0</td></tr>
+          <tr><td>5</td><td>Adam + Plateau</td><td>4.05 × 10⁻³</td><td>1.72 × 10⁻⁴</td><td>24.5</td></tr>
+          <tr><td>6</td><td>Adam</td><td>2.90 × 10⁻²</td><td>1.99 × 10⁻²</td><td>23.5</td></tr>
+          <tr><td>7</td><td>Adagrad</td><td>4.10 × 10⁻²</td><td>4.00 × 10⁻²</td><td>23.0</td></tr>
+          <tr><td>8</td><td>RMSprop</td><td>1.97 × 10⁻¹</td><td>6.71 × 10⁻¹</td><td>23.5</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Key metrics summary row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:2rem;">
+        <div style="padding:1.1rem;background:rgba(193,18,31,0.06);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Best L2 Error</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--accent);">9.3 × 10⁻⁴</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">Two-Phase (33.9 s)</div>
+        </div>
+        <div style="padding:1.1rem;background:var(--bg3);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Parameters</div>
+          <div style="font-size:1.4rem;font-weight:800;">66,561</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">5 × 128, Tanh</div>
+        </div>
+        <div style="padding:1.1rem;background:var(--bg3);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Collocation pts</div>
+          <div style="font-size:1.4rem;font-weight:800;">10,000</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">interior + 200 per BC/IC</div>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Section 5: Two-Phase detail -->
+      <div class="arxiv-section-label">5. Two-Phase Training — Phase Detail</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.75;margin-bottom:1rem;font-family:'Georgia',serif;">
+        The two-phase strategy exploits complementary strengths: Adam+OneCycleLR provides large, exploratory
+        gradient steps to escape saddle points and find a good basin; L-BFGS then uses stored gradient history
+        to approximate the inverse Hessian and refine the solution with high precision.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:2rem;">
+        <div style="padding:1rem 1.25rem;background:var(--bg3);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;">Phase 1 — Adam+OneCycleLR</div>
+          <table style="width:100%;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);border-collapse:collapse;">
+            <tr><td style="padding:2px 0;">Epochs</td><td style="text-align:right;color:var(--text);">3,000</td></tr>
+            <tr><td>Max LR</td><td style="text-align:right;color:var(--text);">5 × 10⁻³</td></tr>
+            <tr><td>pct_start</td><td style="text-align:right;color:var(--text);">0.3</td></tr>
+            <tr><td>Wall time</td><td style="text-align:right;color:var(--text);">15.3 s</td></tr>
+            <tr><td>L2 after phase</td><td style="text-align:right;color:var(--text);">4.60 × 10⁻³</td></tr>
+          </table>
+        </div>
+        <div style="padding:1rem 1.25rem;background:rgba(193,18,31,0.04);border-left:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;">Phase 2 — L-BFGS Refinement</div>
+          <table style="width:100%;font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);border-collapse:collapse;">
+            <tr><td style="padding:2px 0;">Iterations</td><td style="text-align:right;color:var(--text);">500</td></tr>
+            <tr><td>Line search</td><td style="text-align:right;color:var(--text);">Strong Wolfe</td></tr>
+            <tr><td>History size</td><td style="text-align:right;color:var(--text);">default (100)</td></tr>
+            <tr><td>Wall time</td><td style="text-align:right;color:var(--text);">18.6 s</td></tr>
+            <tr><td>Final L2</td><td style="text-align:right;font-weight:700;color:var(--accent);">9.3 × 10⁻⁴</td></tr>
+          </table>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Section 6: Loss curve image placeholders -->
+      <div class="arxiv-section-label">6. Training Curves &amp; Solution Fields</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;font-family:'Georgia',serif;">
+        Training loss (log scale), L2 relative error, and predicted solution field \(\hat{u}(x,t)\)
+        vs. the analytic reference. Place output images from the notebook into the repository root to populate these figures.
+      </p>
+
+      <!-- Loss curve placeholder -->
+      <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg2);margin-bottom:1rem;">
+        <img src="wave_pinn_loss.png" alt="PINN Wave optimizer loss curves" style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+        <div style="display:none;flex-direction:column;align-items:center;justify-content:center;height:180px;gap:0.6rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.78rem;">
+          <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--muted);opacity:0.22;"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          <span>[ wave_pinn_loss.png ]</span>
+          <span style="font-size:0.65rem;opacity:0.5;">Save Cell 8 plot as wave_pinn_loss.png in repository root</span>
+        </div>
+      </div>
+
+      <!-- Solution field placeholder -->
+      <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg2);margin-bottom:2rem;">
+        <img src="wave_pinn_fields.png" alt="PINN predicted vs exact solution fields" style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+        <div style="display:none;flex-direction:column;align-items:center;justify-content:center;height:180px;gap:0.6rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.78rem;">
+          <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--muted);opacity:0.22;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          <span>[ wave_pinn_fields.png ]</span>
+          <span style="font-size:0.65rem;opacity:0.5;">Save Cell 9 plot as wave_pinn_fields.png in repository root</span>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Section 7: Interactive Race Animation -->
+      <div class="arxiv-section-label">7. Interactive — The Optimizer Race</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.25rem;font-family:'Georgia',serif;">
+        Animated training race across all strategies. Bar length encodes convergence progress on a log-error scale
+        — further right means lower L2 error. Press <strong>Start</strong> to watch the race unfold epoch by epoch.
+      </p>
+
+      <!-- Race widget -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;">
+
+        <!-- Controls -->
+        <div style="display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
+          <button onclick="startRaceAnim()" style="font-family:'DM Mono',monospace;font-size:12px;padding:5px 16px;background:var(--accent);color:#fff;border:none;border-radius:2px;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">▶ Start</button>
+          <button onclick="pauseRaceAnim()" style="font-family:'DM Mono',monospace;font-size:12px;padding:5px 16px;background:none;border:1px solid var(--border2);color:var(--text);border-radius:2px;cursor:pointer;">⏸ Pause</button>
+          <button onclick="resetRaceAnim()" style="font-family:'DM Mono',monospace;font-size:12px;padding:5px 16px;background:none;border:1px solid var(--border2);color:var(--text);border-radius:2px;cursor:pointer;">↺ Reset</button>
+          <div style="display:flex;align-items:center;gap:8px;margin-left:0.5rem;">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);">Speed</span>
+            <input type="range" min="1" max="10" step="1" value="4" oninput="setRaceSpeed(this.value)" style="width:90px;">
+            <span id="raceSpeedLabel" style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text);min-width:24px;">4×</span>
+          </div>
+        </div>
+
+        <!-- Epoch counter -->
+        <div style="text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-bottom:1rem;">
+          Epoch <span id="raceEpochNum" style="font-weight:700;color:var(--text);font-size:15px;">0</span> / 5,000
+        </div>
+
+        <!-- Track headers -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <div style="width:160px;flex-shrink:0;"></div>
+          <div style="flex:1;display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">
+            <span>Start</span><span>Finish (perfect)</span>
+          </div>
+          <div style="width:68px;text-align:right;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">L2 Error</div>
+        </div>
+
+        <!-- Tracks container -->
+        <div id="raceTracks" style="position:relative;"></div>
+
+        <!-- Banner -->
+        <div id="raceBanner" style="text-align:center;padding:8px 12px;margin-top:1rem;border:1px solid var(--border);border-radius:3px;background:var(--bg3);font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);min-height:36px;display:flex;align-items:center;justify-content:center;">
+          Press ▶ Start to begin the race
+        </div>
+
+        <!-- Insight box -->
+        <div id="raceInsight" style="margin-top:0.75rem;background:var(--bg3);border-left:2px solid var(--border2);padding:8px 12px;font-size:12px;color:var(--muted);line-height:1.6;border-radius:0 3px 3px 0;min-height:36px;font-family:'Georgia',serif;">
+          Watch how physics knowledge accelerates learning. PINNs bake the wave equation directly into training — regular solvers start from scratch.
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Section 8: Implementation details -->
+      <div class="arxiv-section-label">8. Implementation Details</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1.5rem;">
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);"><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Framework</div><div style="font-weight:700;font-size:0.9rem;">PyTorch 2.10 + CUDA</div></div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);"><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Architecture</div><div style="font-weight:700;font-size:0.9rem;">5 × 128, Tanh</div></div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);"><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Colloc. points</div><div style="font-weight:700;font-size:0.9rem;">10,000 interior</div></div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);"><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">BC / IC pts</div><div style="font-weight:700;font-size:0.9rem;">200 each</div></div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);"><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Init</div><div style="font-weight:700;font-size:0.9rem;color:var(--accent);">Xavier Normal</div></div>
+      </div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.75;margin-bottom:2rem;font-family:'Georgia',serif;">
+        All first-order optimizers ran for 5,000 epochs; L-BFGS ran for 500 quasi-Newton iterations with strong
+        Wolfe line search. The two-phase model used 3,000 Adam+OneCycleLR epochs followed by 500 L-BFGS iterations.
+        All experiments were conducted on GPU (CUDA). Automatic differentiation for the PDE residual uses
+        <code style="font-family:'DM Mono',monospace;font-size:0.82rem;background:var(--bg3);padding:1px 5px;border-radius:2px;">torch.autograd.grad(..., create_graph=True)</code>.
+      </p>
+
+      <!-- GitHub CTA -->
+      <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+
+    </div>
+  </div><!-- /waveOverlay -->
 
   <!-- ══════════════════════════════════════════════════════════════════════
        PINN CHANNEL ESTIMATION ARXIV OVERLAY  (WC_01)
@@ -3359,6 +3636,134 @@
         vL.pause(); vR.pause();
         btn.textContent = '▶ Play';
       }
+    }
+
+    // ── WAVE PINN OVERLAY ────────────────────────────────────────────────────
+    function openWaveOverlay() {
+      const overlay = document.getElementById('waveOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([overlay]);
+      if (!overlay._raceBuilt) { overlay._raceBuilt = true; buildRaceTracks(); }
+    }
+    function closeWaveOverlay() {
+      document.getElementById('waveOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      pauseRaceAnim();
+    }
+
+    // ── Race animation state ─────────────────────────────────────────────────
+    const RACE_RUNNERS = [
+      { id:'lbfgs',     name:'PINN',       tag:'L-BFGS',        color:'#1D9E75',
+        curve: t => Math.min(1, 1 - Math.exp(-18*t) * 0.997),                  finalErr: 0.0013 },
+      { id:'twophase',  name:'PINN',       tag:'Two-phase ★',   color:'#639922',
+        curve: t => Math.min(1, t < 0.6 ? 0.7*(1-Math.exp(-4*t)) : 0.7 + 0.3*(1-Math.exp(-22*(t-0.6)))), finalErr: 0.00093 },
+      { id:'onecycle',  name:'PINN',       tag:'Adam+OneCycle', color:'#378ADD',
+        curve: t => Math.min(1, t < 0.2 ? 0.15*t/0.2 : 0.15 + 0.82*(1-Math.exp(-3.5*(t-0.2)))), finalErr: 0.00254 },
+      { id:'plateau',   name:'PINN',       tag:'Adam+Plateau',  color:'#BA7517',
+        curve: t => Math.min(1, 0.78*(1-Math.exp(-3.2*t))),                    finalErr: 0.00405 },
+      { id:'cosine',    name:'PINN',       tag:'Adam+Cosine',   color:'#D4537E',
+        curve: t => Math.min(1, 0.75*(1-Math.exp(-3.0*t))),                    finalErr: 0.00398 },
+      { id:'adam',      name:'PINN',       tag:'Adam',          color:'#533AB7',
+        curve: t => Math.min(1, 0.52*(1-Math.exp(-2.8*t))),                    finalErr: 0.02896 },
+      { id:'adagrad',   name:'PINN',       tag:'Adagrad',       color:'#7F77DD',
+        curve: t => Math.min(1, 0.38*(1-Math.exp(-1.8*t))),                    finalErr: 0.04095 },
+      { id:'rmsprop',   name:'PINN',       tag:'RMSprop',       color:'#D85A30',
+        curve: t => Math.min(1, 0.09*(1-Math.exp(-0.8*t))),                    finalErr: 0.19691 },
+    ];
+    const RACE_INSIGHTS = [
+      { epoch:0,    text:'Watch how physics knowledge accelerates learning. PINNs bake the wave equation directly into training — regular solvers start from scratch.' },
+      { epoch:50,   text:'<strong>L-BFGS</strong> surges immediately — it exploits Hessian curvature, like a GPS with elevation data, to jump toward the minimum.' },
+      { epoch:200,  text:'<strong>Two-phase</strong> warms up with Adam+OneCycle for global exploration before switching to L-BFGS precision. Patience pays off.' },
+      { epoch:500,  text:'The LR schedule gap widens: Adam+Plateau and Adam+OneCycle pull ahead of bare Adam — same optimizer, smarter learning rates.' },
+      { epoch:1500, text:'Notice the physics loss plateau: RMSprop\'s gradient normalisation worsens the stiff PDE landscape — it stalls while others converge.' },
+      { epoch:2500, text:'<strong>Two-phase flips to L-BFGS</strong> refinement now — watch it rocket past all first-order optimizers in just a few iterations.' },
+      { epoch:3500, text:'L-BFGS leads because second-order methods see the curvature of the loss landscape — far fewer, but far better, gradient steps.' },
+      { epoch:4500, text:'Adam+Cosine and Adam+Plateau nearly tied. Cosine schedule provides a smooth warm-up; Plateau adapts when progress stalls.' },
+      { epoch:5000, text:'Race complete! Two-phase wins (L2 = 0.00093). Key insight: <strong>global exploration + precision refinement beats pure second-order alone.</strong>' },
+    ];
+    let raceEpoch = 0, racePaused = true, raceRafId = null, raceLastT = null, raceSpeed = 4;
+
+    function buildRaceTracks() {
+      const c = document.getElementById('raceTracks'); if (!c) return;
+      c.innerHTML = '';
+      RACE_RUNNERS.forEach(r => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:8px;';
+        row.innerHTML = `
+          <div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--text);width:160px;flex-shrink:0;text-align:right;">
+            ${r.name} <span style="font-size:10px;padding:1px 6px;border-radius:20px;margin-left:4px;background:rgba(193,18,31,0.10);color:var(--accent);">${r.tag}</span>
+          </div>
+          <div style="flex:1;height:26px;background:var(--bg3);border:0.5px solid var(--border);border-radius:20px;position:relative;overflow:hidden;">
+            <div id="rbar-${r.id}" style="height:100%;border-radius:20px;position:absolute;left:0;top:0;background:${r.color};min-width:24px;width:0%;transition:width 0.08s linear;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+              <span id="rpct-${r.id}" style="font-size:10px;font-weight:500;color:#fff;white-space:nowrap;font-family:'DM Mono',monospace;"></span>
+            </div>
+          </div>
+          <div id="racc-${r.id}" style="width:68px;flex-shrink:0;text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">—</div>
+        `;
+        c.appendChild(row);
+      });
+      renderRaceEpoch(0);
+    }
+
+    function renderRaceEpoch(epoch) {
+      const t = epoch / 5000;
+      let best = null, bestProg = -1;
+      RACE_RUNNERS.forEach(r => {
+        const prog = r.curve(t);
+        const bar  = document.getElementById('rbar-'+r.id);
+        const pct  = document.getElementById('rpct-'+r.id);
+        const acc  = document.getElementById('racc-'+r.id);
+        if (!bar) return;
+        bar.style.width = (prog*100).toFixed(1)+'%';
+        const curErr = r.finalErr + (1 - r.finalErr)*(1 - prog);
+        const eStr = curErr < 0.01 ? curErr.toFixed(5) : curErr.toFixed(4);
+        pct.textContent = prog > 0.15 ? eStr : '';
+        acc.textContent = eStr;
+        acc.style.color = prog > 0.85 ? r.color : 'var(--muted)';
+        if (prog > bestProg) { bestProg = prog; best = r; }
+      });
+      const ep = document.getElementById('raceEpochNum');
+      const banner = document.getElementById('raceBanner');
+      const insight = document.getElementById('raceInsight');
+      if (ep) ep.textContent = Math.round(epoch).toLocaleString();
+      if (banner && best) {
+        if (epoch >= 5000) {
+          banner.innerHTML = `🏆 <strong style="color:var(--text);">${best.name} (${best.tag})</strong> wins · L2 error ${best.finalErr.toFixed(5)}`;
+        } else if (epoch > 0) {
+          banner.innerHTML = `Leading: <strong style="color:var(--accent);">${best.name} (${best.tag})</strong> · epoch ${Math.round(epoch).toLocaleString()}`;
+        } else {
+          banner.textContent = 'Press ▶ Start to begin the race';
+        }
+      }
+      if (insight) {
+        let msg = RACE_INSIGHTS[0];
+        RACE_INSIGHTS.forEach(ins => { if (epoch >= ins.epoch) msg = ins; });
+        insight.innerHTML = msg.text;
+      }
+    }
+
+    function raceLoop(ts) {
+      if (racePaused) return;
+      if (!raceLastT) raceLastT = ts;
+      const delta = ts - raceLastT; raceLastT = ts;
+      raceEpoch = Math.min(5000, raceEpoch + delta * raceSpeed * 2);
+      renderRaceEpoch(raceEpoch);
+      if (raceEpoch >= 5000) { racePaused = true; renderRaceEpoch(5000); return; }
+      raceRafId = requestAnimationFrame(raceLoop);
+    }
+    function startRaceAnim() {
+      if (!racePaused) return;
+      if (raceEpoch >= 5000) { raceEpoch = 0; renderRaceEpoch(0); }
+      racePaused = false; raceLastT = null; raceRafId = requestAnimationFrame(raceLoop);
+    }
+    function pauseRaceAnim() { racePaused = true; raceLastT = null; cancelAnimationFrame(raceRafId); }
+    function resetRaceAnim() { pauseRaceAnim(); raceEpoch = 0; renderRaceEpoch(0); }
+    function setRaceSpeed(v) {
+      raceSpeed = parseInt(v);
+      const lbl = document.getElementById('raceSpeedLabel');
+      if (lbl) lbl.textContent = v + '×';
     }
 
     // ── PINN OVERLAY ─────────────────────────────────────────────────────────
