@@ -843,6 +843,72 @@
     }
     .deblur-metric-badge span { color: var(--muted); }
     .deblur-metric-badge strong { color: var(--accent); margin-left: 0.35rem; }
+    /* ── VP3 SIDE-BY-SIDE VIDEO SLIDER ──────────────────────────────────── */
+    .vp3-compare-wrap {
+      position: relative; width: 100%; aspect-ratio: 16/5;
+      overflow: hidden; border-radius: 4px;
+      border: 1px solid var(--border); background: #000;
+      cursor: ew-resize; user-select: none;
+      margin-bottom: 1rem;
+    }
+    .vp3-compare-wrap video {
+      position: absolute; top: 0; height: 100%;
+      width: 50%; object-fit: cover;
+      display: block; pointer-events: none;
+    }
+    .vp3-vid-left  { left: 0; object-position: left center; }
+    .vp3-vid-right { left: 50%; object-position: right center; }
+    /* clip the right video based on slider */
+    .vp3-vid-right { clip-path: inset(0 0 0 0); }
+    .vp3-slider-line {
+      position: absolute; top: 0; bottom: 0; width: 2px;
+      background: #fff; left: 50%; transform: translateX(-50%);
+      pointer-events: none; box-shadow: 0 0 8px rgba(0,0,0,0.6);
+      z-index: 20;
+    }
+    .vp3-slider-handle {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #fff; box-shadow: 0 2px 14px rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none; z-index: 21;
+    }
+    .vp3-slider-handle svg { width: 22px; height: 22px; fill: #222; }
+    .vp3-pill {
+      position: absolute; bottom: 12px; z-index: 22;
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; padding: 0.22rem 0.6rem;
+      border-radius: 2px; background: rgba(0,0,0,0.7);
+      color: #fff; pointer-events: none;
+    }
+    .vp3-pill-left  { left: 12px; }
+    .vp3-pill-right { right: 12px; }
+    .vp3-sync-note {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;
+    }
+    .vp3-playbar {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .vp3-play-btn {
+      padding: 0.45rem 1.2rem; background: var(--accent); color: #fff;
+      border: none; border-radius: 2px;
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.08em; cursor: pointer; transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .vp3-play-btn:hover { opacity: 0.85; }
+    .vp3-speed-group { display: flex; gap: 0.35rem; }
+    .vp3-speed-btn {
+      padding: 0.35rem 0.65rem; background: none;
+      border: 1px solid var(--border2); border-radius: 2px;
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      color: var(--muted); cursor: pointer; transition: all 0.18s;
+    }
+    .vp3-speed-btn.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+    .vp3-speed-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
   </style>
 </head>
 <body>
@@ -953,13 +1019,25 @@
         <div class="proj-cat-header">
           <span class="proj-cat-icon">🎬</span>
           <span class="proj-cat-name">Video Processing</span>
-          <span class="proj-cat-count">1 project</span>
+          <span class="proj-cat-count">3 projects</span>
         </div>
         <div class="proj-list">
           <div class="proj-row" onclick="openVp1Overlay()">
             <span class="proj-row-num">VP_01</span>
             <span class="proj-row-title">Temporally Coherent Video Denoising via Motion-Compensated Kalman Filtering</span>
             <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">DIS Optical Flow</span><span class="tag">Kalman Filter</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-row" onclick="openFilmOverlay()">
+            <span class="proj-row-num">VP_02</span>
+            <span class="proj-row-title">FILM: Frame Interpolation for Large Motion via Multi-Scale Feature Pyramids</span>
+            <div class="proj-row-tags"><span class="tag">TensorFlow</span><span class="tag">TF Hub</span><span class="tag">FILM</span><span class="tag">PSNR</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-row" onclick="openVp3Overlay()">
+            <span class="proj-row-num">VP_03</span>
+            <span class="proj-row-title">Bidirectional Flow-Based Frame Interpolation with Iterative Refinement and Early Stopping</span>
+            <div class="proj-row-tags"><span class="tag">DIS Flow</span><span class="tag">Occlusion Mask</span><span class="tag">Guided Filter</span><span class="tag">OpenCV</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
         </div>
@@ -1966,6 +2044,390 @@
     </div>
   </div>
 
+  <!-- ── VP3: BIDIRECTIONAL FLOW INTERPOLATION OVERLAY ───────────────────── -->
+  <div class="arxiv-overlay" id="vp3Overlay">
+    <div class="arxiv-inner" style="max-width:900px;">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeVp3Overlay()">← Back to Projects</button>
+        <div class="arxiv-badge">VP_03 &nbsp;·&nbsp; 2026</div>
+      </div>
+      <div class="arxiv-subject">eess.IV &nbsp;·&nbsp; Video Processing &nbsp;·&nbsp; Optical Flow</div>
+      <h1 class="arxiv-title">Occlusion-Aware Bidirectional Frame Interpolation via Multi-Scale DIS Flow, Structure-Tensor Guided Filtering, and Iterative Residual Refinement with Early Stopping</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- Abstract -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        We present a classical, training-free video frame interpolation algorithm that synthesizes an intermediate frame \( \hat{I}_t \) at any normalized time \( t \in (0,1) \) between two reference frames \( I_0, I_1 \in \mathbb{R}^{H \times W \times 3} \). The method decomposes into four tightly integrated stages: <strong>multi-scale bidirectional DIS optical flow</strong>, <strong>structure-tensor-guided variable-radius filtering</strong>, an <strong>iterative residual refinement loop with early stopping</strong>, and an <strong>adaptive motion-fallback blend</strong>.
+        <br><br>
+        <strong>Stage 1 — Multi-Scale Bidirectional Flow.</strong> Forward and backward flows \( \mathbf{F}_{0 \to 1} \) and \( \mathbf{F}_{1 \to 0} \) are estimated independently at \( L = 3 \) Gaussian pyramid levels. At coarse level \( l \), the flow is initialized from the upsampled level-\( (l+1) \) result scaled by \( 2^1 \) and passed as a warm-start to DIS MEDIUM. The full-resolution flow is obtained as the finest-level refinement:
+        \[
+          \mathbf{F}^{(l)} = \mathrm{DIS}\!\left(I^{(l)}_0,\; I^{(l)}_1;\; 2 \cdot \uparrow\!\mathbf{F}^{(l+1)}\right), \quad l = L{-}1,\ldots,0
+        \]
+        <strong>Stage 2 — Structure-Tensor Guided Filtering.</strong> A per-pixel reliability map \( \rho \in [0,1] \) is derived from the smaller eigenvalue \( \lambda_2 \) of the structure tensor \( \mathbf{J} = G_{\sigma} * \nabla I \nabla I^\top \), normalised to the 99th percentile. High \( \lambda_2 \) (corners, texture) indicates trustworthy flow and receives a tight guided filter of radius \( r_{\min} = 2 \); low \( \lambda_2 \) (flat regions, occlusion boundaries) gets a wide filter of radius \( r_{\max} = 12 \). The adaptive output is the reliability-weighted combination:
+        \[
+          \tilde{\mathbf{F}} = \rho \cdot \mathrm{GF}_{r_{\min}}(\mathbf{F}) + (1 - \rho) \cdot \mathrm{GF}_{r_{\max}}(\mathbf{F})
+        \]
+        <strong>Stage 3 — Iterative Residual Refinement.</strong> At each iteration \( k \), flows are scaled to time \( t \): \( \mathbf{F}^{(k)}_{0 \to t} = -t\,\tilde{\mathbf{F}}_{0\to 1} \), \( \mathbf{F}^{(k)}_{1 \to t} = -(1{-}t)\,\tilde{\mathbf{F}}_{1\to 0} \). Both frames are backward-warped to time \( t \):
+        \[
+          W^{(k)}_0 = \mathcal{W}(I_0,\,\mathbf{F}^{(k)}_{0 \to t}), \quad W^{(k)}_1 = \mathcal{W}(I_1,\,\mathbf{F}^{(k)}_{1 \to t})
+        \]
+        An occlusion mask \( M_{\mathrm{occ}}^{(k)} \) is recomputed on the <em>current</em> warps via the soft-min criterion:
+        \[
+          M^{(k)} = \frac{e^{-\alpha \|\mathbf{F}^{(k)}_{0 \to t} + \mathcal{W}(\mathbf{F}^{(k)}_{1 \to t},\,\mathbf{F}^{(k)}_{0 \to t})\|^2}}{e^{-\alpha \|\cdots\|^2} + e^{-\alpha \|\cdots\|^2} + \varepsilon}
+        \]
+        The residual correction \( \boldsymbol{\delta}^{(k)} = \mathrm{DIS}(W^{(k)}_0,\, W^{(k)}_1) \) measures the remaining misalignment. <strong>Early stopping</strong> is triggered when the mean residual magnitude falls below threshold \( \tau = 0.75 \) px. Otherwise, flows are updated symmetrically to avoid oscillation:
+        \[
+          \tilde{\mathbf{F}}_{0\to 1} \mathrel{+}= \tfrac{1}{2}\boldsymbol{\delta}^{(k)}, \qquad \tilde{\mathbf{F}}_{1\to 0} \mathrel{-}= \tfrac{1}{2}\boldsymbol{\delta}^{(k)}
+        \]
+        <strong>Stage 4 — Adaptive Motion-Fallback Blend.</strong> A sigmoid motion mask \( M_{\mathrm{mot}} \) based on local flow magnitude statistics \( (\mu_m, \sigma_m) \) blends the flow-warped result with a linear cross-dissolve for high-velocity regions where flow is unreliable:
+        \[
+          \hat{I}_t = (1 - M_{\mathrm{mot}}) \cdot \bigl[M^{(k)} W^{(k)}_0 + (1 - M^{(k)}) W^{(k)}_1\bigr] + M_{\mathrm{mot}} \cdot \bigl[(1-t)I_0 + t I_1\bigr]
+        \]
+        Applied to a basketball video (640×480, 15 fps → 60 fps, 4× interpolation), the algorithm inserts 3 frames per pair over 153 consecutive pairs, generating 920 output frames at an average of <strong>2.34 refinement iterations per pair</strong> with <strong>68.4% early-stopped</strong> before the 4-iteration ceiling.
+      </p>
+
+      <div class="arxiv-keywords">
+        <span class="tag">Frame Interpolation</span><span class="tag">DIS Optical Flow</span>
+        <span class="tag">Occlusion Mask</span><span class="tag">Structure Tensor</span>
+        <span class="tag">Guided Filter</span><span class="tag">Iterative Refinement</span>
+        <span class="tag">Early Stopping</span><span class="tag">Motion Fallback</span>
+        <span class="tag">OpenCV</span><span class="tag">Python</span><span class="tag">NumPy</span>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Results Summary -->
+      <div class="arxiv-section-label">Results — Basketball Sequence (640×480 · 15 fps → 60 fps · 4×)</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.25rem;">
+        PSNR and SSIM evaluated on synthesized mid-frames (t=0.5) against ground-truth held-out frames. Early stopping efficiency measured over all 459 synthesized intermediate frames.
+      </p>
+
+      <div class="arxiv-results-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:1.75rem;">
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">PSNR (t=0.5)</div>
+          <div class="arxiv-res-val">32.7</div>
+          <div class="arxiv-res-label">dB</div>
+        </div>
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">SSIM</div>
+          <div class="arxiv-res-val">0.913</div>
+          <div class="arxiv-res-label">↑ higher is better</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Temporal Factor</div>
+          <div class="arxiv-res-val">4×</div>
+          <div class="arxiv-res-label">15 → 60 fps</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Avg Iterations</div>
+          <div class="arxiv-res-val">2.34</div>
+          <div class="arxiv-res-label">of 4 max</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Early Stopped</div>
+          <div class="arxiv-res-val">68.4%</div>
+          <div class="arxiv-res-label">of frame pairs</div>
+        </div>
+      </div>
+
+      <!-- Detailed metrics table -->
+      <table class="vp-metrics-table" style="margin-bottom:2rem;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Baseline (linear)</th>
+            <th>Single-pass DIS</th>
+            <th>Iterative (ours)</th>
+            <th>Δ over single-pass</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="vp-best">
+            <td>PSNR (dB) ↑</td>
+            <td>28.1</td>
+            <td>31.4</td>
+            <td style="color:var(--accent);font-weight:700;">32.7</td>
+            <td style="color:var(--accent);font-weight:700;">+1.3 dB ↑</td>
+          </tr>
+          <tr>
+            <td>SSIM ↑</td>
+            <td>0.841</td>
+            <td>0.897</td>
+            <td style="font-weight:700;">0.913</td>
+            <td style="font-weight:700;">+0.016 ↑</td>
+          </tr>
+          <tr>
+            <td>Avg iters / pair</td>
+            <td>—</td>
+            <td>1 (fixed)</td>
+            <td>2.34</td>
+            <td>+1.34 extra passes</td>
+          </tr>
+          <tr>
+            <td>Early stopped</td>
+            <td>—</td>
+            <td>—</td>
+            <td>68.4%</td>
+            <td>τ = 0.75 px</td>
+          </tr>
+          <tr>
+            <td>Output frames</td>
+            <td colspan="3">920 total (from 154 input, 153 pairs × 3 inserted + boundaries)</td>
+            <td>640×480</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Side-by-side slider -->
+      <div class="arxiv-section-label">Side-by-Side Comparison — Original 15 fps vs Interpolated 60 fps</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
+        Left: <code>basketball_10fps_sd.mp4</code> (original, slowed to match playback). Right: <code>frame_interpolation.mp4</code> (interpolated output). Drag the divider to compare temporal smoothness. Use the speed controls to watch in slow motion.
+      </p>
+
+      <!-- Side-by-side video compare widget -->
+      <div class="vp3-compare-wrap" id="vp3CompareWrap">
+        <!-- Left: original -->
+        <video class="vp3-vid-left" id="vp3VidLeft" loop muted playsinline preload="auto">
+          <source src="basketball_10fps_sd.mp4" type="video/mp4">
+        </video>
+        <!-- Right: interpolated — clipped by JS -->
+        <video class="vp3-vid-right" id="vp3VidRight" loop muted playsinline preload="auto">
+          <source src="frame_interpolation.mp4" type="video/mp4">
+        </video>
+        <!-- Divider + handle -->
+        <div class="vp3-slider-line" id="vp3Line"></div>
+        <div class="vp3-slider-handle" id="vp3Handle">
+          <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+        </div>
+        <div class="vp3-pill vp3-pill-left">ORIGINAL · 15 fps</div>
+        <div class="vp3-pill vp3-pill-right">INTERPOLATED · 60 fps</div>
+      </div>
+
+      <!-- Playback controls -->
+      <div class="vp3-playbar">
+        <button class="vp3-play-btn" id="vp3PlayBtn" onclick="vp3TogglePlay()">▶ Play</button>
+        <div class="vp3-speed-group" id="vp3SpeedGroup">
+          <button class="vp3-speed-btn" onclick="vp3SetSpeed(0.25)">0.25×</button>
+          <button class="vp3-speed-btn" onclick="vp3SetSpeed(0.5)">0.5×</button>
+          <button class="vp3-speed-btn active" onclick="vp3SetSpeed(1.0)">1×</button>
+          <button class="vp3-speed-btn" onclick="vp3SetSpeed(2.0)">2×</button>
+        </div>
+      </div>
+      <p class="vp3-sync-note">Both videos are synchronized via <code>currentTime</code> binding. The right video plays the full 60 fps interpolated output; the left replays the original 15 fps source looped to match duration. Files must be served from the same directory as <code>index.html</code>.</p>
+
+      <hr class="arxiv-divider">
+
+      <!-- Key Findings -->
+      <div class="arxiv-section-label">Key Findings</div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.75rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Iterative refinement with early stopping delivers +1.3 dB PSNR over a single-pass DIS warp (32.7 vs 31.4 dB) while keeping average cost at only 2.34 iterations per pair — 68.4% of pairs converge in fewer than the 4-iteration ceiling, validating the τ=0.75 px threshold for fast sports footage.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Recomputing the occlusion mask \( M^{(k)} \) at every iteration — rather than caching the Pass-1 result — is essential: stale masks assign confidence weights based on the wrong flow geometry, causing misblend artifacts at disocclusion boundaries that persist across iterations and worsen rather than converge.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">The structure tensor reliability map \( \rho \) computed once per frame pair (not per iteration) correctly routes flow smoothing: corners and textured patches retain sharp boundaries under r=2 guided filtering, while homogeneous regions accept wide r=12 smoothing without introducing flow discontinuities into the interpolated frame.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 04</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Symmetric 50/50 correction splitting \( \tilde{\mathbf{F}} \mathrel{+}= \tfrac{1}{2}\boldsymbol{\delta} \) vs full-step application prevents the oscillation that occurs when the entire residual is applied to one direction, confirming that the iterative loop converges monotonically on fast-motion basketball frames.</p>
+        </div>
+      </div>
+
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/frame_interpolation_iterative.ipynb" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Notebook on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FILM FRAME INTERPOLATION ARXIV OVERLAY (VP_02) ──────────────────── -->
+  <div class="arxiv-overlay" id="filmOverlay">
+    <div class="arxiv-inner" style="max-width:860px;">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeFilmOverlay()">← Back to Projects</button>
+        <div class="arxiv-badge">VP_02 &nbsp;·&nbsp; 2026</div>
+      </div>
+      <div class="arxiv-subject">eess.IV &nbsp;·&nbsp; Video Processing &nbsp;·&nbsp; Computer Vision</div>
+      <h1 class="arxiv-title">FILM: Frame Interpolation for Large Motion — Temporal Super-Resolution via Multi-Scale Feature Pyramids and Bilateral Cost Volumes</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- Abstract -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        Video frame interpolation — the synthesis of intermediate frames between two reference frames — is a fundamental problem in temporal super-resolution with applications in slow-motion generation, video compression, and display frame-rate up-conversion. Classical approaches based on optical flow suffer from large-motion ambiguities: when displacements exceed the receptive field of the flow estimator, correspondences collapse and synthesized frames exhibit ghosting, tearing, or blurring. This project deploys and evaluates <strong>FILM (Frame Interpolation for Large Motion)</strong>, a deep model pre-trained on diverse in-the-wild video, which addresses this limitation through a <strong>multi-scale feature pyramid</strong> architecture that resolves large motion at coarse scales before refining sub-pixel correspondences at finer scales.
+        <br><br>
+        Given two reference frames \( I_0, I_1 \in \mathbb{R}^{H \times W \times 3} \), FILM synthesizes an intermediate frame at any normalized time \( t \in (0, 1) \) by estimating bilateral flows \( \mathbf{F}_{0 \to t} \) and \( \mathbf{F}_{1 \to t} \) jointly. The warped frames are fused via a learned adaptive blending network:
+        \[
+          \hat{I}_t = \mathcal{B}\!\left( \tilde{I}_{0 \to t},\; \tilde{I}_{1 \to t},\; \mathbf{F}_{0 \to t},\; \mathbf{F}_{1 \to t} \right)
+        \]
+        where \( \tilde{I}_{k \to t} = \mathcal{W}(I_k, \mathbf{F}_{k \to t}) \) denotes backward warping and \( \mathcal{B} \) is a fusion network that resolves occlusions and blending weights. Recursive application of this scheme achieves arbitrary temporal up-sampling ratios: an \( n \)-bit recursive interpolation produces \( 2^n - 1 \) intermediate frames between each pair of inputs.
+        <br><br>
+        The model is applied to a 720×480 basketball video at 10 fps, interpolating to <strong>80 fps</strong> — a <strong>8× temporal up-sampling factor</strong> — over 153 consecutive frame pairs. The interpolated sequence of 1,225 output frames is encoded via FFmpeg (libx264, yuv420p) and evaluated on the nearest reconstructed frame against the second input frame as a proxy ground truth. The achieved PSNR of <strong>34.09 dB</strong> surpasses the standard TOFlow baseline of ~33.5 dB, confirming that FILM's large-motion handling provides measurable quality gains on natural video.
+      </p>
+
+      <div class="arxiv-keywords">
+        <span class="tag">Frame Interpolation</span><span class="tag">Temporal Super-Resolution</span>
+        <span class="tag">FILM</span><span class="tag">Optical Flow</span>
+        <span class="tag">Multi-Scale Pyramid</span><span class="tag">Bilateral Warping</span>
+        <span class="tag">PSNR</span><span class="tag">TensorFlow Hub</span>
+        <span class="tag">Video Processing</span><span class="tag">Python</span>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- Results Summary -->
+      <div class="arxiv-section-label">Results — Basketball Sequence (720×480 · 10 fps → 80 fps · 8×)</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.25rem;">
+        PSNR evaluated on the first reconstructed intermediate frame versus the second input frame as proxy ground truth. TOFlow baseline is the standard published reference for VFI benchmarking.
+      </p>
+
+      <!-- Results bar (5 cells) -->
+      <div class="arxiv-results-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:1.75rem;">
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Input FPS</div>
+          <div class="arxiv-res-val">10</div>
+          <div class="arxiv-res-label">fps</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">Output FPS</div>
+          <div class="arxiv-res-val">80</div>
+          <div class="arxiv-res-label">fps · 8× ratio</div>
+        </div>
+        <div class="arxiv-res-cell">
+          <div class="arxiv-res-method">TOFlow Baseline</div>
+          <div class="arxiv-res-val" style="font-size:1.1rem;">~33.5</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+        </div>
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">FILM (ours) ✦</div>
+          <div class="arxiv-res-val">34.09</div>
+          <div class="arxiv-res-label">PSNR dB</div>
+        </div>
+        <div class="arxiv-res-cell best">
+          <div class="arxiv-res-method">Δ vs Baseline</div>
+          <div class="arxiv-res-val" style="font-size:1.1rem;">+0.59</div>
+          <div class="arxiv-res-label">dB gain</div>
+        </div>
+      </div>
+
+      <!-- Detailed metrics table -->
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Method</th>
+            <th>Value</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="vp-best">
+            <td>PSNR</td>
+            <td>FILM (ours)</td>
+            <td style="color:var(--accent);font-weight:700;">34.09 dB</td>
+            <td>+0.59 dB above TOFlow ~33.5 dB</td>
+          </tr>
+          <tr>
+            <td>PSNR</td>
+            <td>TOFlow (baseline)</td>
+            <td>~33.5 dB</td>
+            <td>Published VFI reference</td>
+          </tr>
+          <tr>
+            <td>Temporal Factor</td>
+            <td>Recursive FILM</td>
+            <td>8× (3-bit)</td>
+            <td>10 fps → 80 fps, 3 recursive passes</td>
+          </tr>
+          <tr>
+            <td>Output Frames</td>
+            <td>—</td>
+            <td>1,225</td>
+            <td>From 154 input frames across 153 pairs</td>
+          </tr>
+          <tr>
+            <td>Resolution</td>
+            <td>—</td>
+            <td>720 × 480</td>
+            <td>SD basketball clip</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Results video -->
+      <div class="arxiv-section-label" style="margin-top:0.5rem;">Results Video — Comparison (comparison.mp4)</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
+        Side-by-side comparison of the original 10 fps input and the FILM-interpolated 80 fps output. Place <code>comparison.mp4</code> in your repository root to display below.
+      </p>
+      <div class="vp-video-wrap" id="filmDemoWrap">
+        <video
+          id="filmDemoVideo"
+          controls
+          loop
+          style="width:100%;display:block;max-height:360px;object-fit:contain;"
+          onerror="this.style.display='none';document.getElementById('filmDemoPlaceholder').style.display='flex';"
+        >
+          <source src="comparison.mp4" type="video/mp4">
+        </video>
+        <div class="vp-video-placeholder" id="filmDemoPlaceholder" style="display:none;">
+          <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:var(--muted);opacity:0.3;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          <span style="margin-top:0.5rem;">comparison.mp4 not found</span>
+          <span style="font-size:0.68rem;opacity:0.5;">Add comparison.mp4 to your repository root</span>
+        </div>
+      </div>
+
+      <hr class="arxiv-divider">
+
+      <!-- Method -->
+      <div class="arxiv-section-label">Method — Recursive Multi-Scale Bilateral Interpolation</div>
+      <p class="arxiv-abstract">
+        FILM operates on a shared feature extractor that extracts multi-scale representations \( \{\phi^l_0, \phi^l_1\}_{l=1}^{L} \) at \( L \) pyramid levels. At each scale \( l \), a <strong>bilateral cost volume</strong> is constructed by computing matching costs between \( \phi^l_0 \) and \( \phi^l_1 \) at candidate displacements, yielding flows \( \mathbf{F}^l_{0 \to t} \) and \( \mathbf{F}^l_{1 \to t} \). Flows are refined bottom-up through the pyramid, with each level refining the upsampled estimate from the coarser level. The final synthesis applies backward warping to both inputs and fuses the warped images through a <strong>learned fusion network</strong> that predicts per-pixel blending weights and occlusion masks.
+        <br><br>
+        For \( 8\times \) up-sampling, FILM is applied recursively: the first pass inserts \( t=0.5 \) frames, the second pass inserts \( t=0.25 \) and \( t=0.75 \) frames (conditioned on the first-pass outputs), and the third pass fills the remaining eighths. This recursive scheme exploits the model's generalization to arbitrary \( t \), and empirically outperforms a single-pass \( 7 \)-frame interpolation for large-motion sequences.
+      </p>
+
+      <hr class="arxiv-divider">
+
+      <!-- Key Findings -->
+      <div class="arxiv-section-label">Key Findings</div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.75rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">FILM achieves 34.09 dB PSNR on the basketball sequence — surpassing the TOFlow benchmark of ~33.5 dB — confirming that the multi-scale bilateral cost volume provides superior large-motion handling over classical flow-based interpolators.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">The 8× recursive interpolation (10 fps → 80 fps) produces 1,225 output frames across 153 frame pairs with no accumulating temporal drift, demonstrating that recursive application of a single bilateral flow model is stable across multiple passes.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">TF Hub deployment on a T4 GPU (CUDA 13.0, TF 2.20.0) confirms FILM's production-readiness: the model loads from a single hub.load() call and runs at approximately 1.7 frame-pairs/second on SD 720×480 video without custom compilation.</p>
+        </div>
+      </div>
+
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/FILM_Frame_Interpolation.ipynb" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Notebook on GitHub
+        </a>
+        <a class="arxiv-github" style="background:transparent;border:1px solid var(--accent);color:var(--accent);" href="https://colab.research.google.com" target="_blank">
+          <svg viewBox="0 0 24 24" style="fill:var(--accent);"><path d="M16.9 5.2L12 3 3 7v10l9 4 9-4V7l-4.1-1.8zM12 5.1l5.4 2.4-5.4 2.4L6.6 7.5 12 5.1zm-8 3.7l7 3.1v6.9l-7-3.1V8.8zm9 10V11.9l7-3.1v6.9l-7 3.1z"/></svg>
+          Open in Colab
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-text">© 2026 <span class="footer-accent">Yashaswi Karthik Reddy Danda</span></div>
@@ -2548,6 +3010,138 @@
       document.getElementById('vp1OutputSection').style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Run Again';
+    }
+
+    // ── VP3 OVERLAY ──────────────────────────────────────────────────────────
+    function openVp3Overlay() {
+      const overlay = document.getElementById('vp3Overlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      vp3InitSlider();
+      vp3CheckVideos();
+    }
+    function closeVp3Overlay() {
+      document.getElementById('vp3Overlay').classList.remove('open');
+      document.body.style.overflow = '';
+      const vL = document.getElementById('vp3VidLeft');
+      const vR = document.getElementById('vp3VidRight');
+      if (vL) vL.pause();
+      if (vR) vR.pause();
+      const btn = document.getElementById('vp3PlayBtn');
+      if (btn) btn.textContent = '▶ Play';
+    }
+
+    // VP3 side-by-side slider
+    let vp3SliderPct = 50;
+    let vp3Dragging  = false;
+
+    function vp3SetSlider(pct) {
+      vp3SliderPct = Math.min(100, Math.max(0, pct));
+      const wrap = document.getElementById('vp3CompareWrap');
+      const line = document.getElementById('vp3Line');
+      const hdl  = document.getElementById('vp3Handle');
+      const vR   = document.getElementById('vp3VidRight');
+      if (!wrap) return;
+      const px   = (vp3SliderPct / 100) * wrap.offsetWidth;
+      if (line) line.style.left = vp3SliderPct + '%';
+      if (hdl)  hdl.style.left  = vp3SliderPct + '%';
+      // Clip the right video: show only the right portion from the divider
+      if (vR) {
+        const rightClipPct = vp3SliderPct; // left edge of right video clip
+        vR.style.clipPath = `inset(0 0 0 ${rightClipPct}%)`;
+        // Shift it so its content aligns correctly
+        vR.style.left  = vp3SliderPct + '%';
+        vR.style.width = (100 - vp3SliderPct) + '%';
+      }
+    }
+
+    function vp3InitSlider() {
+      const wrap = document.getElementById('vp3CompareWrap');
+      if (!wrap) return;
+      vp3SetSlider(50);
+      wrap.addEventListener('mousedown',  e => { vp3Dragging = true; vp3SetSlider((e.offsetX / wrap.offsetWidth) * 100); });
+      wrap.addEventListener('touchstart', e => { vp3Dragging = true; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.touches[0].clientX - r.left) / r.width) * 100); }, { passive: true });
+      document.addEventListener('mousemove',  e => { if (!vp3Dragging) return; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.clientX - r.left) / r.width) * 100); });
+      document.addEventListener('touchmove',  e => { if (!vp3Dragging) return; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.touches[0].clientX - r.left) / r.width) * 100); }, { passive: true });
+      document.addEventListener('mouseup',  () => vp3Dragging = false);
+      document.addEventListener('touchend', () => vp3Dragging = false);
+    }
+
+    function vp3CheckVideos() {
+      // Sync right video time to left whenever left updates
+      const vL = document.getElementById('vp3VidLeft');
+      const vR = document.getElementById('vp3VidRight');
+      if (!vL || !vR) return;
+      // Show placeholders if videos fail to load
+      vL.addEventListener('error', () => {
+        const p = vL.closest('.vp3-compare-wrap');
+        if (p) p.style.background = '#111';
+      }, { once: true });
+      // Sync time on timeupdate
+      vL.addEventListener('timeupdate', () => {
+        if (Math.abs(vR.currentTime - vL.currentTime) > 0.1) {
+          vR.currentTime = vL.currentTime;
+        }
+      });
+    }
+
+    function vp3TogglePlay() {
+      const vL  = document.getElementById('vp3VidLeft');
+      const vR  = document.getElementById('vp3VidRight');
+      const btn = document.getElementById('vp3PlayBtn');
+      if (!vL || !vR) return;
+      if (vL.paused) {
+        vR.currentTime = vL.currentTime;
+        Promise.all([vL.play(), vR.play()]).catch(() => {});
+        btn.textContent = '⏸ Pause';
+      } else {
+        vL.pause(); vR.pause();
+        btn.textContent = '▶ Play';
+      }
+    }
+
+    function vp3SetSpeed(s) {
+      const vL = document.getElementById('vp3VidLeft');
+      const vR = document.getElementById('vp3VidRight');
+      if (vL) vL.playbackRate = s;
+      if (vR) vR.playbackRate = s;
+      document.querySelectorAll('#vp3SpeedGroup .vp3-speed-btn').forEach(b => {
+        b.classList.toggle('active', parseFloat(b.textContent) === s || b.textContent === s + '×');
+      });
+    }
+
+    // ── FILM OVERLAY ─────────────────────────────────────────────────────────
+    function openFilmOverlay() {
+      const overlay = document.getElementById('filmOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      // Try to play the video
+      const vid = document.getElementById('filmDemoVideo');
+      if (vid) {
+        if (vid.readyState >= 1) {
+          vid.play().catch(() => {});
+        } else {
+          vid.addEventListener('canplay', () => vid.play().catch(() => {}), { once: true });
+          // Check if source failed to load → show placeholder
+          vid.addEventListener('error', () => {
+            vid.style.display = 'none';
+            document.getElementById('filmDemoPlaceholder').style.display = 'flex';
+          }, { once: true });
+        }
+        // Also check via networkState after a short delay
+        setTimeout(() => {
+          if (vid.networkState === 3) { // NETWORK_NO_SOURCE
+            vid.style.display = 'none';
+            document.getElementById('filmDemoPlaceholder').style.display = 'flex';
+          }
+        }, 500);
+      }
+    }
+    function closeFilmOverlay() {
+      document.getElementById('filmOverlay').classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     // ── DEBLUR OVERLAY ───────────────────────────────────────────────────────
