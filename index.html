@@ -1077,13 +1077,19 @@
         <div class="proj-cat-header">
           <span class="proj-cat-icon">🎵</span>
           <span class="proj-cat-name">Audio Signal Processing</span>
-          <span class="proj-cat-count">1 project</span>
+          <span class="proj-cat-count">2 projects</span>
         </div>
         <div class="proj-list">
           <div class="proj-row" onclick="openOverlay('au1')">
             <span class="proj-row-num">AU_01</span>
             <span class="proj-row-title">Audio Signal Processing Project</span>
             <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">librosa</span><span class="tag">DSP</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-row" onclick="openOverlay('au2')">
+            <span class="proj-row-num">AU_02</span>
+            <span class="proj-row-title">LMS Noise Cancellation — Optimizer Comparison (GD · NLMS · MAGD)</span>
+            <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">LMS</span><span class="tag">NLMS</span><span class="tag">MAGD</span></div>
             <span class="proj-row-arrow">→</span>
           </div>
         </div>
@@ -1812,6 +1818,12 @@
           <div class="ba-label" id="ol-result-label-2" style="margin-bottom:0.75rem;"></div>
           <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
             <img id="ol-result-img-2" src="" alt="Result 2" style="width:100%; display:block;" />
+          </div>
+        </div>
+        <div id="ol-result-img-3-wrap" style="display:none;">
+          <div class="ba-label" id="ol-result-label-3" style="margin-bottom:0.75rem;"></div>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden; background:var(--bg3);">
+            <img id="ol-result-img-3" src="" alt="Result 3" style="width:100%; display:block;" />
           </div>
         </div>
       </div>
@@ -3113,6 +3125,82 @@
         ],
         github: 'https://github.com/yourusername/audio-project',
       },
+      au2: {
+        category: '🎵 Audio Signal Processing',
+        title: 'LMS Noise Cancellation — Optimizer Comparison',
+        desc: `<strong style="font-size:1.05rem;color:var(--text);display:block;margin-bottom:1rem;letter-spacing:-0.01em;">Implementation</strong>
+<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.75rem;">
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 1</span><br>Synthesized a composite clean signal from three sinusoids (50 Hz, 120 Hz, 300 Hz at amplitudes 0.6, 0.3, 0.1) at 32 kHz over 0.5 s — 16,000 samples total.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 2</span><br>Added AWGN at 0.5 dB SNR (signal power 0.230, noise power 0.205) to create an extremely low-SNR noisy primary microphone signal <em>d(n)</em>.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 3</span><br>Applied a 32-tap adaptive FIR filter (M=32) to estimate and cancel noise. The reference microphone input <em>x(n)</em> captures correlated noise; the filter estimates <em>y(n) = w<sup>T</sup>·x(n)</em>.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 4</span><br>Compared three weight-update strategies — vanilla Gradient Descent (GD / LMS), Normalized LMS (NLMS), and Momentum-Accelerated Gradient Descent (MAGD, β=0.7) — tracking per-sample MSE over the full signal.</div>
+  <div><span style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">STEP 5</span><br>Evaluated steady-state MSE (dB) to quantify noise suppression depth and convergence behavior across all three optimizers.</div>
+</div>`,
+        tags: ['Python', 'NumPy', 'SciPy', 'LMS', 'NLMS', 'MAGD', 'Adaptive Filtering', 'Noise Cancellation'],
+        resultsPanel: `<div class="results-panel">
+  <div class="results-grid-top">
+    <div class="res-cell accent-dim">
+      <div class="res-key">Best MSE (NLMS)</div>
+      <div class="res-val">−6.09 dB</div>
+      <div class="res-sub">steady-state, μ=0.01</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Input SNR</div>
+      <div class="res-val">0.5 dB</div>
+      <div class="res-sub">extreme noise — near noise floor</div>
+    </div>
+    <div class="res-cell accent-dim">
+      <div class="res-key">Filter Order</div>
+      <div class="res-val">M = 32</div>
+      <div class="res-sub">32 FIR taps · μ = 0.01</div>
+    </div>
+  </div>
+  <div class="results-grid-bottom">
+    <div class="res-cell">
+      <div class="res-key">Signal Configuration</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;">
+        <span class="tag">16000 samples</span>
+        <span class="tag">32 kHz Fs</span>
+        <span class="tag">50·120·300 Hz</span>
+        <span class="tag">0.5 s duration</span>
+      </div>
+    </div>
+    <div class="res-cell">
+      <div class="res-sweep-tag">Optimizer Comparison — Steady-State MSE</div>
+      <div style="margin-top:0.5rem;">
+        <table style="width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:0.76rem;">
+          <thead>
+            <tr style="color:var(--muted);border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:0.25rem 0.5rem;">Method</th>
+              <th style="text-align:right;padding:0.25rem 0.5rem;">MSE (dB)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:0.3rem 0.5rem;color:var(--text);">GD (vanilla LMS)</td>
+              <td style="text-align:right;padding:0.3rem 0.5rem;color:var(--muted);">−5.88</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--accent-dim);">
+              <td style="padding:0.3rem 0.5rem;color:var(--accent);font-weight:700;">NLMS ★</td>
+              <td style="text-align:right;padding:0.3rem 0.5rem;color:var(--accent);font-weight:700;">−6.09</td>
+            </tr>
+            <tr>
+              <td style="padding:0.3rem 0.5rem;color:var(--text);">MAGD (β=0.7)</td>
+              <td style="text-align:right;padding:0.3rem 0.5rem;color:var(--muted);">−4.96</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>`,
+        resultImages: [
+          { src: 'lms_noise_cancellation_signals.png', label: 'Clean vs Noisy Signal (SNR = 0.5 dB)' },
+          { src: 'lms_noise_cancellation_pipeline.png', label: 'LMS Full Pipeline — 4-Stage Noise Cancellation' },
+          { src: 'lms_optimizer_loss_curves.png',       label: 'Loss Curves — GD vs NLMS vs MAGD' },
+        ],
+        github: 'https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io',
+      },
       ssp1: {
         category: '📡 Statistical Signal Processing',
         title: 'Adaptive Channel Equalization — Optimizer Comparison',
@@ -3212,6 +3300,13 @@
           document.getElementById('ol-result-img-2-wrap').style.display = 'block';
         } else {
           document.getElementById('ol-result-img-2-wrap').style.display = 'none';
+        }
+        if (imgs[2]) {
+          document.getElementById('ol-result-label-3').textContent      = imgs[2].label;
+          document.getElementById('ol-result-img-3').src                = imgs[2].src;
+          document.getElementById('ol-result-img-3-wrap').style.display = 'block';
+        } else {
+          document.getElementById('ol-result-img-3-wrap').style.display = 'none';
         }
         resultImgWrap.style.display = 'flex';
         sliderWrap.style.display    = 'none';
