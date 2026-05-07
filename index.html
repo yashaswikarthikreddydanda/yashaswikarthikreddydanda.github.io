@@ -120,9 +120,9 @@
 
     /* HERO */
     #hero {
-      min-height: 100vh;
+      min-height: 44vh;
       display: flex; align-items: center;
-      padding: 0 4rem;
+      padding: 5rem 4rem 2rem;
       position: relative;
       overflow: hidden;
     }
@@ -143,7 +143,30 @@
       background: radial-gradient(circle, rgba(10,30,60,0.04) 0%, transparent 70%);
       z-index: 0; pointer-events: none;
     }
-    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero-content { position: relative; z-index: 1; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
+    .hero-left { flex: 1; max-width: 620px; }
+    .hero-right { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .hero-projects-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.5rem; text-decoration: none;
+      border: 1px solid var(--border2); border-radius: 4px;
+      padding: 1.75rem 2.25rem; background: var(--bg2);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      min-width: 140px;
+    }
+    .hero-projects-btn:hover { border-color: var(--accent); background: var(--bg3); transform: translateY(-2px); }
+    .hero-projects-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .hero-projects-count { font-size: 2.8rem; font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.04em; }
+    .hero-projects-arrow { font-family: 'DM Mono', monospace; font-size: 1rem; color: var(--muted); }
+    .nav-avail {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      color: var(--text); letter-spacing: 0.06em;
+    }
+    .nav-avail-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0;
+    }
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'DM Mono', monospace; font-size: 0.78rem;
@@ -153,13 +176,13 @@
     }
     .hero-tag::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); animation: pulse 2s infinite;
+      background: #22c55e; animation: pulse 2s infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
     }
     .hero-name {
-      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
       font-weight: 800; line-height: 1.05;
       letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
@@ -193,7 +216,8 @@
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
     /* SECTIONS */
-    section { padding: 7rem 4rem; }
+    section { padding: 4rem 4rem; }
+    #projects { padding-top: 2rem; }
     .section-label {
       font-family: 'DM Mono', monospace; font-size: 0.75rem;
       color: var(--accent2); letter-spacing: 0.14em; text-transform: uppercase;
@@ -563,6 +587,32 @@
     .arxiv-github:hover { opacity: 0.85; transform: translateY(-1px); }
     .arxiv-github svg { width: 16px; height: 16px; fill: currentColor; }
 
+    /* FILTER BAND */
+    .proj-filters {
+      display: flex; flex-wrap: wrap; gap: 0.45rem;
+      margin-bottom: 0.75rem;
+    }
+    .proj-filter-btn {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.07em; padding: 0.4rem 1rem;
+      border: 1px solid var(--border2); border-radius: 2px;
+      background: none; color: var(--muted); cursor: pointer;
+      transition: all 0.18s; white-space: nowrap;
+    }
+    .proj-filter-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    .proj-filter-btn.active {
+      background: var(--accent); color: #fff;
+      border-color: var(--accent);
+    }
+    .proj-filter-count {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      color: var(--muted); letter-spacing: 0.06em;
+      margin-bottom: 1.5rem;
+    }
+    #proj-filter-band { margin-bottom: 0; }
+    .proj-row[data-categories] { transition: opacity 0.18s, transform 0.18s; }
+    .proj-row.hidden { display: none; }
+
     /* ANIMATIONS */
     .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .fade-in.visible { opacity: 1; transform: none; }
@@ -886,7 +936,10 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">YKR</div>
+    <div class="nav-avail">
+      <span class="nav-avail-dot"></span>
+      Available for opportunities
+    </div>
     <ul class="nav-links">
         <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
@@ -904,15 +957,22 @@
     <div class="hero-glow"></div>
     <div class="hero-glow2"></div>
     <div class="hero-content">
-      <div class="hero-tag">Available for opportunities</div>
-      <h1 class="hero-name">
-        <span class="first">Yashaswi Karthik Reddy</span>
-        <span class="last">Danda</span>
-      </h1>
-      <p class="hero-sub">Signal processing engineer with a deep affinity for the mathematics behind DSP and ML optimization — where the deeper you go, the more there is to engineer.</p>
-      <div class="hero-ctas">
-        <a href="#projects" class="btn-primary">View Projects</a>
-        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      <div class="hero-left">
+        <h1 class="hero-name">
+          <span class="first">Yashaswi Karthik Reddy</span>
+          <span class="last">Danda</span>
+        </h1>
+        <p class="hero-sub">Proficient in machine learning, image processing, and video compression and processing — seeking PhD positions in machine learning applied to signal processing problems.</p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <a href="#projects" class="hero-projects-btn">
+          <span class="hero-projects-label">View Projects</span>
+          <span class="hero-projects-count">11</span>
+          <span class="hero-projects-arrow">↓</span>
+        </a>
       </div>
     </div>
   </section>
@@ -925,171 +985,104 @@
       <div class="section-divider"></div>
     </div>
 
-    <!-- Project List -->
+    <!-- Filter Band -->
+    <div class="fade-in" id="proj-filter-band">
+      <div class="proj-filters">
+        <button class="proj-filter-btn active" data-filter="all" onclick="filterProjects('all', this)">All</button>
+        <button class="proj-filter-btn" data-filter="ml" onclick="filterProjects('ml', this)">🧠 Machine Learning</button>
+        <button class="proj-filter-btn" data-filter="cl" onclick="filterProjects('cl', this)">♾️ Continuous Learning</button>
+        <button class="proj-filter-btn" data-filter="pinn" onclick="filterProjects('pinn', this)">⚛️ PINN</button>
+        <button class="proj-filter-btn" data-filter="vp" onclick="filterProjects('vp', this)">🎬 Video Processing</button>
+        <button class="proj-filter-btn" data-filter="vc" onclick="filterProjects('vc', this)">🗜️ Video Compression</button>
+        <button class="proj-filter-btn" data-filter="ip" onclick="filterProjects('ip', this)">🖼️ Image Processing</button>
+        <button class="proj-filter-btn" data-filter="ssp" onclick="filterProjects('ssp', this)">📡 Signal Processing</button>
+        <button class="proj-filter-btn" data-filter="au" onclick="filterProjects('au', this)">🎵 Audio</button>
+      </div>
+      <div class="proj-filter-count" id="proj-filter-count">11 projects</div>
+    </div>
+
+    <!-- Flat Project List -->
     <div class="fade-in" id="proj-list-root">
+      <div class="proj-list" id="proj-flat-list">
 
-      <!-- Machine Learning -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🧠</span>
-          <span class="proj-cat-name">Machine Learning</span>
-          <span class="proj-cat-count">2 projects</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openArxivOverlay()">
-            <span class="proj-row-num">ML_01</span>
-            <span class="proj-row-title">Sparse Adaptive Continual Learning with Drift-Aware Online Dictionary Optimization</span>
-            <div class="proj-row-tags"><span class="tag">OMP</span><span class="tag">DER++</span><span class="tag">AMSGrad</span><span class="tag">DWT</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <div class="proj-row" onclick="openArxivOverlay2()">
-            <span class="proj-row-num">ML_02</span>
-            <span class="proj-row-title">Cross-Domain Continual Learning with Replay and Regularization</span>
-            <div class="proj-row-tags"><span class="tag">PyTorch</span><span class="tag">DER++</span><span class="tag">EWC</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistical Signal Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">📡</span>
-          <span class="proj-cat-name">Statistical Signal Processing</span>
-          <span class="proj-cat-count">1 project</span>
-        </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('ssp1')">
-            <span class="proj-row-num">SSP_01</span>
-            <span class="proj-row-title">Adaptive Channel Equalization — Optimizer Comparison</span>
-            <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">Monte Carlo</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
+        <div class="proj-row" data-categories="ml cl" onclick="openArxivOverlay()">
+          <span class="proj-row-num">ML_01</span>
+          <span class="proj-row-title">Sparse Adaptive Continual Learning with Drift-Aware Online Dictionary Optimization</span>
+          <div class="proj-row-tags"><span class="tag">OMP</span><span class="tag">DER++</span><span class="tag">AMSGrad</span><span class="tag">DWT</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
 
+        <div class="proj-row" data-categories="ml cl" onclick="openArxivOverlay2()">
+          <span class="proj-row-num">ML_02</span>
+          <span class="proj-row-title">Cross-Domain Continual Learning with Replay and Regularization</span>
+          <div class="proj-row-tags"><span class="tag">PyTorch</span><span class="tag">DER++</span><span class="tag">EWC</span></div>
+          <span class="proj-row-arrow">→</span>
+        </div>
 
-      <!-- Video Compression -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🗜️</span>
-          <span class="proj-cat-name">Video Compression</span>
-          <span class="proj-cat-count">1 project</span>
+        <div class="proj-row" data-categories="ml pinn ssp" onclick="openPinnOverlay()">
+          <span class="proj-row-num">WC_01</span>
+          <span class="proj-row-title">Physics-Informed Neural Network OFDM Channel Estimation with Doppler–Delay Regularization</span>
+          <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PyTorch</span><span class="tag">OFDM</span><span class="tag">Channel Estimation</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openOverlay('vc1')">
-            <span class="proj-row-num">VC_01</span>
-            <span class="proj-row-title">Content-Aware Intra and Inter Prediction with Texture and Motion Analysis</span>
-            <div class="proj-row-tags"><span class="tag">C++</span><span class="tag">FFmpeg</span><span class="tag">SIMD</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Video Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🎬</span>
-          <span class="proj-cat-name">Video Processing</span>
-          <span class="proj-cat-count">3 projects</span>
+        <div class="proj-row" data-categories="ml pinn ssp" onclick="openWaveOverlay()">
+          <span class="proj-row-num">WC_02</span>
+          <span class="proj-row-title">PINN Wave Equation Solver: Optimizer &amp; LR Schedule Comparison Study</span>
+          <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PDE</span><span class="tag">L-BFGS</span><span class="tag">PyTorch</span><span class="tag">Wave Equation</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openVp1Overlay()">
-            <span class="proj-row-num">VP_01</span>
-            <span class="proj-row-title">Temporally Coherent Video Denoising via Motion-Compensated Kalman Filtering</span>
-            <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">DIS Optical Flow</span><span class="tag">Kalman Filter</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <div class="proj-row" onclick="openFilmOverlay()">
-            <span class="proj-row-num">VP_02</span>
-            <span class="proj-row-title">FILM: Frame Interpolation for Large Motion via Multi-Scale Feature Pyramids</span>
-            <div class="proj-row-tags"><span class="tag">TensorFlow</span><span class="tag">TF Hub</span><span class="tag">FILM</span><span class="tag">PSNR</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <div class="proj-row" onclick="openVp3Overlay()">
-            <span class="proj-row-num">VP_03</span>
-            <span class="proj-row-title">Bidirectional Flow-Based Frame Interpolation with Iterative Refinement and Early Stopping</span>
-            <div class="proj-row-tags"><span class="tag">DIS Flow</span><span class="tag">Occlusion Mask</span><span class="tag">Guided Filter</span><span class="tag">OpenCV</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Image Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🖼️</span>
-          <span class="proj-cat-name">Image Processing</span>
-          <span class="proj-cat-count">3 projects</span>
+        <div class="proj-row" data-categories="ssp" onclick="openOverlay('ssp1')">
+          <span class="proj-row-num">SSP_01</span>
+          <span class="proj-row-title">Adaptive Channel Equalization — Optimizer Comparison</span>
+          <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">NLMS</span><span class="tag">Monte Carlo</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openDeblurOverlay()">
-            <span class="proj-row-num">IP_01</span>
-            <span class="proj-row-title">Blind Motion Deblurring via Cepstral PSF Estimation and Forward-Consistent Wiener Regularization</span>
-            <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">SciPy</span><span class="tag">Wiener Filter</span><span class="tag">Cepstrum</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <div class="proj-extra" id="extra-image-processing">
-            <div class="proj-row" onclick="openOverlay('ip1')">
-              <span class="proj-row-num">IP_02</span>
-              <span class="proj-row-title">Image Processing Project 2</span>
-              <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">PIL</span><span class="tag">NumPy</span></div>
-              <span class="proj-row-arrow">→</span>
-            </div>
-            <div class="proj-row" onclick="openOverlay('ip2')">
-              <span class="proj-row-num">IP_03</span>
-              <span class="proj-row-title">Image Processing Project 3</span>
-              <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">C++</span><span class="tag">MATLAB</span></div>
-              <span class="proj-row-arrow">→</span>
-            </div>
-          </div>
-          <button class="proj-view-more" id="vm-image-processing" onclick="toggleViewMore('image-processing')">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-            View more projects
-          </button>
-        </div>
-      </div>
 
-      <!-- Wireless Communications / PINN -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">📡</span>
-          <span class="proj-cat-name">Physics-Informed Neural Networks &amp; Signal Processing</span>
-          <span class="proj-cat-count">2 projects</span>
+        <div class="proj-row" data-categories="ml vc" onclick="openOverlay('vc1')">
+          <span class="proj-row-num">VC_01</span>
+          <span class="proj-row-title">Content-Aware Intra and Inter Prediction with Texture and Motion Analysis</span>
+          <div class="proj-row-tags"><span class="tag">C++</span><span class="tag">FFmpeg</span><span class="tag">SIMD</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-        <div class="proj-list">
-          <div class="proj-row" onclick="openPinnOverlay()">
-            <span class="proj-row-num">WC_01</span>
-            <span class="proj-row-title">Physics-Informed Neural Network OFDM Channel Estimation with Doppler–Delay Regularization</span>
-            <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PyTorch</span><span class="tag">OFDM</span><span class="tag">Channel Estimation</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-          <div class="proj-row" onclick="openWaveOverlay()">
-            <span class="proj-row-num">WC_02</span>
-            <span class="proj-row-title">PINN Wave Equation Solver: Optimizer &amp; LR Schedule Comparison Study</span>
-            <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PDE</span><span class="tag">L-BFGS</span><span class="tag">PyTorch</span><span class="tag">Wave Equation</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Audio Signal Processing -->
-      <div class="proj-category">
-        <div class="proj-cat-header">
-          <span class="proj-cat-icon">🎵</span>
-          <span class="proj-cat-name">Audio Signal Processing</span>
-          <span class="proj-cat-count">2 projects</span>
+        <div class="proj-row" data-categories="vp" onclick="openVp1Overlay()">
+          <span class="proj-row-num">VP_01</span>
+          <span class="proj-row-title">Temporally Coherent Video Denoising via Motion-Compensated Kalman Filtering</span>
+          <div class="proj-row-tags"><span class="tag">OpenCV</span><span class="tag">DIS Optical Flow</span><span class="tag">Kalman Filter</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-          <div class="proj-row" onclick="openOverlay('au2')">
-            <span class="proj-row-num">AU_02</span>
-            <span class="proj-row-title">LMS Noise Cancellation — Optimizer Comparison (GD · NLMS · MAGD)</span>
-            <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">LMS</span><span class="tag">NLMS</span><span class="tag">MAGD</span></div>
-            <span class="proj-row-arrow">→</span>
-          </div>
+
+        <div class="proj-row" data-categories="ml vp" onclick="openFilmOverlay()">
+          <span class="proj-row-num">VP_02</span>
+          <span class="proj-row-title">FILM: Frame Interpolation for Large Motion via Multi-Scale Feature Pyramids</span>
+          <div class="proj-row-tags"><span class="tag">TensorFlow</span><span class="tag">TF Hub</span><span class="tag">FILM</span><span class="tag">PSNR</span></div>
+          <span class="proj-row-arrow">→</span>
         </div>
-      </div>
+
+        <div class="proj-row" data-categories="vp" onclick="openVp3Overlay()">
+          <span class="proj-row-num">VP_03</span>
+          <span class="proj-row-title">Bidirectional Flow-Based Frame Interpolation with Iterative Refinement and Early Stopping</span>
+          <div class="proj-row-tags"><span class="tag">DIS Flow</span><span class="tag">Occlusion Mask</span><span class="tag">Guided Filter</span><span class="tag">OpenCV</span></div>
+          <span class="proj-row-arrow">→</span>
+        </div>
+
+        <div class="proj-row" data-categories="ip" onclick="openDeblurOverlay()">
+          <span class="proj-row-num">IP_01</span>
+          <span class="proj-row-title">Blind Motion Deblurring via Cepstral PSF Estimation and Forward-Consistent Wiener Regularization</span>
+          <div class="proj-row-tags"><span class="tag">NumPy</span><span class="tag">SciPy</span><span class="tag">Wiener Filter</span><span class="tag">Cepstrum</span></div>
+          <span class="proj-row-arrow">→</span>
+        </div>
+
+        <div class="proj-row" data-categories="au" onclick="openOverlay('au2')">
+          <span class="proj-row-num">AU_02</span>
+          <span class="proj-row-title">LMS Noise Cancellation — Optimizer Comparison (GD · NLMS · MAGD)</span>
+          <div class="proj-row-tags"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">LMS</span><span class="tag">NLMS</span><span class="tag">MAGD</span></div>
+          <span class="proj-row-arrow">→</span>
+        </div>
 
       </div>
-
     </div>
 
 
@@ -1103,48 +1096,67 @@
       <div class="section-divider"></div>
     </div>
     <div class="skills-grid">
+
       <div class="skill-group fade-in">
         <div class="skill-group-title">Languages</div>
         <div class="skill-list">
-          <div class="skill-item">
-            <span class="skill-name">C++</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">Python</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">MATLAB</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">CUDA</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div>
-          </div>
+          <div class="skill-item"><span class="skill-name">Python</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">C++</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">MATLAB</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">CUDA</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:72%"></div></div></div>
         </div>
       </div>
+
       <div class="skill-group fade-in">
-        <div class="skill-group-title">Frameworks & Tools</div>
+        <div class="skill-group-title">ML & Deep Learning</div>
         <div class="skill-list">
-          <div class="skill-item">
-            <span class="skill-name">GStreamer</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">FFmpeg</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">SIMD</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
-          </div>
-          <div class="skill-item">
-            <span class="skill-name">Linux</span>
-            <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
-          </div>
+          <div class="skill-item"><span class="skill-name">PyTorch</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">TensorFlow</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">TF Hub</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:72%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Autograd / torch.autograd</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div></div>
         </div>
       </div>
+
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Signal & Image Processing</div>
+        <div class="skill-list">
+          <div class="skill-item"><span class="skill-name">NumPy / SciPy</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">OpenCV</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">DIS Optical Flow</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Kalman Filtering</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Video & Compression</div>
+        <div class="skill-list">
+          <div class="skill-item"><span class="skill-name">FFmpeg</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:84%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">GStreamer</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:76%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">SIMD / AVX</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:74%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Intra / Inter Prediction</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Optimizers & Solvers</div>
+        <div class="skill-list">
+          <div class="skill-item"><span class="skill-name">L-BFGS</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:86%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Adam / AdamW / AMSGrad</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">NLMS / LMS / MAGD</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">OMP / DWT</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">Methods & Concepts</div>
+        <div class="skill-list">
+          <div class="skill-item"><span class="skill-name">PINNs</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Continual Learning (DER++, EWC)</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:86%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">OFDM / Channel Estimation</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:84%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Wiener / Cepstral Filtering</span><div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -3888,6 +3900,25 @@
       document.querySelectorAll('#vp3SpeedGroup .vp3-speed-btn').forEach(b => {
         b.classList.toggle('active', b.textContent.trim() === s + '×' || b.textContent.trim() === s.toString());
       });
+    }
+
+    // ── PROJECT FILTER ────────────────────────────────────────────────────────
+    function filterProjects(filter, btn) {
+      // Update active button
+      document.querySelectorAll('.proj-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const rows = document.querySelectorAll('#proj-flat-list .proj-row[data-categories]');
+      let visible = 0;
+      rows.forEach(row => {
+        const cats = row.getAttribute('data-categories').split(' ');
+        const show = filter === 'all' || cats.includes(filter);
+        row.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+
+      const countEl = document.getElementById('proj-filter-count');
+      if (countEl) countEl.textContent = visible + (visible === 1 ? ' project' : ' projects');
     }
 
     // ── FILM OVERLAY ─────────────────────────────────────────────────────────
