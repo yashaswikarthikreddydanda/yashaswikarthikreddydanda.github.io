@@ -843,50 +843,21 @@
     }
     .deblur-metric-badge span { color: var(--muted); }
     .deblur-metric-badge strong { color: var(--accent); margin-left: 0.35rem; }
-    /* ── VP3 SIDE-BY-SIDE VIDEO SLIDER ──────────────────────────────────── */
-    .vp3-compare-wrap {
-      position: relative; width: 100%; aspect-ratio: 16/5;
-      overflow: hidden; border-radius: 4px;
-      border: 1px solid var(--border); background: #000;
-      cursor: ew-resize; user-select: none;
-      margin-bottom: 1rem;
+    /* ── VP3 SIDE-BY-SIDE VIDEOS ─────────────────────────────────────────── */
+    .vp3-sbs-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden; background: var(--border);
+      margin-bottom: 1.5rem;
     }
-    .vp3-compare-wrap video {
-      position: absolute; top: 0; height: 100%;
-      width: 50%; object-fit: cover;
-      display: block; pointer-events: none;
-    }
-    .vp3-vid-left  { left: 0; object-position: left center; }
-    .vp3-vid-right { left: 50%; object-position: right center; }
-    /* clip the right video based on slider */
-    .vp3-vid-right { clip-path: inset(0 0 0 0); }
-    .vp3-slider-line {
-      position: absolute; top: 0; bottom: 0; width: 2px;
-      background: #fff; left: 50%; transform: translateX(-50%);
-      pointer-events: none; box-shadow: 0 0 8px rgba(0,0,0,0.6);
-      z-index: 20;
-    }
-    .vp3-slider-handle {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 44px; height: 44px; border-radius: 50%;
-      background: #fff; box-shadow: 0 2px 14px rgba(0,0,0,0.5);
-      display: flex; align-items: center; justify-content: center;
-      pointer-events: none; z-index: 21;
-    }
-    .vp3-slider-handle svg { width: 22px; height: 22px; fill: #222; }
-    .vp3-pill {
-      position: absolute; bottom: 12px; z-index: 22;
-      font-family: 'DM Mono', monospace; font-size: 0.65rem;
-      letter-spacing: 0.1em; padding: 0.22rem 0.6rem;
-      border-radius: 2px; background: rgba(0,0,0,0.7);
-      color: #fff; pointer-events: none;
-    }
-    .vp3-pill-left  { left: 12px; }
-    .vp3-pill-right { right: 12px; }
-    .vp3-sync-note {
-      font-family: 'DM Mono', monospace; font-size: 0.68rem;
-      color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;
+    .vp3-panel { position: relative; background: #000; }
+    .vp3-panel video { width: 100%; display: block; max-height: 300px; object-fit: contain; }
+    .vp3-panel-label {
+      position: absolute; bottom: 10px; left: 10px;
+      font-family: 'DM Mono', monospace; font-size: 0.63rem;
+      letter-spacing: 0.1em; padding: 0.2rem 0.55rem;
+      border-radius: 2px; background: rgba(0,0,0,0.7); color: #fff;
+      pointer-events: none; z-index: 5;
     }
     .vp3-playbar {
       display: flex; align-items: center; gap: 1rem;
@@ -2180,29 +2151,22 @@
         </tbody>
       </table>
 
-      <!-- Side-by-side slider -->
+      <!-- Side-by-side videos -->
       <div class="arxiv-section-label">Side-by-Side Comparison — Original 15 fps vs Interpolated 60 fps</div>
-      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;">
-        Left: <code>basketball_10fps_sd.mp4</code> (original, slowed to match playback). Right: <code>frame_interpolation.mp4</code> (interpolated output). Drag the divider to compare temporal smoothness. Use the speed controls to watch in slow motion.
-      </p>
 
-      <!-- Side-by-side video compare widget -->
-      <div class="vp3-compare-wrap" id="vp3CompareWrap">
-        <!-- Left: original -->
-        <video class="vp3-vid-left" id="vp3VidLeft" loop muted playsinline preload="auto">
-          <source src="basketball_10fps_sd.mp4" type="video/mp4">
-        </video>
-        <!-- Right: interpolated — clipped by JS -->
-        <video class="vp3-vid-right" id="vp3VidRight" loop muted playsinline preload="auto">
-          <source src="frame_interpolation.mp4" type="video/mp4">
-        </video>
-        <!-- Divider + handle -->
-        <div class="vp3-slider-line" id="vp3Line"></div>
-        <div class="vp3-slider-handle" id="vp3Handle">
-          <svg viewBox="0 0 24 24"><path d="M8 5l-6 7 6 7V5zm8 0v14l6-7-6-7z"/></svg>
+      <div class="vp3-sbs-wrap">
+        <div class="vp3-panel">
+          <video id="vp3VidLeft" loop muted playsinline preload="auto">
+            <source src="basketball_10fps_sd.mp4" type="video/mp4">
+          </video>
+          <div class="vp3-panel-label">ORIGINAL · 15 fps</div>
         </div>
-        <div class="vp3-pill vp3-pill-left">ORIGINAL · 15 fps</div>
-        <div class="vp3-pill vp3-pill-right">INTERPOLATED · 60 fps</div>
+        <div class="vp3-panel">
+          <video id="vp3VidRight" loop muted playsinline preload="auto">
+            <source src="frame_interpolation.mp4" type="video/mp4">
+          </video>
+          <div class="vp3-panel-label">INTERPOLATED · 60 fps</div>
+        </div>
       </div>
 
       <!-- Playback controls -->
@@ -2215,7 +2179,6 @@
           <button class="vp3-speed-btn" onclick="vp3SetSpeed(2.0)">2×</button>
         </div>
       </div>
-      <p class="vp3-sync-note">Both videos are synchronized via <code>currentTime</code> binding. The right video plays the full 60 fps interpolated output; the left replays the original 15 fps source looped to match duration. Files must be served from the same directory as <code>index.html</code>.</p>
 
       <hr class="arxiv-divider">
 
@@ -3018,8 +2981,17 @@
       overlay.classList.add('open');
       overlay.scrollTop = 0;
       document.body.style.overflow = 'hidden';
-      vp3InitSlider();
-      vp3CheckVideos();
+      // Attach sync listener once
+      const vL = document.getElementById('vp3VidLeft');
+      const vR = document.getElementById('vp3VidRight');
+      if (vL && vR && !vL._vp3synced) {
+        vL._vp3synced = true;
+        vL.addEventListener('timeupdate', () => {
+          if (Math.abs(vR.currentTime - vL.currentTime) > 0.15) {
+            vR.currentTime = vL.currentTime;
+          }
+        });
+      }
     }
     function closeVp3Overlay() {
       document.getElementById('vp3Overlay').classList.remove('open');
@@ -3030,60 +3002,6 @@
       if (vR) vR.pause();
       const btn = document.getElementById('vp3PlayBtn');
       if (btn) btn.textContent = '▶ Play';
-    }
-
-    // VP3 side-by-side slider
-    let vp3SliderPct = 50;
-    let vp3Dragging  = false;
-
-    function vp3SetSlider(pct) {
-      vp3SliderPct = Math.min(100, Math.max(0, pct));
-      const wrap = document.getElementById('vp3CompareWrap');
-      const line = document.getElementById('vp3Line');
-      const hdl  = document.getElementById('vp3Handle');
-      const vR   = document.getElementById('vp3VidRight');
-      if (!wrap) return;
-      const px   = (vp3SliderPct / 100) * wrap.offsetWidth;
-      if (line) line.style.left = vp3SliderPct + '%';
-      if (hdl)  hdl.style.left  = vp3SliderPct + '%';
-      // Clip the right video: show only the right portion from the divider
-      if (vR) {
-        const rightClipPct = vp3SliderPct; // left edge of right video clip
-        vR.style.clipPath = `inset(0 0 0 ${rightClipPct}%)`;
-        // Shift it so its content aligns correctly
-        vR.style.left  = vp3SliderPct + '%';
-        vR.style.width = (100 - vp3SliderPct) + '%';
-      }
-    }
-
-    function vp3InitSlider() {
-      const wrap = document.getElementById('vp3CompareWrap');
-      if (!wrap) return;
-      vp3SetSlider(50);
-      wrap.addEventListener('mousedown',  e => { vp3Dragging = true; vp3SetSlider((e.offsetX / wrap.offsetWidth) * 100); });
-      wrap.addEventListener('touchstart', e => { vp3Dragging = true; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.touches[0].clientX - r.left) / r.width) * 100); }, { passive: true });
-      document.addEventListener('mousemove',  e => { if (!vp3Dragging) return; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.clientX - r.left) / r.width) * 100); });
-      document.addEventListener('touchmove',  e => { if (!vp3Dragging) return; const r = wrap.getBoundingClientRect(); vp3SetSlider(((e.touches[0].clientX - r.left) / r.width) * 100); }, { passive: true });
-      document.addEventListener('mouseup',  () => vp3Dragging = false);
-      document.addEventListener('touchend', () => vp3Dragging = false);
-    }
-
-    function vp3CheckVideos() {
-      // Sync right video time to left whenever left updates
-      const vL = document.getElementById('vp3VidLeft');
-      const vR = document.getElementById('vp3VidRight');
-      if (!vL || !vR) return;
-      // Show placeholders if videos fail to load
-      vL.addEventListener('error', () => {
-        const p = vL.closest('.vp3-compare-wrap');
-        if (p) p.style.background = '#111';
-      }, { once: true });
-      // Sync time on timeupdate
-      vL.addEventListener('timeupdate', () => {
-        if (Math.abs(vR.currentTime - vL.currentTime) > 0.1) {
-          vR.currentTime = vL.currentTime;
-        }
-      });
     }
 
     function vp3TogglePlay() {
@@ -3107,7 +3025,7 @@
       if (vL) vL.playbackRate = s;
       if (vR) vR.playbackRate = s;
       document.querySelectorAll('#vp3SpeedGroup .vp3-speed-btn').forEach(b => {
-        b.classList.toggle('active', parseFloat(b.textContent) === s || b.textContent === s + '×');
+        b.classList.toggle('active', b.textContent.trim() === s + '×' || b.textContent.trim() === s.toString());
       });
     }
 
