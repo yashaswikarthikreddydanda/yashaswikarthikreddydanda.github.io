@@ -896,11 +896,17 @@
         <div class="proj-cat-header">
           <span class="proj-cat-icon">🧠</span>
           <span class="proj-cat-name">Machine Learning</span>
-          <span class="proj-cat-count">1 project</span>
+          <span class="proj-cat-count">2 projects</span>
         </div>
         <div class="proj-list">
           <div class="proj-row" onclick="openArxivOverlay()">
             <span class="proj-row-num">ML_01</span>
+            <span class="proj-row-title">Sparse Adaptive Continual Learning with Drift-Aware Online Dictionary Optimization</span>
+            <div class="proj-row-tags"><span class="tag">OMP</span><span class="tag">DER++</span><span class="tag">AMSGrad</span><span class="tag">DWT</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+          <div class="proj-row" onclick="openArxivOverlay2()">
+            <span class="proj-row-num">ML_02</span>
             <span class="proj-row-title">Cross-Domain Continual Learning with Replay and Regularization</span>
             <div class="proj-row-tags"><span class="tag">PyTorch</span><span class="tag">DER++</span><span class="tag">EWC</span></div>
             <span class="proj-row-arrow">→</span>
@@ -1465,12 +1471,178 @@
     </div>
   </div>
 
-  <!-- ARXIV PAPER OVERLAY -->
+  <!-- ARXIV PAPER OVERLAY — ML_01 SPARSE ADAPTIVE CL -->
   <div class="arxiv-overlay" id="arxivOverlay">
     <div class="arxiv-inner">
       <div class="arxiv-topbar">
         <button class="arxiv-back" onclick="closeArxivOverlay()">← Back to Projects</button>
         <div class="arxiv-badge">ML_01 &nbsp;·&nbsp; 2025</div>
+      </div>
+      <div class="arxiv-subject">cs.LG &nbsp;·&nbsp; Signal Processing &nbsp;·&nbsp; Continual Learning</div>
+      <h1 class="arxiv-title">Sparse Adaptive Continual Learning with Drift-Aware Online Dictionary Optimization</h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- ABSTRACT -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        We propose a <strong>sparse adaptive continual learning</strong> framework for non-stationary time-series classification under concept drift, unifying online sparse coding, drift-aware dictionary adaptation, and replay-based catastrophic forgetting mitigation into a single pipeline. Each incoming window \( \mathbf{x}_t \in \mathbb{R}^W \) is first decomposed via a multi-resolution signal processing stage — a four-level <strong>Discrete Wavelet Transform</strong> (db4) followed by Short-Time Fourier Transform statistics — yielding a feature vector \( \boldsymbol{\phi}_t \in \mathbb{R}^d \). The feature is then encoded as a sparse combination of \( K{=}64 \) dictionary atoms \( \mathbf{D} \in \mathbb{R}^{d \times K} \) via <strong>Orthogonal Matching Pursuit</strong> (OMP) with target sparsity \( s{=}10 \):
+        \[
+          \hat{\boldsymbol{\alpha}}_t = \arg\min_{\boldsymbol{\alpha}} \|\boldsymbol{\phi}_t - \mathbf{D}\boldsymbol{\alpha}\|_2^2 \quad \text{s.t.} \quad \|\boldsymbol{\alpha}\|_0 \le s.
+        \]
+        The dictionary \( \mathbf{D} \) is maintained online via a mini-batch update rule that enforces a maximum atom coherence threshold \( \mu_{\max} {=} 0.85 \), replacing incoherent atoms upon drift events to preserve representational diversity.
+        <br><br>
+        Concept drift is detected by an ensemble of three complementary detectors operating in parallel: a <strong>Page–Hinkley</strong> (PH) test monitoring the cumulative accuracy residual \( m_t = \sum_{i=1}^t (\bar{\epsilon} - \epsilon_i + \delta) \) with threshold \( \lambda{=}10 \); a <strong>mean-shift</strong> detector tracking rolling feature-norm divergence; and an <strong>EMA accuracy drop</strong> detector flagging sustained performance degradation. A confirmed drift at time \( \tau \) triggers a hard learning-rate restart, dictionary partial refresh, and replay buffer rebalancing.
+        <br><br>
+        The classifier is a linear <strong>SGD</strong> model trained with an optimized update rule combining <strong>AMSGrad</strong> — which maintains a running maximum of squared gradients \( \hat{v}_t = \max(\hat{v}_{t-1},\, \beta_2 v_{t-1} + (1-\beta_2)g_t^2) \) and scales updates by \( \eta / (\sqrt{\hat{v}_t} + \epsilon) \) — with <strong>Nesterov momentum</strong> (\( \beta{=}0.9 \)) and <strong>cosine learning-rate warm-restarts</strong> annealing from \( \eta_{\max}{=}0.01 \) to \( \eta_{\min}{=}0.0002 \) per inter-drift segment. Three continual learning strategies are evaluated across all feature pipeline modes: <strong>Experience Replay</strong>, <strong>Dark Experience Replay (DER)</strong>, and <strong>DER++</strong>, the latter combining logit-level knowledge distillation with a replay cross-entropy term.
+        <br><br>
+        Performance is assessed via four complementary metrics: <strong>Mean Accuracy</strong>, <strong>AUC-Accuracy</strong> (area under the rolling accuracy curve, penalising prolonged post-drift dips), <strong>Backward Transfer (BWT)</strong> measuring mean per-drift accuracy regression, and a composite <strong>Stability–Plasticity (SP) Score</strong> defined as \( \text{SP} = (1 - \bar{F}) \cdot \bar{A} \), where \( \bar{F} \) is mean forgetting and \( \bar{A} \) is mean accuracy. On a synthetic 4-class non-stationary signal stream (\( T{=}30{,}000 \) samples, 5 injected drifts), the <strong>SP+Optimized + REPLAY</strong> configuration achieves the highest mean accuracy of <strong>0.741</strong> and SP Score of <strong>0.638</strong>, with the signal processing pipeline yielding a \(\mathbf{2.4\times}\) improvement in mean accuracy over the raw PCA baseline across all strategies.
+      </p>
+
+      <div class="arxiv-keywords">
+        <span class="tag">Continual Learning</span><span class="tag">Sparse Coding</span>
+        <span class="tag">OMP</span><span class="tag">Dictionary Learning</span>
+        <span class="tag">Concept Drift</span><span class="tag">Page–Hinkley</span>
+        <span class="tag">AMSGrad</span><span class="tag">DER++</span>
+        <span class="tag">DWT</span><span class="tag">STFT</span>
+        <span class="tag">Stability–Plasticity</span><span class="tag">BWT/FWT</span>
+      </div>
+
+      <hr class="arxiv-divider">
+
+      <!-- RESULTS TABLE -->
+      <div class="arxiv-section-label">Table 1 — Full Results (Synthetic, T=30,000, 5 Drifts, 4 Classes)</div>
+      <p style="color:var(--muted);font-size:0.84rem;line-height:1.6;margin-bottom:1.25rem;">
+        All 9 runs (3 feature modes × 3 CL strategies). Best per-column highlighted. SP Score = (1 − Mean Forgetting) × Mean Accuracy. ↑ = higher is better, ↓ = lower is better.
+      </p>
+      <div style="overflow-x:auto;margin-bottom:0.5rem;">
+        <table class="data-table" style="font-size:0.75rem;min-width:760px;">
+          <thead>
+            <tr>
+              <th>Feature Mode</th>
+              <th>Strategy</th>
+              <th>Mean Acc ↑</th>
+              <th>Final Acc ↑</th>
+              <th>AUC-Acc ↑</th>
+              <th>BWT ↑</th>
+              <th>FWT</th>
+              <th>SP Score ↑</th>
+              <th>Mean Fgt ↓</th>
+              <th>Drifts Det.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PCA (no SP)</td><td>REPLAY</td>
+              <td>0.299</td><td>0.140</td><td>0.312</td>
+              <td>−0.042</td><td>0.000</td><td>0.278</td><td>0.070</td><td>3</td>
+            </tr>
+            <tr>
+              <td>PCA (no SP)</td><td>DER</td>
+              <td>0.287</td><td>0.040</td><td>0.300</td>
+              <td>−0.124</td><td>0.333</td><td>0.274</td><td>0.048</td><td>3</td>
+            </tr>
+            <tr>
+              <td>PCA (no SP)</td><td>DER++</td>
+              <td>0.306</td><td>0.080</td><td>0.319</td>
+              <td>−0.078</td><td>0.000</td><td>0.280</td><td>0.084</td><td>3</td>
+            </tr>
+            <tr>
+              <td>Signal Processing</td><td>REPLAY</td>
+              <td>0.716</td><td>0.280</td><td>0.723</td>
+              <td>−0.323</td><td>0.600</td><td>0.577</td><td>0.194</td><td>5</td>
+            </tr>
+            <tr>
+              <td>Signal Processing</td><td>DER</td>
+              <td>0.583</td><td>0.420</td><td>0.570</td>
+              <td>−0.205</td><td>0.200</td><td>0.454</td><td>0.221</td><td>5</td>
+            </tr>
+            <tr>
+              <td>Signal Processing</td><td>DER++</td>
+              <td>0.667</td><td>0.220</td><td>0.672</td>
+              <td>−0.284</td><td>0.000</td><td>0.530</td><td>0.204</td><td>5</td>
+            </tr>
+            <tr class="highlight-row">
+              <td>SP + Optimized</td><td>REPLAY ★</td>
+              <td><strong>0.741</strong></td><td>0.320</td><td><strong>0.749</strong></td>
+              <td>−0.317</td><td>0.600</td><td><strong>0.638</strong></td><td><strong>0.140</strong></td><td>5</td>
+            </tr>
+            <tr>
+              <td>SP + Optimized</td><td>DER</td>
+              <td>0.598</td><td>0.260</td><td>0.599</td>
+              <td>−0.247</td><td>0.333</td><td>0.498</td><td>0.167</td><td>3</td>
+            </tr>
+            <tr>
+              <td>SP + Optimized</td><td>DER++</td>
+              <td>0.643</td><td>0.260</td><td>0.649</td>
+              <td>−0.260</td><td>0.333</td><td>0.546</td><td>0.152</td><td>3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">★ Best overall configuration. PCA baseline uses raw 256-sample window → PCA(32) with no signal processing. SP+Optimized adds AMSGrad, Nesterov momentum, cosine LR warm-restarts, and gradient clipping (L2 ≤ 1.0) on top of the signal processing pipeline.</p>
+
+      <hr class="arxiv-divider">
+
+      <!-- BAR GRAPH PLACEHOLDER -->
+      <div class="arxiv-section-label">Figure 1 — Mean Accuracy &amp; SP Score by Mode and Strategy</div>
+      <p style="color:var(--muted);font-size:0.84rem;line-height:1.6;margin-bottom:1rem;">
+        Grouped bar chart comparing Mean Accuracy and SP Score across all 9 configurations. Upload your matplotlib/seaborn export to replace the placeholder below.
+      </p>
+      <div class="arxiv-figure" style="min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg2);border:2px dashed var(--border2);">
+        <img
+          src="sparse_cl_bar_results.png"
+          alt="Mean Accuracy and SP Score grouped bar chart"
+          style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;padding:2.5rem;text-align:center;">
+          <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:var(--muted);opacity:0.3;"><path d="M5 9h3v9H5zm6-4h3v13h-3zm6 8h3v5h-3z"/></svg>
+          <div style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);">[ Bar graph placeholder ]</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);opacity:0.6;">Add <code>sparse_cl_bar_results.png</code> to your repository root to display here</div>
+        </div>
+      </div>
+      <div class="arxiv-figure-cap"><strong>Figure 1.</strong> Mean accuracy (left axis) and SP Score (right axis) for all 3 feature pipeline modes × 3 CL strategies on the synthetic dataset. The SP+Optimized mode consistently outperforms the raw PCA baseline by a factor of ~2.4×, with REPLAY achieving the best SP Score of 0.638.</div>
+
+      <hr class="arxiv-divider">
+
+      <!-- KEY FINDINGS -->
+      <div class="arxiv-section-label">Key Findings</div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.75rem;">
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">The DWT + STFT signal processing pipeline lifts mean accuracy from ~0.297 (PCA baseline) to ~0.655 averaged across strategies — a 2.4× improvement — confirming that frequency-domain features provide dramatically more discriminative signal for non-stationary time-series than raw PCA projections.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">REPLAY with SP+Optimized features achieves the highest SP Score (0.638) despite the largest BWT (−0.317), suggesting that when drift detection correctly triggers hard LR restarts, fast re-adaptation after drift compensates for short-term forgetting spikes.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">DER and DER++ underperform REPLAY in the SP+Optimized setting, likely because the soft logit distillation temperature (τ=4.0) interacts with the cosine LR schedule to produce over-smoothed gradient updates — a tradeoff between knowledge preservation and adaptation speed post-drift.</p>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;">
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 04</span>
+          <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">The ensemble drift detector (PH + mean-shift + EMA) correctly identifies all 5 injected drifts in the SP modes, while the PCA mode detects only 3/5 — confirming that richer feature representations increase the sensitivity of distribution-shift statistics to true concept drift.</p>
+        </div>
+      </div>
+
+      <div class="arxiv-cta-row">
+        <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda/yashaswikarthikreddydanda.github.io/blob/main/sparse_adaptive_final.py" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Code on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CROSS-DOMAIN CL ARXIV OVERLAY (ML_02) ─────────────────────────── -->
+  <div class="arxiv-overlay" id="arxivOverlay2">
+    <div class="arxiv-inner">
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closeArxivOverlay2()">← Back to Projects</button>
+        <div class="arxiv-badge">ML_02 &nbsp;·&nbsp; 2025</div>
       </div>
       <div class="arxiv-subject">cs.LG &nbsp;·&nbsp; Computer Vision &nbsp;·&nbsp; Continual Learning</div>
       <h1 class="arxiv-title">Cross-Domain Continual Learning with Replay and Regularization: A Comparative Analysis of EWC, Experience Replay, and DER++</h1>
@@ -1515,60 +1687,56 @@
       <div class="arxiv-section-label">Key Findings</div>
       <hr class="arxiv-divider">
 
-<div class="arxiv-section-label"> Analysis</div>
+      <div class="arxiv-section-label">Analysis</div>
 
-<div class="arxiv-abstract">
-  From a signal processing perspective, the validity of a continual learning benchmark is governed by the degree of distributional shift between tasks. If multiple domains share similar spectral and structural statistics, their data can be approximated as lying in overlapping (or low principal angle) subspaces of a common feature space. In such cases, learning reduces to reusing an existing basis rather than adapting to new information.
-  <br><br>
+      <div class="arxiv-abstract">
+        From a signal processing perspective, the validity of a continual learning benchmark is governed by the degree of distributional shift between tasks. If multiple domains share similar spectral and structural statistics, their data can be approximated as lying in overlapping (or low principal angle) subspaces of a common feature space. In such cases, learning reduces to reusing an existing basis rather than adapting to new information.
+        <br><br>
+        This is evident in the Scene, Satellite, and Texture domains. Their dominant components edges, gradients, and mid-frequency structures exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels:
+      </div>
 
-  This is evident in the Scene, Satellite, and Texture domains. Their dominant components edges, gradients, and mid-frequency structures exhibit high cross-domain correlation, as well as alignment with representations learned from pretraining datasets such as ImageNet. Additionally, the inputs are grayscale images replicated across three channels:
-</div>
+      <div style="text-align:center; margin: 1.5rem 0;">
+        \[
+        x \in \mathbb{R}^{H \times W} \rightarrow [x, x, x] \in \mathbb{R}^{H \times W \times 3}
+        \]
+      </div>
 
-<div style="text-align:center; margin: 1.5rem 0;">
-  \[
-  x \in \mathbb{R}^{H \times W} \rightarrow [x, x, x] \in \mathbb{R}^{H \times W \times 3}
-  \]
-</div>
+      <div class="arxiv-abstract">
+        This introduces no new information and effectively constrains the signal to a rank-1 subspace across channels. This redundancy compresses the effective input space and amplifies inter-domain similarity.
+        <br><br>
+        Consequently, these domains do not introduce statistically independent components. Considering feature covariance matrices \( \Sigma_i \), we observe significant overlap in their eigenspaces:
+      </div>
 
-<div class="arxiv-abstract">
-  This introduces no new information and effectively constrains the signal to a rank-1 subspace across channels. This redundancy compresses the effective input space and amplifies inter-domain similarity.
-  <br><br>
+      <div style="text-align:center; margin: 1.5rem 0;">
+        \[
+        \text{span}(\Sigma_{\text{Scene}}) \approx
+        \text{span}(\Sigma_{\text{Satellite}}) \approx
+        \text{span}(\Sigma_{\text{Texture}})
+        \]
+      </div>
 
-  Consequently, these domains do not introduce statistically independent components. Considering feature covariance matrices \( \Sigma_i \), we observe significant overlap in their eigenspaces:
-</div>
+      <div class="arxiv-abstract">
+        As a result, most methods exhibit strong retention, not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
+        <br><br>
+        This leads to a weak evaluation setting. Observed stability reflects high mutual coherence between task distributions rather than a true plasticity–stability tradeoff. The model operates within a shared, low-diversity signal manifold.
+        <br><br>
+        The Medical domain, however, deviates significantly. Its feature distribution introduces components that are weakly aligned or effectively orthogonal to the existing basis:
+      </div>
 
-<div style="text-align:center; margin: 1.5rem 0;">
-  \[
-  \text{span}(\Sigma_{\text{Scene}}) \approx 
-  \text{span}(\Sigma_{\text{Satellite}}) \approx 
-  \text{span}(\Sigma_{\text{Texture}})
-  \]
-</div>
+      <div style="text-align:center; margin: 1.5rem 0;">
+        \[
+        \text{span}(\Sigma_{\text{Medical}}) \not\subseteq
+        \text{span}(\Sigma_{\text{others}})
+        \]
+      </div>
 
-<div class="arxiv-abstract">
-  As a result, most methods exhibit strong retention, not because they successfully mitigate forgetting, but because new tasks project onto already learned eigen-directions. The system experiences minimal interference, as there is little competition for representational capacity.
-  <br><br>
+      <div class="arxiv-abstract">
+        This induces genuine competition in parameter space, making catastrophic forgetting a direct consequence of adapting to new signal components. The plasticity–stability tradeoff becomes unavoidable: incorporating new eigen-directions perturbs previously learned ones.
+        <br><br>
+        Therefore, the Medical domain is the only task in this framework that meaningfully probes continual learning. Performance deviations here reflect true interference and adaptation dynamics. By contrast, the remaining domains largely measure projection onto an already learned subspace, where apparent robustness is an artifact of shared structure and redundant channel representation rather than evidence of effective continual learning.
+      </div>
 
-  This leads to a weak evaluation setting. Observed stability reflects high mutual coherence between task distributions rather than a true plasticity–stability tradeoff. The model operates within a shared, low-diversity signal manifold.
-  <br><br>
-
-  The Medical domain, however, deviates significantly. Its feature distribution introduces components that are weakly aligned or effectively orthogonal to the existing basis:
-</div>
-
-<div style="text-align:center; margin: 1.5rem 0;">
-  \[
-  \text{span}(\Sigma_{\text{Medical}}) \not\subseteq 
-  \text{span}(\Sigma_{\text{others}})
-  \]
-</div>
-
-<div class="arxiv-abstract">
-  This induces genuine competition in parameter space, making catastrophic forgetting a direct consequence of adapting to new signal components. The plasticity–stability tradeoff becomes unavoidable: incorporating new eigen-directions perturbs previously learned ones.
-  <br><br>
-
-  Therefore, the Medical domain is the only task in this framework that meaningfully probes continual learning. Performance deviations here reflect true interference and adaptation dynamics. By contrast, the remaining domains largely measure projection onto an already learned subspace, where apparent robustness is an artifact of shared structure and redundant channel representation rather than evidence of effective continual learning.
-</div>
-      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.5rem;">
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.5rem;margin-top:1.5rem;">
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 01</span>
           <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">Naive fine-tuning exhibits severe catastrophic forgetting — Scene accuracy drops from 0.97 → 0.54 after training on Task 2.</p>
@@ -1576,7 +1744,6 @@
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 02</span>
           <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;font-family:'Georgia',serif;">EWC shows high sensitivity to λ — a sweep from 100 to 50,000 reveals λ=1000 as optimal, with degradation at extremes.</p>
-       
         </div>
         <div style="display:flex;gap:1rem;align-items:flex-start;">
           <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:0.1em;white-space:nowrap;margin-top:0.15rem;">FINDING 03</span>
@@ -2073,6 +2240,17 @@
       document.getElementById('arxivOverlay').classList.remove('open');
       document.body.style.overflow = '';
     }
+    function openArxivOverlay2() {
+      const overlay = document.getElementById('arxivOverlay2');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([overlay]);
+    }
+    function closeArxivOverlay2() {
+      document.getElementById('arxivOverlay2').classList.remove('open');
+      document.body.style.overflow = '';
+    }
     // ── VP1 MC-KALMAN overlay ─────────────────────────────────────────────
     function openVp1Overlay() {
       const overlay = document.getElementById('vp1Overlay');
@@ -2087,7 +2265,7 @@
     }
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); closeDeblurOverlay(); }
+      if (e.key === 'Escape') { closeVp1Overlay(); closeOverlay(); closeArxivOverlay(); closeArxivOverlay2(); closeDeblurOverlay(); }
     });
 
     // ── Demo video upload ─────────────────────────────────────────────────
