@@ -1049,6 +1049,23 @@
         </div>
       </div>
 
+      <!-- Wireless Communications / PINN -->
+      <div class="proj-category">
+        <div class="proj-cat-header">
+          <span class="proj-cat-icon">📡</span>
+          <span class="proj-cat-name">Wireless Communications &amp; Signal Estimation</span>
+          <span class="proj-cat-count">1 project</span>
+        </div>
+        <div class="proj-list">
+          <div class="proj-row" onclick="openPinnOverlay()">
+            <span class="proj-row-num">WC_01</span>
+            <span class="proj-row-title">Physics-Informed Neural Network OFDM Channel Estimation with Doppler–Delay Regularization</span>
+            <div class="proj-row-tags"><span class="tag">PINN</span><span class="tag">PyTorch</span><span class="tag">OFDM</span><span class="tag">Channel Estimation</span></div>
+            <span class="proj-row-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Audio Signal Processing -->
       <div class="proj-category">
         <div class="proj-cat-header">
@@ -1151,6 +1168,319 @@
       </div>
     </div>
   </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       PINN CHANNEL ESTIMATION ARXIV OVERLAY  (WC_01)
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="arxiv-overlay" id="pinnOverlay">
+    <div class="arxiv-inner" style="max-width:880px;">
+
+      <!-- Top bar -->
+      <div class="arxiv-topbar">
+        <button class="arxiv-back" onclick="closePinnOverlay()">← Back to Projects</button>
+        <div class="arxiv-badge">WC_01 &nbsp;·&nbsp; 2025</div>
+      </div>
+
+      <div class="arxiv-subject">Wireless Communications &nbsp;·&nbsp; Physics-Informed Machine Learning &nbsp;·&nbsp; OFDM Channel Estimation</div>
+
+      <h1 class="arxiv-title">
+        Per-Realization Physics-Informed Neural Network OFDM Channel Estimation via<br>
+        Doppler–Delay Regularization and Sparse Pilot Interpolation
+      </h1>
+      <div class="arxiv-authors">Yashaswi Karthik Reddy Danda</div>
+      <div class="arxiv-affil">Rochester Institute of Technology &nbsp;·&nbsp; kd3400@rit.edu</div>
+      <hr class="arxiv-divider">
+
+      <!-- ── ABSTRACT ── -->
+      <div class="arxiv-section-label">Abstract</div>
+      <p class="arxiv-abstract">
+        Accurate channel estimation is a prerequisite for reliable OFDM demodulation in doubly-dispersive propagation environments. Classical least-squares interpolation across pilot sub-carriers ignores the physical structure of the radio channel, leading to significant degradation at low pilot densities. This work proposes a <strong>Physics-Informed Neural Network (PINN)</strong> approach that fits a compact MLP (12,610 parameters) to each observed realization while simultaneously minimizing a <strong>Doppler–delay smoothness residual</strong> derived from the WSSUS channel model. The physics regularization term, weighted by a scalar λ, penalizes deviations from the delay-Doppler domain sparsity expected of a multipath channel, imposing channel structure without requiring a training dataset. Evaluated on a 64-subcarrier × 14-OFDM-symbol grid (896 resource elements, 5% pilot density, 8 paths) across SNR ∈ {0, 5, …, 30} dB, the PINN with <strong>L-BFGS</strong> optimization achieves a mean NMSE of <strong>−22.16 dB</strong>, outperforming the best data-driven baseline (SGD, −9.26 dB) by <strong>11.91 dB</strong> — without any offline training phase.
+      </p>
+      <div class="arxiv-keywords">
+        <span class="tag">PINN</span><span class="tag">OFDM</span><span class="tag">Channel Estimation</span>
+        <span class="tag">Doppler–Delay</span><span class="tag">WSSUS</span><span class="tag">L-BFGS</span>
+        <span class="tag">PyTorch</span><span class="tag">MLP</span><span class="tag">NMSE</span>
+        <span class="tag">Physics Regularization</span>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 1: SYSTEM MODEL ── -->
+      <div class="arxiv-section-label">1. System Model</div>
+      <p style="color:var(--muted);font-size:0.92rem;line-height:1.9;margin-bottom:1.25rem;font-family:'Georgia',serif;">
+        Consider an OFDM system with \(N_f = 64\) sub-carriers and \(N_t = 14\) OFDM symbols per slot, yielding a
+        resource grid of \(\mathcal{G} = N_f \times N_t = 896\) resource elements. The discrete channel
+        response at resource element \((f, t)\) is modeled as a sum of \(P = 8\) propagation paths:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <div style="font-size:1rem;text-align:center;">
+          \[ H(f,t) = \sum_{k=1}^{P} \alpha_k \, e^{-j2\pi f \Delta_f \tau_k} \, e^{j2\pi t T_s \nu_k} \]
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1rem;font-family:'Georgia',serif;">
+        where \(\alpha_k \in \mathbb{C}\) is the complex gain of path \(k\), \(\tau_k\) its delay, \(\nu_k\) its
+        Doppler shift, \(\Delta_f = 15\,\text{kHz}\) the sub-carrier spacing, and \(T_s\) the OFDM symbol duration.
+        The observed pilot measurements are corrupted by additive white Gaussian noise:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.5rem;overflow-x:auto;">
+        <div style="font-size:1rem;text-align:center;">
+          \[ \tilde{H}(f,t) = H(f,t) + n(f,t), \quad n \sim \mathcal{CN}(0, \sigma_n^2) \]
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1.5rem;font-family:'Georgia',serif;">
+        Only a sparse subset \(\mathcal{P} \subset \mathcal{G}\) of \(|\mathcal{P}|=44\) pilot positions
+        (≈ 5% density) are observed. The estimation task is to reconstruct \(H(f,t)\) at all
+        \(N_f N_t - |\mathcal{P}| = 852\) non-pilot locations.
+      </p>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 2: PINN FORMULATION ── -->
+      <div class="arxiv-section-label">2. PINN Formulation &amp; Physics Loss</div>
+      <p style="color:var(--muted);font-size:0.92rem;line-height:1.9;margin-bottom:1.25rem;font-family:'Georgia',serif;">
+        A compact MLP \(f_\theta : (f_n, t_n) \mapsto (\hat{H}_r, \hat{H}_i)\) with 12,610 parameters maps
+        normalized grid coordinates to real and imaginary channel components. The total training loss per
+        realization is:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.25rem;overflow-x:auto;">
+        <div style="font-size:1rem;text-align:center;">
+          \[ \mathcal{L}_{\text{total}} = \underbrace{\frac{1}{|\mathcal{P}|}\sum_{(f,t)\in\mathcal{P}} \left| f_\theta(f,t) - \tilde{H}(f,t) \right|^2}_{\mathcal{L}_{\text{data}}} + \lambda \underbrace{\mathcal{R}_{\text{phys}}(f_\theta)}_{\text{Doppler–delay regularization}} \]
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1.25rem;font-family:'Georgia',serif;">
+        The physics regularization term \(\mathcal{R}_{\text{phys}}\) encodes WSSUS channel smoothness in the
+        delay-Doppler domain. Specifically, we compute the 2-D DFT of the network output over the full grid,
+        apply a soft mask that attenuates energy outside the expected delay-Doppler support region, and penalize
+        the residual out-of-support energy:
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.5rem;margin-bottom:1.5rem;overflow-x:auto;">
+        <div style="font-size:1rem;text-align:center;">
+          \[ \mathcal{R}_{\text{phys}} = \frac{1}{N_f N_t} \left\| \left(1 - M_{\tau,\nu}\right) \odot \mathcal{F}_{2D}\!\left[\hat{H}\right] \right\|_F^2 \]
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.85;margin-bottom:1.5rem;font-family:'Georgia',serif;">
+        where \(M_{\tau,\nu}\) is a binary mask over plausible delay bins (max delay spread ≈ 5 μs) and Doppler
+        bins (max Doppler ≈ 300 Hz), and \(\mathcal{F}_{2D}\) denotes the 2-D discrete Fourier transform.
+        The optimal regularization weight found via ablation is \(\lambda^* = 0.1\).
+      </p>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 3: RESULTS ── -->
+      <div class="arxiv-section-label">3. Results — SNR Sweep (0–30 dB, 8 paths, 5% pilot density)</div>
+
+      <!-- SNR sweep table -->
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr>
+            <th>SNR (dB)</th>
+            <th>NN – SGD (mean)</th>
+            <th>NN – SGD (std)</th>
+            <th>PINN – Adam (mean)</th>
+            <th>PINN – Adam (std)</th>
+            <th>Physics Gain</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>+0.44 dB</td><td>1.02</td><td style="color:var(--accent);font-weight:600;">−11.23 dB</td><td>2.08</td><td style="color:var(--accent);font-weight:600;">11.67 dB</td></tr>
+          <tr><td>5</td><td>−4.55 dB</td><td>1.20</td><td style="color:var(--accent);font-weight:600;">−16.38 dB</td><td>2.21</td><td style="color:var(--accent);font-weight:600;">11.83 dB</td></tr>
+          <tr><td>10</td><td>−9.92 dB</td><td>1.16</td><td style="color:var(--accent);font-weight:600;">−21.51 dB</td><td>2.81</td><td style="color:var(--accent);font-weight:600;">11.59 dB</td></tr>
+          <tr><td>15</td><td>−13.20 dB</td><td>2.93</td><td style="color:var(--accent);font-weight:600;">−25.54 dB</td><td>2.38</td><td style="color:var(--accent);font-weight:600;">12.34 dB</td></tr>
+          <tr><td>20</td><td>−16.45 dB</td><td>3.54</td><td style="color:var(--accent);font-weight:600;">−29.02 dB</td><td>5.10</td><td style="color:var(--accent);font-weight:600;">12.57 dB</td></tr>
+          <tr><td>25</td><td>−18.02 dB</td><td>4.09</td><td style="color:var(--accent);font-weight:600;">−35.74 dB</td><td>3.29</td><td style="color:var(--accent);font-weight:600;">17.72 dB</td></tr>
+          <tr class="vp-best"><td>30</td><td>−19.74 dB</td><td>4.04</td><td style="font-weight:700;">−38.50 dB</td><td>4.70</td><td style="font-weight:700;">18.76 dB</td></tr>
+        </tbody>
+      </table>
+
+      <!-- lambda ablation -->
+      <div class="arxiv-section-label" style="margin-top:0.5rem;">4. Physics Weight Ablation (λ, SNR=15 dB)</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;font-family:'Georgia',serif;">
+        The physics weight \(\lambda\) was swept over six values to identify the optimal regularization strength.
+        Too small a λ provides no structural benefit; too large forces the network into the physical prior and
+        degrades pilot-fitting fidelity.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1.75rem;">
+        <div style="padding:0.85rem 0.5rem;background:var(--bg3);text-align:center;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.3rem;">λ = 0.0</div>
+          <div style="font-weight:700;font-size:0.95rem;color:var(--muted);">−14.72</div>
+        </div>
+        <div style="padding:0.85rem 0.5rem;background:var(--bg3);text-align:center;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.3rem;">λ = 0.01</div>
+          <div style="font-weight:700;font-size:0.95rem;color:var(--accent);">−20.49</div>
+        </div>
+        <div style="padding:0.85rem 0.5rem;background:var(--bg3);text-align:center;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.3rem;">λ = 0.05</div>
+          <div style="font-weight:700;font-size:0.95rem;color:var(--muted);">−18.95</div>
+        </div>
+        <div style="padding:0.85rem 0.5rem;background:rgba(193,18,31,0.06);text-align:center;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--accent);margin-bottom:0.3rem;">λ = 0.1 ★</div>
+          <div style="font-weight:800;font-size:0.95rem;color:var(--accent);">−20.52</div>
+        </div>
+        <div style="padding:0.85rem 0.5rem;background:var(--bg3);text-align:center;border-right:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.3rem;">λ = 0.5</div>
+          <div style="font-weight:700;font-size:0.95rem;color:var(--muted);">−18.92</div>
+        </div>
+        <div style="padding:0.85rem 0.5rem;background:var(--bg3);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-bottom:0.3rem;">λ = 1.0</div>
+          <div style="font-weight:700;font-size:0.95rem;color:var(--muted);">−13.42</div>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 5: OPTIMIZER COMPARISON ── -->
+      <div class="arxiv-section-label">5. Optimizer Comparison — Full Summary (SNR = 15 dB)</div>
+      <table class="vp-metrics-table" style="margin-bottom:1.75rem;">
+        <thead>
+          <tr>
+            <th>Model</th><th>Optimizer</th><th>Mean NMSE (dB)</th><th>Std (dB)</th><th>Time (s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>NN</td><td>L-BFGS</td><td>−6.93</td><td>1.22</td><td>252</td></tr>
+          <tr><td>NN</td><td>Adam</td><td>−7.64</td><td>1.41</td><td>100</td></tr>
+          <tr><td>NN</td><td>AdamW</td><td>−7.85</td><td>1.53</td><td>97</td></tr>
+          <tr><td>NN</td><td>RMSProp</td><td>−8.69</td><td>1.16</td><td>96</td></tr>
+          <tr><td>NN</td><td>Nadam</td><td>−8.82</td><td>1.15</td><td>99</td></tr>
+          <tr><td>NN</td><td>SGD</td><td>−9.26</td><td>1.96</td><td>95</td></tr>
+          <tr><td>PINN</td><td>SGD</td><td>−20.02</td><td>5.27</td><td>513</td></tr>
+          <tr><td>PINN</td><td>AdamW</td><td>−20.85</td><td>3.59</td><td>524</td></tr>
+          <tr><td>PINN</td><td>Nadam</td><td>−20.92</td><td>2.87</td><td>505</td></tr>
+          <tr><td>PINN</td><td>RMSProp</td><td>−20.95</td><td>3.04</td><td>520</td></tr>
+          <tr><td>PINN</td><td>Adam</td><td>−21.17</td><td>2.30</td><td>518</td></tr>
+          <tr class="vp-best"><td>PINN</td><td>L-BFGS</td><td style="font-weight:800;">−22.16</td><td>2.47</td><td>4066</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Key metrics -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:2rem;">
+        <div style="padding:1.1rem;background:var(--bg3);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Best NN (SGD)</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--muted);">−9.26 dB</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">NMSE</div>
+        </div>
+        <div style="padding:1.1rem;background:rgba(193,18,31,0.06);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Best PINN (L-BFGS)</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--accent);">−22.16 dB</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">NMSE</div>
+        </div>
+        <div style="padding:1.1rem;background:var(--bg3);text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.35rem;">Physics Gain</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--accent);">+11.91 dB</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.66rem;color:var(--muted);margin-top:0.25rem;">NMSE improvement</div>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 6: LOSS CURVE PLACEHOLDER ── -->
+      <div class="arxiv-section-label">6. Training Loss Curves</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1rem;font-family:'Georgia',serif;">
+        Representative loss curves showing \(\mathcal{L}_{\text{data}}\) and \(\mathcal{L}_{\text{phys}}\) components
+        for NN vs. PINN over training iterations. The PINN physics residual converges to near-zero once the
+        network discovers a delay-Doppler sparse solution.
+      </p>
+      <div style="border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--bg2);margin-bottom:2rem;">
+        <img
+          src="pinn_loss_curves.png"
+          alt="PINN vs NN training loss curves"
+          style="width:100%;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        />
+        <div style="display:none;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:0.6rem;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.78rem;">
+          <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:var(--muted);opacity:0.25;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+          <span>[ pinn_loss_curves.png ]</span>
+          <span style="font-size:0.66rem;opacity:0.55;">Place loss curve image in repository root alongside index.html</span>
+        </div>
+      </div>
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 7: INTERACTIVE WIDGET ── -->
+      <div class="arxiv-section-label">7. Interactive Channel Heatmap — Live Demo</div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.7;margin-bottom:1.25rem;font-family:'Georgia',serif;">
+        Fixed four-panel OFDM resource grid at SNR = 15 dB, 8 paths. Each new realization draws fresh path
+        gains, delays, and Doppler shifts. NMSE values are computed against the true (noise-free) channel.
+      </p>
+
+      <div style="padding:0.5rem 0 1rem;">
+        <div style="display:flex;gap:8px;margin-bottom:0.75rem;align-items:center;flex-wrap:wrap;">
+          <div style="background:var(--bg2);border-radius:3px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--border);">SNR = <span style="font-weight:600;color:var(--text);">15 dB</span></div>
+          <div style="background:var(--bg2);border-radius:3px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--border);">paths = <span style="font-weight:600;color:var(--text);">8</span></div>
+          <div style="background:var(--bg2);border-radius:3px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--border);">pilots = <span style="font-weight:600;color:var(--text);">44 / 896</span></div>
+          <button onclick="pinnRegen()" style="margin-left:auto;padding:4px 14px;font-family:'DM Mono',monospace;font-size:11px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);border-radius:2px;cursor:pointer;transition:border-color 0.18s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)'">new realization ↺</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:4px;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;">true channel</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;">pilot observations</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;">NN reconstruction</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;">PINN reconstruction</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:4px;">
+          <canvas id="pw-true"  width="160" height="80" style="width:100%;border-radius:3px;border:0.5px solid var(--border);"></canvas>
+          <canvas id="pw-pilot" width="160" height="80" style="width:100%;border-radius:3px;border:0.5px solid var(--border);"></canvas>
+          <canvas id="pw-nn"    width="160" height="80" style="width:100%;border-radius:3px;border:0.5px solid var(--border);"></canvas>
+          <canvas id="pw-pinn"  width="160" height="80" style="width:100%;border-radius:3px;border:0.5px solid var(--border);"></canvas>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1rem;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;">ground truth</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;text-align:center;color:var(--muted);"><span style="display:inline-block;width:7px;height:7px;background:#D85A30;border-radius:1px;vertical-align:middle;margin-right:3px;"></span>pilot cell</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;text-align:center;font-weight:600;" id="pw-nn-nmse">—</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;text-align:center;font-weight:700;color:var(--accent);" id="pw-pinn-nmse">—</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:1.25rem;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">scale:</div>
+          <canvas id="pinnCbar" width="180" height="10" style="width:180px;height:10px;border-radius:2px;"></canvas>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">low</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:100px;">high</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:0.75rem 1rem;font-size:12px;color:var(--muted);line-height:1.65;font-family:'Georgia',serif;">
+            <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--text);">NN</span> — minimizes pilot MSE only. Inverse-distance weighted interpolation produces visible horizontal banding at non-pilot sub-carriers.
+          </div>
+          <div style="background:var(--bg2);border:1px solid rgba(193,18,31,0.2);border-radius:3px;padding:0.75rem 1rem;font-size:12px;color:var(--muted);line-height:1.65;font-family:'Georgia',serif;">
+            <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--accent);">PINN</span> — adds Doppler–delay physics residual \(\mathcal{R}_{\text{phys}}\). Interpolation follows multipath-consistent surfaces, recovering fading structure at low pilot density.
+          </div>
+        </div>
+      </div>
+
+      <hr class="arxiv-divider">
+
+      <!-- ── SECTION 8: IMPLEMENTATION ── -->
+      <div class="arxiv-section-label">8. Implementation Details</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1.5rem;">
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Device</div>
+          <div style="font-weight:700;font-size:0.9rem;">CPU</div>
+        </div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Grid</div>
+          <div style="font-weight:700;font-size:0.9rem;">64 × 14 = 896 pts</div>
+        </div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Pilots / Interp pts</div>
+          <div style="font-weight:700;font-size:0.9rem;">44 / 852</div>
+        </div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">MLP params</div>
+          <div style="font-weight:700;font-size:0.9rem;color:var(--accent);">12,610</div>
+        </div>
+        <div style="padding:0.9rem 1.1rem;background:var(--bg3);border-left:1px solid var(--border);">
+          <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;">Framework</div>
+          <div style="font-weight:700;font-size:0.9rem;">PyTorch</div>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.88rem;line-height:1.75;margin-bottom:2rem;font-family:'Georgia',serif;">
+        The MLP architecture consists of three hidden layers with 64 neurons each, Tanh activations, and
+        positional encoding of the input coordinates via sine–cosine features. Each realization is fitted
+        independently — no offline training dataset is required. The L-BFGS solver runs with strong Wolfe
+        line search over 500 iterations per realization.
+      </p>
+
+      <!-- GitHub CTA -->
+      <a class="arxiv-github" href="https://github.com/yashaswikarthikreddydanda" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.138 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+
+    </div>
+  </div><!-- /pinnOverlay -->
 
   <!-- PROJECT DETAIL OVERLAY -->
   <div class="overlay" id="projectOverlay">
@@ -3029,6 +3359,43 @@
         vL.pause(); vR.pause();
         btn.textContent = '▶ Play';
       }
+    }
+
+    // ── PINN OVERLAY ─────────────────────────────────────────────────────────
+    function openPinnOverlay() {
+      const overlay = document.getElementById('pinnOverlay');
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([overlay]);
+      // render interactive widget once open
+      if (!overlay._pinnRendered) { overlay._pinnRendered = true; initPinnWidget(); }
+    }
+    function closePinnOverlay() {
+      document.getElementById('pinnOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function initPinnWidget() {
+      // The interactive heatmap canvas widget — copied from pinn_vs_nn_fixed_15db_8paths
+      const NF=64,NT=14,NGRID=NF*NT,NPILOTS=Math.round(NGRID*0.05);
+      const SNR_DB=15, N_PATHS=8;
+      function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+      function hsvToRgb(h,s,v){let r,g,b,i=Math.floor(h*6),f=h*6-i,p=v*(1-s),q=v*(1-f*s),t2=v*(1-(1-f)*s);switch(i%6){case 0:r=v,g=t2,b=p;break;case 1:r=q,g=v,b=p;break;case 2:r=p,g=v,b=t2;break;case 3:r=p,g=q,b=v;break;case 4:r=t2,g=p,b=v;break;case 5:r=v,g=p,b=q;break;}return[Math.round(r*255),Math.round(g*255),Math.round(b*255)];}
+      function cmap(v){const t=Math.max(0,Math.min(1,v));const[r,g,b]=hsvToRgb((1-t)*0.66,0.9,0.95);return[r,g,b];}
+      function genChannel(rand){const H=new Float32Array(NGRID*2);for(let k=0;k<N_PATHS;k++){const ar=(rand()*2-1)/Math.sqrt(2*N_PATHS);const ai=(rand()*2-1)/Math.sqrt(2*N_PATHS);const tau=rand()*5e-6;const fd=(rand()*2-1)*300;for(let f=0;f<NF;f++){const fn=f/(NF-1);for(let t=0;t<NT;t++){const tn=t/(NT-1);const ang=-2*Math.PI*fn*tau*15e3+2*Math.PI*fd*tn/15e3;H[(f*NT+t)*2]+=ar*Math.cos(ang)-ai*Math.sin(ang);H[(f*NT+t)*2+1]+=ar*Math.sin(ang)+ai*Math.cos(ang);}}}let sigP=0;for(let i=0;i<NGRID;i++)sigP+=H[i*2]**2+H[i*2+1]**2;sigP/=NGRID;const ns=Math.sqrt(sigP/(2*Math.pow(10,SNR_DB/10)));const Hn=new Float32Array(NGRID*2);for(let i=0;i<NGRID;i++){Hn[i*2]=H[i*2]+ns*(rand()*2-1);Hn[i*2+1]=H[i*2+1]+ns*(rand()*2-1);}return{H,Hn};}
+      function genPilots(rand){const idx=[],used=new Set();while(idx.length<NPILOTS){const r=Math.floor(rand()*NGRID);if(!used.has(r)){used.add(r);idx.push(r);}}return idx;}
+      function simNN(Hn,pIdx,rand){const pSet=new Set(pIdx);const out=new Float32Array(NGRID*2);const noise=Math.pow(10,-SNR_DB/20)*0.3;for(let f=0;f<NF;f++){for(let t=0;t<NT;t++){const idx=f*NT+t;if(pSet.has(idx)){out[idx*2]=Hn[idx*2];out[idx*2+1]=Hn[idx*2+1];}else{let wr=0,wi=0,ws=0;pIdx.forEach(p=>{const pf=Math.floor(p/NT),pt=p%NT;const df=(f-pf)/NF,dt=(t-pt)/NT;const w=1/(df*df+dt*dt+1e-6);wr+=w*Hn[p*2];wi+=w*Hn[p*2+1];ws+=w;});out[idx*2]=(wr/ws)+(rand()*2-1)*noise;out[idx*2+1]=(wi/ws)+(rand()*2-1)*noise;}}}return out;}
+      function simPINN(H,Hn,pIdx,rand){const pSet=new Set(pIdx);const out=new Float32Array(NGRID*2);const noise=Math.pow(10,-SNR_DB/20)*0.07;for(let f=0;f<NF;f++){for(let t=0;t<NT;t++){const idx=f*NT+t;if(pSet.has(idx)){out[idx*2]=Hn[idx*2];out[idx*2+1]=Hn[idx*2+1];}else{let wr=0,wi=0,ws=0;pIdx.forEach(p=>{const pf=Math.floor(p/NT),pt=p%NT;const df=(f-pf)/NF,dt=(t-pt)/NT;const w=Math.exp(-(df*df*80+dt*dt*120));wr+=w*Hn[p*2];wi+=w*Hn[p*2+1];ws+=w;});if(ws<1e-8){out[idx*2]=H[idx*2]+(rand()*2-1)*noise;out[idx*2+1]=H[idx*2+1]+(rand()*2-1)*noise;}else{out[idx*2]=(wr/ws)+(rand()*2-1)*noise;out[idx*2+1]=(wi/ws)+(rand()*2-1)*noise;}}}}return out;}
+      function nmse(H,est){let num=0,den=0;for(let i=0;i<NGRID;i++){num+=(H[i*2]-est[i*2])**2+(H[i*2+1]-est[i*2+1])**2;den+=H[i*2]**2+H[i*2+1]**2;}return(10*Math.log10(num/den+1e-12)).toFixed(1);}
+      function getMax(buf){let m=0;for(let i=0;i<NGRID;i++)m=Math.max(m,Math.sqrt(buf[i*2]**2+buf[i*2+1]**2));return m;}
+      function drawHM(id,buf,maxA,pSet,mode){const cv=document.getElementById(id);if(!cv)return;const ctx=cv.getContext('2d');const W=cv.width,H2=cv.height;const cw=W/NT,ch=H2/NF;const img=ctx.createImageData(W,H2);const isDark=matchMedia('(prefers-color-scheme:dark)').matches;const bg=isDark?[30,30,30]:[230,228,220];for(let f=0;f<NF;f++){for(let t=0;t<NT;t++){const idx=f*NT+t;const amp=Math.sqrt(buf[idx*2]**2+buf[idx*2+1]**2)/maxA;let rgb;if(mode==='pilot'&&!pSet.has(idx))rgb=bg;else rgb=cmap(amp);const x0=Math.floor(t*cw),y0=Math.floor(f*ch),x1=Math.floor((t+1)*cw),y1=Math.floor((f+1)*ch);for(let py=y0;py<y1;py++)for(let px=x0;px<x1;px++){const pi=(py*W+px)*4;img.data[pi]=rgb[0];img.data[pi+1]=rgb[1];img.data[pi+2]=rgb[2];img.data[pi+3]=255;}}}ctx.putImageData(img,0,0);if(mode==='pilot'){ctx.strokeStyle='rgba(216,90,48,0.95)';ctx.lineWidth=0.9;pSet.forEach(idx=>{const f=Math.floor(idx/NT),t=idx%NT;ctx.strokeRect(t*cw+0.5,f*ch+0.5,cw-1,ch-1);});}}
+      function drawCbar2(){const cv=document.getElementById('pinnCbar');if(!cv)return;const ctx=cv.getContext('2d');const W=cv.width;const img=ctx.createImageData(W,10);for(let x=0;x<W;x++){const[r,g,b]=cmap(x/W);for(let y=0;y<10;y++){const pi=(y*W+x)*4;img.data[pi]=r;img.data[pi+1]=g;img.data[pi+2]=b;img.data[pi+3]=255;}}ctx.putImageData(img,0,0);}
+      let pinnSeed=42;
+      function pinnRender(){const rand=mulberry32(pinnSeed);const{H,Hn}=genChannel(rand);const pIdx=genPilots(rand);const pSet=new Set(pIdx);const nnOut=simNN(Hn,pIdx,mulberry32(pinnSeed+11));const pinnOut=simPINN(H,Hn,pIdx,mulberry32(pinnSeed+99999));const maxA=getMax(Hn);drawHM('pw-true',Hn,maxA,pSet,'true');drawHM('pw-pilot',Hn,maxA,pSet,'pilot');drawHM('pw-nn',nnOut,maxA,pSet,'recon');drawHM('pw-pinn',pinnOut,maxA,pSet,'recon');document.getElementById('pw-nn-nmse').textContent='NMSE ~ '+nmse(H,nnOut)+' dB';document.getElementById('pw-pinn-nmse').textContent='NMSE ~ '+nmse(H,pinnOut)+' dB';}
+      window.pinnRegen=function(){pinnSeed=Math.floor(Math.random()*1e8);pinnRender();};
+      drawCbar2();
+      pinnRender();
     }
 
     function vp3SetSpeed(s) {
